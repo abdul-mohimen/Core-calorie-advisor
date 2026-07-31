@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#1a1a20">
+<div id="stage" style="width:520px;height:680px"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+<script>
+window.__ready=false;
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x1a1a20);
+const cam=new THREE.PerspectiveCamera(38,520/680,.1,100);
+cam.position.set(0,1.05,3.2); cam.lookAt(0,0.95,0);
+const rn=new THREE.WebGLRenderer({antialias:true}); rn.setSize(520,680);
+document.getElementById('stage').appendChild(rn.domElement);
+scene.add(new THREE.HemisphereLight(0xffffff,0x333344,2.0));
+const k=new THREE.DirectionalLight(0xffffff,2.6); k.position.set(2,4,4); scene.add(k);
+const f=new THREE.DirectionalLight(0xffe0c0,1.3); f.position.set(-3,2,-2); scene.add(f);
+let MESH=null, MATS=null;
+new THREE.FBXLoader().load('../assets/models/trainer-ch06.fbx',function(obj){
+  const bx=new THREE.Box3().setFromObject(obj); const h=bx.max.y-bx.min.y;
+  obj.scale.setScalar(1.8/h); obj.updateMatrixWorld(true);
+  const b2=new THREE.Box3().setFromObject(obj); obj.position.y-=b2.min.y;
+  scene.add(obj);
+  obj.traverse(function(o){ if((o.isMesh||o.isSkinnedMesh)&&!MESH){MESH=o;MATS=Array.isArray(o.material)?o.material:[o.material];} });
+  window.__ready=true; rn.render(scene,cam);
+});
+window.showOnly=function(slot){
+  MATS.forEach(function(m,i){ m.visible = (slot===-1) ? true : (i===slot); });
+  rn.render(scene,cam);
+  return MATS.map(function(m,i){return i+':'+m.name+'='+m.visible;}).join(' | ');
+};
+</script></body>

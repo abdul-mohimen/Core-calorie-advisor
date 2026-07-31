@@ -1,0 +1,33 @@
+<!doctype html><meta charset="utf-8"><body style="background:#111">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+<script>
+window.__r=null;
+new THREE.FBXLoader().load('../assets/models/trainer-ch06.fbx', function(obj){
+  const out={meshes:[]};
+  obj.traverse(function(o){
+    if(!o.isMesh && !o.isSkinnedMesh) return;
+    const g=o.geometry;
+    const mats=Array.isArray(o.material)?o.material:[o.material];
+    const groups=(g.groups||[]).map(gr=>({start:gr.start,count:gr.count,matIndex:gr.materialIndex}));
+    out.meshes.push({
+      name:o.name,
+      skinned:!!o.isSkinnedMesh,
+      totalIndex:g.index?g.index.count:null,
+      groupCount:groups.length,
+      groups:groups,
+      materials:mats.map(function(m,i){
+        return {
+          slot:i, name:m.name, type:m.type,
+          color:m.color?('#'+m.color.getHexString()):null,
+          mapImage:m.map&&m.map.image?(m.map.image.width+'x'+m.map.image.height):null,
+          mapName:m.map&&m.map.name?m.map.name:null,
+          transparent:m.transparent, opacity:m.opacity
+        };
+      })
+    });
+  });
+  window.__r=out;
+}, undefined, function(e){window.__r={error:String(e&&e.message||e)};});
+</script></body>

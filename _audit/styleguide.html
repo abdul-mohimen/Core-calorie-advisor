@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCA Design System — Phase 4</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Rajdhani:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body { padding: 40px 20px; max-width: 1400px; margin: 0 auto; background: var(--bg); }
+        .sg-section { margin-bottom: 64px; }
+        .sg-title { border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 24px; color: var(--primary); }
+        .sg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+        .sg-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+        .sg-swatch { width: 64px; height: 64px; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; align-items: flex-end; padding: 4px; font-size: 10px; font-family: var(--font-tech); }
+        
+        /* Theme toggle for testing */
+        .theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; }
+    </style>
+</head>
+<body>
+    <button class="cca-btn cca-btn-secondary theme-toggle" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">Toggle Theme</button>
+
+    <div class="sg-section">
+        <h2 class="cca-h2 sg-title">1. Typography</h2>
+        <h1 class="cca-h1">Heading 1 - Russo One (32px)</h1>
+        <h2 class="cca-h2">Heading 2 - Russo One (24px)</h2>
+        <h3 class="cca-h3">Heading 3 - Rajdhani (18px)</h3>
+        <p class="cca-p">Body Text - Manrope (14px). This is a standard paragraph that might wrap across multiple lines to show the line height. Core Calorie Advisor uses geometric sans-serif fonts for a highly technical feel.</p>
+        <p class="cca-small">Small Text (12px) for meta information.</p>
+    </div>
+
+    <div class="sg-section">
+        <h2 class="cca-h2 sg-title">2. Color Tokens</h2>
+        <div class="sg-row">
+            <div class="sg-swatch" style="background: var(--primary); color: #0F1115;">Primary</div>
+            <div class="sg-swatch" style="background: var(--bg); color: var(--text-1);">Bg</div>
+            <div class="sg-swatch" style="background: var(--surface); color: var(--text-1);">Surface</div>
+            <div class="sg-swatch" style="background: var(--success); color: #0F1115;">Success</div>
+            <div class="sg-swatch" style="background: var(--warning); color: #0F1115;">Warning</div>
+            <div class="sg-swatch" style="background: var(--danger); color: #0F1115;">Danger</div>
+        </div>
+    </div>
+
+    <div class="sg-section">
+        <h2 class="cca-h2 sg-title">3. Buttons & Badges</h2>
+        <div class="sg-row">
+            <button class="cca-btn cca-btn-primary">Primary Action</button>
+            <button class="cca-btn cca-btn-secondary">Secondary</button>
+            <button class="cca-btn cca-btn-ghost">Ghost</button>
+            <button class="cca-btn cca-btn-danger">Danger</button>
+            <button class="cca-btn cca-btn-primary" disabled>Disabled</button>
+        </div>
+        <div class="sg-row">
+            <span class="cca-badge cca-badge-success">Completed</span>
+            <span class="cca-badge cca-badge-warning">Pending</span>
+            <span class="cca-badge cca-badge-danger">Error</span>
+            <span class="cca-badge cca-badge-info">Pro Tool</span>
+        </div>
+    </div>
+
+    <div class="sg-section">
+        <h2 class="cca-h2 sg-title">4. Form Elements</h2>
+        <div class="sg-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="cca-form-group">
+                <label class="cca-label">Standard Input</label>
+                <input class="cca-input" type="text" placeholder="e.g. John Doe">
+            </div>
+            <div class="cca-form-group">
+                <label class="cca-label">Input with Error</label>
+                <input class="cca-input error" type="email" value="invalid-email">
+                <span class="cca-form-error">Please enter a valid email address.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sg-section">
+        <h2 class="cca-h2 sg-title">5. Card Variants</h2>
+        <div class="sg-grid">
+            
+            <!-- A) Stat Card -->
+            <div class="cca-card">
+                <div class="cca-card-header">
+                    <span class="cca-card-title">Daily Calories</span>
+                    <span class="cca-badge cca-badge-success">On Track</span>
+                </div>
+                <div class="cca-card-value cca-number">2,140 <span class="cca-small">/ 2,500 kcal</span></div>
+                <div class="cca-card-footer">
+                    <span class="cca-small" style="color: var(--success);">▼ 12% vs yesterday</span>
+                </div>
+            </div>
+
+            <!-- D) Workout Card -->
+            <div class="cca-card">
+                <div class="cca-card-header">
+                    <span class="cca-card-title">Core Crusher V2</span>
+                    <span class="cca-badge cca-badge-warning">Intense</span>
+                </div>
+                <p class="cca-p" style="margin-bottom: 12px;">45 min · 320 kcal burn · 3D Guided</p>
+                <div style="height: 120px; background: var(--bg2); border-radius: var(--radius-md); border: 1px dashed var(--border); display: grid; place-items: center; color: var(--text-3); font-family: var(--font-tech); font-size: 12px; margin-bottom: 16px;">
+                    [ 3D Preview Placeholder ]
+                </div>
+                <div class="cca-card-footer" style="padding-top: 0; border-top: none;">
+                    <button class="cca-btn cca-btn-primary" style="width: 100%;">Start Session</button>
+                </div>
+            </div>
+
+            <!-- F) Person Card -->
+            <div class="cca-card">
+                <div class="cca-card-header" style="justify-content: flex-start;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--surface-elevated); border: 1px solid var(--border); display: grid; place-items: center; font-family: var(--font-disp); color: var(--primary);">EK</div>
+                    <div>
+                        <div class="cca-card-title">Elena K.</div>
+                        <div class="cca-small">Pro Trainer · ⭐ 4.9</div>
+                    </div>
+                </div>
+                <p class="cca-p">Specializes in hypertrophy and core conditioning.</p>
+                <div class="cca-card-footer">
+                    <button class="cca-btn cca-btn-secondary" style="flex: 1;">View Profile</button>
+                    <button class="cca-btn cca-btn-primary" style="flex: 1;">Message</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

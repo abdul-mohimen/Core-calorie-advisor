@@ -9,8 +9,18 @@
 logs/
 uploads/
 
-# Developer audit workspace (57 MB). Evidence PNGs stay on disk, just untracked.
-_audit/
+# _audit/ IS tracked (owner decision 2026-07-31): it holds the phase reports, the
+# garment-failure evidence PNGs referenced from cca-wardrobe.js:16, and the
+# _audit/opaque-check.mjs regression guard — losing those loses the reasoning
+# behind current design decisions. The 16.9 MB _backup-2026-07-30.zip inside it
+# stays excluded by the *.zip rule below: it is a backup archive, not evidence.
+
+# Database dumps: three of these carry real user rows — 33 bcrypt password
+# hashes and 33 unique email addresses across the three files. Same reasoning as
+# .env: git history is permanent, so credentials must never enter it. The
+# schema-only dump (pre-migration-workouts-exercises.sql, 0 hashes) is harmless
+# but excluded with the rest to keep one simple rule.
+_audit/db-backup/
 
 # Archives & backups
 *.zip
