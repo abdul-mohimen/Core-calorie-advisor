@@ -7,7 +7,6 @@ $workouts = db()->query('SELECT id, name FROM workouts ORDER BY name')->fetchAll
 
 $portal = 'trainer'; $pageTitle = 'Routine Creator';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['Client Roster',url('trainer/client-roster.php'),nav_icon('users')],['Routine Creator',url('trainer/routine-creator.php'),nav_icon('dumbbell')],['Earnings',url('trainer/earnings-payouts.php'),nav_icon('money')],['Reviews',url('trainer/reviews-ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('trainer/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Routine Creator</div>
@@ -15,7 +14,7 @@ $navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['
   <h1 class="cca-hero__title">Routine <span class="grad">Creator</span></h1>
   <p class="cca-hero__subtitle">Build custom workout routines for your clients using the exercise library. Drag and drop to reorder.</p>
 </div></div></section>
-<?= portal_nav('trainer', $navLinks) ?>
+<?= portal_nav('trainer') ?>
 <div class="cca-page-container">
   <div class="cca-grid-2" style="grid-template-columns: 1fr 360px; align-items:start; gap:24px">
     <!-- Exercise Library -->

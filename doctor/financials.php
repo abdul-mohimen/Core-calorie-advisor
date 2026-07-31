@@ -8,7 +8,6 @@ $commRate = calculate_commission(100, $uid);
 
 $portal = 'doctor'; $pageTitle = 'Financials';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['Patient Queue',url('doctor/patient-queue.php'),nav_icon('queue')],['Consultations',url('doctor/consultations.php'),nav_icon('stethoscope')],['Financials',url('doctor/financials.php'),nav_icon('money')],['Ratings',url('doctor/ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('doctor/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Financials</div>
@@ -20,7 +19,7 @@ $navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['P
   <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c1">💰</span><div><div class="cca-hero__kpi-val">$<?= number_format($wallet, 2) ?></div><div class="cca-hero__kpi-lbl">Available</div></div></div>
   <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c2">📊</span><div><div class="cca-hero__kpi-val"><?= $commRate['rate'] ?>%</div><div class="cca-hero__kpi-lbl">Platform Fee</div></div></div>
 </div></div></section>
-<?= portal_nav('doctor', $navLinks) ?>
+<?= portal_nav('doctor') ?>
 <div class="cca-page-container">
   <div class="cca-grid-2" style="margin-bottom:24px">
     <div class="cca-card" style="text-align:center; padding:32px">

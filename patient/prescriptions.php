@@ -11,14 +11,13 @@ try {
 
 $portal = 'patient'; $pageTitle = 'Prescriptions';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('patient/dashboard.php'),nav_icon('dashboard')],['Doctors',url('patient/doctors.php'),nav_icon('stethoscope')],['Prescriptions',url('patient/prescriptions.php'),nav_icon('prescription')],['Vitals Log',url('patient/vitals-log.php'),nav_icon('chart')],['Appointments',url('patient/appointments.php'),nav_icon('calendar')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('patient/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Prescriptions</div>
   <h1 class="cca-hero__title">E-<span class="grad">Prescriptions</span></h1>
   <p class="cca-hero__subtitle">Your digital prescription vault. View active medications, dosage instructions, and doctor notes.</p>
 </div></div></section>
-<?= portal_nav('patient', $navLinks) ?>
+<?= portal_nav('patient') ?>
 <div class="cca-page-container">
   <?php if ($prescriptions): ?>
   <div class="cca-grid-2">

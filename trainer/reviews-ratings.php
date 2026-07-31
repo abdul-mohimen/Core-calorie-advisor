@@ -10,7 +10,6 @@ $avg = $total ? round($avg / $total, 1) : 0;
 
 $portal = 'trainer'; $pageTitle = 'Reviews & Ratings';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['Client Roster',url('trainer/client-roster.php'),nav_icon('users')],['Routine Creator',url('trainer/routine-creator.php'),nav_icon('dumbbell')],['Earnings',url('trainer/earnings-payouts.php'),nav_icon('money')],['Reviews',url('trainer/reviews-ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('trainer/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Reviews</div>
@@ -25,7 +24,7 @@ $navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['
     <div style="font-size:13px; color:var(--text-3)"><?= $total ?> total reviews</div>
   </div>
 </div></div></section>
-<?= portal_nav('trainer', $navLinks) ?>
+<?= portal_nav('trainer') ?>
 <div class="cca-page-container">
   <!-- Star breakdown -->
   <div class="cca-card" style="margin-bottom:24px">

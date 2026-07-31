@@ -9,7 +9,6 @@ $commRate = calculate_commission(100, $uid);
 
 $portal = 'trainer'; $pageTitle = 'Earnings & Payouts';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['Client Roster',url('trainer/client-roster.php'),nav_icon('users')],['Routine Creator',url('trainer/routine-creator.php'),nav_icon('dumbbell')],['Earnings',url('trainer/earnings-payouts.php'),nav_icon('money')],['Reviews',url('trainer/reviews-ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('trainer/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Earnings</div>
@@ -22,7 +21,7 @@ $navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['
   <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c2">📊</span><div><div class="cca-hero__kpi-val"><?= $commRate['rate'] ?>%</div><div class="cca-hero__kpi-lbl">Platform Commission</div></div></div>
   <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c3">💸</span><div><div class="cca-hero__kpi-val"><?= count($txns) ?></div><div class="cca-hero__kpi-lbl">Total Transactions</div></div></div>
 </div></div></section>
-<?= portal_nav('trainer', $navLinks) ?>
+<?= portal_nav('trainer') ?>
 <div class="cca-page-container">
   <div class="cca-grid-2" style="margin-bottom:24px">
     <div class="cca-card" style="text-align:center; padding:32px">

@@ -419,6 +419,64 @@
   box-shadow: 0 0 12px rgba(255,107,26,0.1);
 }
 
+/* ══ PHASE I — portal patti upgrades ══
+   Horizontal scroll and hidden scrollbars already existed above; these add the
+   parts that did not. --portal-accent is set per role in layout.css, so the
+   patti picks up each portal's own colour instead of hardcoding orange. */
+
+/* Sticks under the fixed navbar once the hero scrolls away. --nav-h is measured
+   at runtime by main.js (layout.css:24), so this follows the real header. */
+.cca-portal-nav {
+  position: sticky;
+  top: var(--nav-h, 80px);
+  z-index: 30;
+  scroll-snap-type: x proximity;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--surface, #14141a) 88%, transparent);
+  /* Edge fades tell the user there is more to scroll on narrow screens. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+}
+/* No mask when everything fits — otherwise the first/last item looks clipped. */
+@media (min-width: 1100px) {
+  .cca-portal-nav { -webkit-mask-image: none; mask-image: none; }
+}
+
+.cca-portal-nav a { scroll-snap-align: start; position: relative; }
+
+/* Active item uses the portal's own accent + an underline, not just a tint. */
+.cca-portal-nav a.active {
+  background: color-mix(in srgb, var(--portal-accent, #FF6B1A) 14%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--portal-accent, #FF6B1A) 12%, transparent);
+}
+.cca-portal-nav a.active::after {
+  content: '';
+  position: absolute; left: 18px; right: 18px; bottom: 4px; height: 2px;
+  border-radius: 2px;
+  background: var(--portal-accent, #FF6B1A);
+}
+
+/* Keyboard reachability — arrow-key handling lives in assets/js/main.js. */
+.cca-portal-nav a:focus-visible {
+  outline: 2px solid var(--portal-accent, #FF6B1A);
+  outline-offset: -2px;
+}
+
+/* Unread-notification badge, rendered by portal_nav() on the Dashboard entry. */
+.cca-portal-nav__badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px; margin-left: 2px;
+  border-radius: 9px;
+  background: var(--danger, #E5484D); color: #fff;
+  font-size: 10px; font-weight: 800; line-height: 1;
+  font-family: var(--font-mono, monospace);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cca-portal-nav { scroll-behavior: auto; }
+  .cca-portal-nav a { transition: none; }
+}
+
 .cca-portal-nav a svg {
   width: 16px;
   height: 16px;

@@ -10,7 +10,6 @@ $avg = $total ? round($avg / $total, 1) : 0;
 
 $portal = 'doctor'; $pageTitle = 'Ratings';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['Patient Queue',url('doctor/patient-queue.php'),nav_icon('queue')],['Consultations',url('doctor/consultations.php'),nav_icon('stethoscope')],['Financials',url('doctor/financials.php'),nav_icon('money')],['Ratings',url('doctor/ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('doctor/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Ratings</div>
@@ -26,7 +25,7 @@ $navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['P
     <?php if ($avg >= 4.5): ?><span class="cca-badge cca-badge-success" style="margin-top:10px">✓ Verified Doctor</span><?php endif; ?>
   </div>
 </div></div></section>
-<?= portal_nav('doctor', $navLinks) ?>
+<?= portal_nav('doctor') ?>
 <div class="cca-page-container"><div class="cca-card">
   <h3 class="cca-h3">💬 Patient Reviews</h3>
   <?php if (!$reviews): ?><div class="cca-empty-state">No reviews yet.</div><?php endif; ?>

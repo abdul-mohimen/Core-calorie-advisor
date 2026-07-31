@@ -22,14 +22,13 @@ $reviews = []; try { $reviews = db()->query("SELECT r.*, u.name reviewer, t.name
 
 $portal = 'admin'; $pageTitle = 'Review Moderation';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('admin/dashboard.php'),nav_icon('dashboard')],['Users',url('admin/user-management.php'),nav_icon('users')],['Monetization',url('admin/monetization-stripe.php'),nav_icon('money')],['Appointments',url('admin/appointments-master.php'),nav_icon('calendar')],['Exercises',url('admin/exercise-library-admin.php'),nav_icon('library')],['Reviews',url('admin/reviews-moderation.php'),nav_icon('moderate')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('admin/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Reviews</div>
   <h1 class="cca-hero__title">Review <span class="grad">Moderation</span></h1>
   <p class="cca-hero__subtitle">Approve or reject member/patient reviews for Trainers and Doctors.</p>
 </div></div></section>
-<?= portal_nav('admin', $navLinks) ?>
+<?= portal_nav('admin') ?>
 <div class="cca-page-container"><div class="cca-card">
   <h3 class="cca-h3">⭐ All Reviews (<?= count($reviews) ?>)</h3>
   <div class="cca-table-wrap"><table class="cca-table">

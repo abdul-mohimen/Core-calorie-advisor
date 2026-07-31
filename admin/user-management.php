@@ -13,14 +13,13 @@ $users = db()->query('SELECT id, name, email, role, plan, created_at FROM users 
 
 $portal = 'admin'; $pageTitle = 'User Management';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('admin/dashboard.php'),nav_icon('dashboard')],['Users',url('admin/user-management.php'),nav_icon('users')],['Monetization',url('admin/monetization-stripe.php'),nav_icon('money')],['Appointments',url('admin/appointments-master.php'),nav_icon('calendar')],['Exercises',url('admin/exercise-library-admin.php'),nav_icon('library')],['Reviews',url('admin/reviews-moderation.php'),nav_icon('moderate')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('admin/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Users</div>
   <h1 class="cca-hero__title">User <span class="grad">Management</span></h1>
   <p class="cca-hero__subtitle">Switch roles, suspend accounts, and manage privileges across the platform.</p>
 </div></div></section>
-<?= portal_nav('admin', $navLinks) ?>
+<?= portal_nav('admin') ?>
 <div class="cca-page-container">
   <div class="cca-card">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">

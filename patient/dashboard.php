@@ -40,13 +40,6 @@ $portal    = 'patient';
 $pageTitle = 'Patient Dashboard';
 include dirname(__DIR__) . '/includes/header.php';
 
-$navLinks = [
-    ['Dashboard',      url('patient/dashboard.php'),      nav_icon('dashboard')],
-    ['Doctors',        url('patient/doctors.php'),         nav_icon('stethoscope')],
-    ['Prescriptions',  url('patient/prescriptions.php'),   nav_icon('prescription')],
-    ['Vitals Log',     url('patient/vitals-log.php'),      nav_icon('chart')],
-    ['Appointments',   url('patient/appointments.php'),    nav_icon('calendar')],
-];
 ?>
 
 <section class="cca-hero cca-hero--video cca-hero--particles">
@@ -77,7 +70,7 @@ $navLinks = [
   </div>
 </section>
 
-<?= portal_nav('patient', $navLinks) ?>
+<?= portal_nav('patient') ?>
 
 <div class="cca-page-container">
   <div class="cca-grid-4">

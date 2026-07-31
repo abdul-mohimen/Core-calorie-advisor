@@ -290,16 +290,92 @@ function calculate_commission(float $amount, int $providerId = 0): array {
     return ['commission' => $commission, 'payout' => $payout, 'rate' => $rate];
 }
 
-/* ---- Portal Sub-page Navigation ---- */
-function portal_nav(string $portal, array $links): string {
+/* ---- Portal Sub-page Navigation ----
+
+   PHASE I: portal_links() is the canonical link set per portal.
+
+   Measured before writing this: all 27 portal_nav() call sites were already in
+   sync — every portal resolved to exactly ONE distinct link set. So this is not
+   repairing drift, it is removing the duplication that makes drift inevitable:
+   adding a portal page currently means editing 5-6 files and silently getting
+   away with editing only some.
+
+   Every entry below points at a file that EXISTS on disk. Entries the master
+   prompt asks for but which have no page yet — member "Progress", doctor
+   "Prescriptions", admin "Wardrobe Admin" (Phase F) and "Platform Settings"
+   (Phase L) — are deliberately absent: a nav link to a 404 is a placeholder,
+   which rule 0.1.6 forbids. Add them here when the page lands, not before. */
+function portal_links(string $portal): array {
+    $sets = [
+        'member' => [
+            ['Dashboard',       url('member/dashboard.php'),        nav_icon('dashboard')],
+            ['Workouts',        url('member/workouts.php'),         nav_icon('dumbbell')],
+            ['Diet Planner',    url('member/diet-planner.php'),     nav_icon('diet')],
+            ['Trainers & Docs', url('member/trainers-doctors.php'), nav_icon('users')],
+            ['Appointments',    url('member/appointments.php'),     nav_icon('calendar')],
+            ['Billing',         url('member/billing.php'),          nav_icon('billing')],
+            /* pages/trainer-studio.php exists and is member-facing, but was
+               reachable only via the "Change" link inside the player. */
+            ['Trainer Studio',  url('pages/trainer-studio.php'),    nav_icon('star')],
+        ],
+        'trainer' => [
+            ['Dashboard',       url('trainer/dashboard.php'),        nav_icon('dashboard')],
+            ['Client Roster',   url('trainer/client-roster.php'),    nav_icon('users')],
+            ['Routine Creator', url('trainer/routine-creator.php'),  nav_icon('dumbbell')],
+            ['Earnings',        url('trainer/earnings-payouts.php'), nav_icon('money')],
+            ['Reviews',         url('trainer/reviews-ratings.php'),  nav_icon('star')],
+        ],
+        'doctor' => [
+            ['Dashboard',     url('doctor/dashboard.php'),     nav_icon('dashboard')],
+            ['Patient Queue', url('doctor/patient-queue.php'), nav_icon('queue')],
+            ['Consultations', url('doctor/consultations.php'), nav_icon('stethoscope')],
+            ['Financials',    url('doctor/financials.php'),    nav_icon('money')],
+            ['Ratings',       url('doctor/ratings.php'),       nav_icon('star')],
+        ],
+        'patient' => [
+            ['Dashboard',     url('patient/dashboard.php'),     nav_icon('dashboard')],
+            ['Doctors',       url('patient/doctors.php'),       nav_icon('stethoscope')],
+            ['Prescriptions', url('patient/prescriptions.php'), nav_icon('prescription')],
+            ['Vitals Log',    url('patient/vitals-log.php'),    nav_icon('heart')],
+            ['Appointments',  url('patient/appointments.php'),  nav_icon('calendar')],
+        ],
+        'admin' => [
+            ['Dashboard',    url('admin/dashboard.php'),              nav_icon('dashboard')],
+            ['Users',        url('admin/user-management.php'),        nav_icon('users')],
+            ['Monetization', url('admin/monetization-stripe.php'),    nav_icon('money')],
+            ['Appointments', url('admin/appointments-master.php'),    nav_icon('calendar')],
+            ['Exercises',    url('admin/exercise-library-admin.php'), nav_icon('library')],
+            ['Reviews',      url('admin/reviews-moderation.php'),     nav_icon('moderate')],
+        ],
+    ];
+    return $sets[$portal] ?? [];
+}
+
+/* $links stays optional-overridable so a page with a genuine one-off need is not
+   forced to fight the helper; omit it and you get the canonical set. */
+function portal_nav(string $portal, ?array $links = null): string {
+    $links = $links ?? portal_links($portal);
     $curFile = basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: 'dashboard.php');
-    $html = '<nav class="cca-portal-nav">';
+
+    /* Badge: unread notifications, shown on the portal's Dashboard entry.
+       unread_count() is already the single source for this (functions.php:167). */
+    $badge = 0;
+    if (is_logged_in()) $badge = unread_count((int)($_SESSION['user']['id'] ?? 0));
+
+    $html = '<nav class="cca-portal-nav" role="navigation" aria-label="'
+          . e(ucfirst($portal)) . ' section">';
     foreach ($links as [$label, $href, $icon]) {
-        $file = basename(parse_url($href, PHP_URL_PATH) ?: '');
-        $active = ($file === $curFile) ? ' active' : '';
-        $html .= '<a href="' . e($href) . '" class="' . $active . '">'
-               . ($icon ? '<span style="display:inline-flex">' . $icon . '</span>' : '')
-               . e($label) . '</a>';
+        $file   = basename(parse_url($href, PHP_URL_PATH) ?: '');
+        $active = ($file === $curFile);
+        $html  .= '<a href="' . e($href) . '" class="' . ($active ? 'active' : '') . '"'
+                . ($active ? ' aria-current="page"' : '') . '>'
+                . ($icon ? '<span style="display:inline-flex">' . $icon . '</span>' : '')
+                . e($label);
+        if ($badge > 0 && $label === 'Dashboard') {
+            $html .= '<span class="cca-portal-nav__badge" aria-label="'
+                   . (int)$badge . ' unread notifications">' . ($badge > 99 ? '99+' : (int)$badge) . '</span>';
+        }
+        $html .= '</a>';
     }
     $html .= '</nav>';
     return $html;

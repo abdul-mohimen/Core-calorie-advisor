@@ -14,7 +14,6 @@ $pendRev = 0; try { $pendRev = (int)db()->query("SELECT COUNT(*) c FROM reviews 
 
 $portal = 'admin'; $pageTitle = 'Admin Dashboard';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('admin/dashboard.php'),nav_icon('dashboard')],['Users',url('admin/user-management.php'),nav_icon('users')],['Monetization',url('admin/monetization-stripe.php'),nav_icon('money')],['Appointments',url('admin/appointments-master.php'),nav_icon('calendar')],['Exercises',url('admin/exercise-library-admin.php'),nav_icon('library')],['Reviews',url('admin/reviews-moderation.php'),nav_icon('moderate')]];
 ?>
 <section class="cca-hero cca-hero--video cca-hero--particles">
   <video class="cca-hero__video" autoplay muted loop playsinline preload="metadata" poster="<?= url('assets/images/hero-poster.jpg') ?>">
@@ -39,7 +38,7 @@ $navLinks = [['Dashboard',url('admin/dashboard.php'),nav_icon('dashboard')],['Us
     </div>
   </div>
 </section>
-<?= portal_nav('admin', $navLinks) ?>
+<?= portal_nav('admin') ?>
 <div class="cca-page-container">
   <div class="cca-grid-4">
     <div class="cca-metric"><span class="cca-metric-icon c1">👥</span><div><div class="cca-metric-val"><?= $totalMembers ?></div><div class="cca-metric-lbl">Members</div></div></div>

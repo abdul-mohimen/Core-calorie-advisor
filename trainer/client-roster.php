@@ -7,14 +7,13 @@ $clients->execute([$uid]); $roster = $clients->fetchAll();
 
 $portal = 'trainer'; $pageTitle = 'Client Roster';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['Client Roster',url('trainer/client-roster.php'),nav_icon('users')],['Routine Creator',url('trainer/routine-creator.php'),nav_icon('dumbbell')],['Earnings',url('trainer/earnings-payouts.php'),nav_icon('money')],['Reviews',url('trainer/reviews-ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('trainer/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Clients</div>
   <h1 class="cca-hero__title">Client <span class="grad">Roster</span></h1>
   <p class="cca-hero__subtitle">Manage your assigned members and customize their workout and diet plans.</p>
 </div></div></section>
-<?= portal_nav('trainer', $navLinks) ?>
+<?= portal_nav('trainer') ?>
 <div class="cca-page-container">
   <div class="cca-card">
     <h3 class="cca-h3">👥 My Clients</h3>

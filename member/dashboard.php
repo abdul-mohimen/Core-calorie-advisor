@@ -47,14 +47,6 @@ $pageTitle = 'Member Dashboard';
 include dirname(__DIR__) . '/includes/header.php';
 
 /* Portal sub-navigation */
-$navLinks = [
-    ['Dashboard',        url('member/dashboard.php'),        nav_icon('dashboard')],
-    ['Workouts',         url('member/workouts.php'),          nav_icon('dumbbell')],
-    ['Diet Planner',     url('member/diet-planner.php'),      nav_icon('diet')],
-    ['Trainers & Docs',  url('member/trainers-doctors.php'),  nav_icon('users')],
-    ['Appointments',     url('member/appointments.php'),      nav_icon('calendar')],
-    ['Billing',          url('member/billing.php'),           nav_icon('billing')],
-];
 ?>
 <svg width="0" height="0" style="position:absolute"><defs>
   <linearGradient id="heroRingGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF3D00"/><stop offset="1" stop-color="#FFC02E"/></linearGradient>
@@ -111,7 +103,7 @@ $navLinks = [
   </div>
 </section>
 
-<?= portal_nav('member', $navLinks) ?>
+<?= portal_nav('member') ?>
 
 <div class="cca-page-container">
   <!-- ═══ STAT CARDS ═══ -->

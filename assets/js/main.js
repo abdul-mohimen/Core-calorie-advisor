@@ -126,3 +126,23 @@ function calcBMR(){const a=+$('#bAge').value,g=$('#bGen').value,h=+$('#bH').valu
   $('#bOut').style.display='block';$('#bCal').textContent=Math.round(bmr*act)}
 function calcWater(){const w=+$('#wW').value;$('#wOut').style.display='block';$('#wL').textContent=(w*0.035).toFixed(1)}
 function calcMacro(){const c=+$('#mCal').value;$('#mOut').style.display='block';$('#mTxt').textContent=Math.round(c*.3/4)+'g / '+Math.round(c*.45/4)+'g / '+Math.round(c*.25/9)+'g'}
+
+/* ══ PHASE I — portal patti keyboard navigation ══
+   Arrow keys move focus along the strip, Home/End jump to the ends. Enter is
+   not handled: these are real <a> elements, so the browser already activates
+   them — intercepting it would only risk breaking modified clicks. */
+document.addEventListener('keydown', function (ev) {
+  if (['ArrowLeft','ArrowRight','Home','End'].indexOf(ev.key) === -1) return;
+  var nav = ev.target.closest && ev.target.closest('.cca-portal-nav');
+  if (!nav) return;
+  var items = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var i = items.indexOf(ev.target);
+  if (i === -1) return;
+  var to = ev.key === 'Home'  ? 0
+         : ev.key === 'End'   ? items.length - 1
+         : ev.key === 'ArrowLeft' ? (i - 1 + items.length) % items.length
+         : (i + 1) % items.length;
+  ev.preventDefault();
+  items[to].focus();
+  if (items[to].scrollIntoView) items[to].scrollIntoView({ block:'nearest', inline:'nearest' });
+});

@@ -5,14 +5,13 @@ $appts = db()->query('SELECT a.*, m.name member_name, t.name trainer_name FROM a
 
 $portal = 'admin'; $pageTitle = 'Appointments Master';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('admin/dashboard.php'),nav_icon('dashboard')],['Users',url('admin/user-management.php'),nav_icon('users')],['Monetization',url('admin/monetization-stripe.php'),nav_icon('money')],['Appointments',url('admin/appointments-master.php'),nav_icon('calendar')],['Exercises',url('admin/exercise-library-admin.php'),nav_icon('library')],['Reviews',url('admin/reviews-moderation.php'),nav_icon('moderate')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('admin/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Appointments</div>
   <h1 class="cca-hero__title">Master <span class="grad">Schedule</span></h1>
   <p class="cca-hero__subtitle">Platform-wide appointment overview. Manage disputes, process refunds, and resolve scheduling conflicts.</p>
 </div></div></section>
-<?= portal_nav('admin', $navLinks) ?>
+<?= portal_nav('admin') ?>
 <div class="cca-page-container"><div class="cca-card">
   <h3 class="cca-h3">📅 All Appointments (<?= count($appts) ?>)</h3>
   <div class="cca-table-wrap"><table class="cca-table">

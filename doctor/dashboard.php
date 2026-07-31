@@ -12,7 +12,6 @@ $wallet = get_wallet_balance($uid);
 
 $portal = 'doctor'; $pageTitle = 'Doctor Dashboard';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['Patient Queue',url('doctor/patient-queue.php'),nav_icon('queue')],['Consultations',url('doctor/consultations.php'),nav_icon('stethoscope')],['Financials',url('doctor/financials.php'),nav_icon('money')],['Ratings',url('doctor/ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--video cca-hero--particles">
   <video class="cca-hero__video" autoplay muted loop playsinline preload="metadata" poster="<?= url('assets/images/hero-poster.jpg') ?>">
@@ -37,7 +36,7 @@ $navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['P
     </div>
   </div>
 </section>
-<?= portal_nav('doctor', $navLinks) ?>
+<?= portal_nav('doctor') ?>
 <div class="cca-page-container">
   <div class="cca-grid-4">
     <div class="cca-metric"><span class="cca-metric-icon c1">👥</span><div><div class="cca-metric-val"><?= count($patients) ?></div><div class="cca-metric-lbl">Patients</div></div></div>

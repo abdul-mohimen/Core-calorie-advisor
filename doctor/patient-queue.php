@@ -7,14 +7,13 @@ $queue->execute([$uid]); $patients = $queue->fetchAll();
 
 $portal = 'doctor'; $pageTitle = 'Patient Queue';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('doctor/dashboard.php'),nav_icon('dashboard')],['Patient Queue',url('doctor/patient-queue.php'),nav_icon('queue')],['Consultations',url('doctor/consultations.php'),nav_icon('stethoscope')],['Financials',url('doctor/financials.php'),nav_icon('money')],['Ratings',url('doctor/ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('doctor/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Patient Queue</div>
   <h1 class="cca-hero__title">Patient <span class="grad">Queue</span></h1>
   <p class="cca-hero__subtitle">Live waiting room with clinical notes. Accept, reject, or manage patient intake requests.</p>
 </div></div></section>
-<?= portal_nav('doctor', $navLinks) ?>
+<?= portal_nav('doctor') ?>
 <div class="cca-page-container">
   <div class="cca-card">
     <h3 class="cca-h3">📋 Consultation Queue</h3>

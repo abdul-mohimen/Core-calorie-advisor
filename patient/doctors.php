@@ -7,14 +7,13 @@ $doctors = db()->query("SELECT tp.*, u.id AS user_id, u.name, u.role FROM traine
 
 $portal = 'patient'; $pageTitle = 'Find Doctors';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('patient/dashboard.php'),nav_icon('dashboard')],['Doctors',url('patient/doctors.php'),nav_icon('stethoscope')],['Prescriptions',url('patient/prescriptions.php'),nav_icon('prescription')],['Vitals Log',url('patient/vitals-log.php'),nav_icon('chart')],['Appointments',url('patient/appointments.php'),nav_icon('calendar')]];
 ?>
 <section class="cca-hero cca-hero--gradient"><div class="cca-hero__overlay"></div><div class="cca-hero__content"><div class="cca-hero__text">
   <div class="cca-hero__breadcrumb"><a href="<?= url('patient/dashboard.php') ?>">Dashboard</a> <span class="sep">›</span> Doctors</div>
   <h1 class="cca-hero__title">Find <span class="grad">Doctors</span></h1>
   <p class="cca-hero__subtitle">Browse certified Dietitians, Endocrinologists, Physiotherapists, and Sports Medicine specialists. Filter by rating and fee.</p>
 </div></div></section>
-<?= portal_nav('patient', $navLinks) ?>
+<?= portal_nav('patient') ?>
 <div class="cca-page-container">
   <div class="cca-grid-3">
     <?php foreach ($doctors as $d): $rate = $d['consultation_fee'] ?? 100; ?>

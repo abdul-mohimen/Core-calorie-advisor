@@ -7,8 +7,6 @@ try { $vst = db()->prepare('SELECT * FROM vitals_logs WHERE user_id = ? ORDER BY
 
 $portal = 'patient'; $pageTitle = 'Vitals Log';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('patient/dashboard.php'),nav_icon('dashboard')],['Doctors',url('patient/doctors.php'),nav_icon('stethoscope')],['Prescriptions',url('patient/prescriptions.php'),nav_icon('prescription')],['Vitals Log',url('patient/vitals-log.php'),nav_icon('chart')],['Appointments',url('patient/appointments.php'),nav_icon('calendar')]];
-
 /* Chart data for ApexCharts */
 $chartDates = []; $chartHR = []; $chartSugar = []; $chartWeight = [];
 foreach (array_reverse($vitals) as $v) {
@@ -23,7 +21,7 @@ foreach (array_reverse($vitals) as $v) {
   <h1 class="cca-hero__title">Health <span class="grad">Vitals Log</span></h1>
   <p class="cca-hero__subtitle">Interactive health metrics charts. Track heart rate, blood sugar, weight, and BMI over time.</p>
 </div></div></section>
-<?= portal_nav('patient', $navLinks) ?>
+<?= portal_nav('patient') ?>
 <div class="cca-page-container">
   <!-- ═══ CHARTS ═══ -->
   <div class="cca-grid-2" style="margin-bottom:24px">

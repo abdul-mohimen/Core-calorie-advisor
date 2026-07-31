@@ -24,14 +24,6 @@ $portal    = 'member';
 $pageTitle = '3D Workout Studio';
 include dirname(__DIR__) . '/includes/header.php';
 
-$navLinks = [
-    ['Dashboard',        url('member/dashboard.php'),        nav_icon('dashboard')],
-    ['Workouts',         url('member/workouts.php'),          nav_icon('dumbbell')],
-    ['Diet Planner',     url('member/diet-planner.php'),      nav_icon('diet')],
-    ['Trainers & Docs',  url('member/trainers-doctors.php'),  nav_icon('users')],
-    ['Appointments',     url('member/appointments.php'),      nav_icon('calendar')],
-    ['Billing',          url('member/billing.php'),           nav_icon('billing')],
-];
 ?>
 
 <section class="cca-hero cca-hero--particles">
@@ -52,7 +44,7 @@ $navLinks = [
   </div>
 </section>
 
-<?= portal_nav('member', $navLinks) ?>
+<?= portal_nav('member') ?>
 
 <div class="cca-page-container">
   <div class="cca-grid-2" style="grid-template-columns: 260px 1fr; align-items:start; gap:24px">

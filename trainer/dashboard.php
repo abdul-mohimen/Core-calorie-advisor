@@ -15,7 +15,6 @@ $wallet = get_wallet_balance($uid);
 
 $portal = 'trainer'; $pageTitle = 'Trainer Dashboard';
 include dirname(__DIR__) . '/includes/header.php';
-$navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['Client Roster',url('trainer/client-roster.php'),nav_icon('users')],['Routine Creator',url('trainer/routine-creator.php'),nav_icon('dumbbell')],['Earnings',url('trainer/earnings-payouts.php'),nav_icon('money')],['Reviews',url('trainer/reviews-ratings.php'),nav_icon('star')]];
 ?>
 <section class="cca-hero cca-hero--video cca-hero--particles">
   <video class="cca-hero__video" autoplay muted loop playsinline preload="metadata" poster="<?= url('assets/images/hero-poster.jpg') ?>">
@@ -40,7 +39,7 @@ $navLinks = [['Dashboard',url('trainer/dashboard.php'),nav_icon('dashboard')],['
     </div>
   </div>
 </section>
-<?= portal_nav('trainer', $navLinks) ?>
+<?= portal_nav('trainer') ?>
 <div class="cca-page-container">
   <div class="cca-grid-4">
     <div class="cca-metric"><span class="cca-metric-icon c1">👥</span><div><div class="cca-metric-val"><?= $clients ?></div><div class="cca-metric-lbl">My Clients</div></div></div>
