@@ -2,8 +2,13 @@
 require_once dirname(__DIR__) . '/config/config.php';
 require_role('admin');
 
-/* Handle approve/reject POST */
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify_json()) {
+/* Handle approve/reject POST.
+   NOTE: csrf_verify*() returns void, so it must NEVER be used as a condition —
+   `POST && csrf_verify_json()` evaluates to false always and silently disabled
+   this entire handler. Use csrf_verify() (plain-text 419) because this is an
+   HTML form POST that redirects, not a JSON endpoint. */
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     $rid = (int)($_POST['review_id'] ?? 0);
     $act = $_POST['mod_action'] ?? '';
     if ($rid && in_array($act, ['approved','rejected'])) {

@@ -2,12 +2,20 @@
 require_once dirname(__DIR__) . '/config/config.php';
 require_role('admin');
 
-/* Handle settings POST */
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify_json()) {
+/* Handle settings POST.
+   NOTE: csrf_verify*() returns void, so it must NEVER be used as a condition —
+   `POST && csrf_verify_json()` evaluates to false always and silently disabled
+   this entire handler. Use csrf_verify() (plain-text 419) because this is an
+   HTML form POST that redirects, not a JSON endpoint. */
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     foreach (['commission_rate','top_rated_commission_rate','top_rated_threshold'] as $k) {
         if (isset($_POST[$k])) set_setting($k, $_POST[$k]);
     }
-    $_SESSION['flash'] = 'Settings saved!';
+    /* Page-local key on purpose: $_SESSION['flash'] belongs to flash_render()
+       (functions.php:136) which iterates it as a list of [type, msg] pairs.
+       Assigning a plain string there makes header.php:207 foreach over a string. */
+    $_SESSION['mon_flash'] = 'Settings saved!';
     header('Location: ' . url('admin/monetization-stripe.php'));
     exit;
 }
@@ -26,7 +34,7 @@ $navLinks = [['Dashboard',url('admin/dashboard.php'),nav_icon('dashboard')],['Us
 </div></div></section>
 <?= portal_nav('admin', $navLinks) ?>
 <div class="cca-page-container">
-  <?php if (isset($_SESSION['flash'])): ?><div class="cca-alert cca-alert-success" style="margin-bottom:16px"><?= e($_SESSION['flash']) ?></div><?php unset($_SESSION['flash']); endif; ?>
+  <?php if (isset($_SESSION['mon_flash'])): ?><div class="cca-alert cca-alert-success" style="margin-bottom:16px"><?= e($_SESSION['mon_flash']) ?></div><?php unset($_SESSION['mon_flash']); endif; ?>
 
   <div class="cca-grid-2" style="margin-bottom:24px">
     <div class="cca-card">
