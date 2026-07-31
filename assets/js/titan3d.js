@@ -276,13 +276,9 @@ function fitModel(obj) {
     const mats = Array.isArray(o.material) ? o.material : [o.material];
 
     mats.forEach(mat => {
-      // Force 100% opaque render setup for all human meshes (stripping translucent shader code)
-      mat.transparent = false;
-      mat.opacity = 1.0;
-      mat.alphaTest = 0;
-      mat.depthWrite = true;
-      if ('blending' in mat) mat.blending = THREE.NormalBlending;
-      if (mat.alphaMap) mat.alphaMap = null;
+      /* Opacity forcing lives in forceOpaque() — the single choke point. It used
+         to be inline here, which meant a wardrobe texture swap could silently
+         re-introduce transparency because nothing re-asserted it. */
 
       // Clean, professional PBR: sRGB color maps
       if (mat.map && 'encoding' in mat.map) { mat.map.encoding = THREE.sRGBEncoding; mat.map.needsUpdate = true; }
@@ -316,7 +312,16 @@ function fitModel(obj) {
       mat.needsUpdate = true;
     });
   });
+
+  /* PHASE D choke point. Runs AFTER the traverse above, because materials are
+     cloned per-mesh in there and forcing earlier would mutate the shared source
+     materials. Implementation lives in cca-wardrobe.js: every page that loads
+     titan3d.js also loads cca-wardrobe.js, but pages/trainer-studio.php loads
+     cca-wardrobe.js WITHOUT titan3d.js — so the wardrobe file is the only place
+     that is present on all three-D pages. One implementation, no drift. */
+  if (window.CCAForceOpaque) window.CCAForceOpaque(obj);
 }
+
 function makeGLTFLoader() {
   const loader = new THREE.GLTFLoader();
   if (typeof THREE.DRACOLoader === 'function') {
@@ -330,14 +335,16 @@ function makeGLTFLoader() {
 function buildProceduralHumanoid() {
   const group = new THREE.Group();
   
+  /* PHASE D: was transparent:true / opacity:0.85, which rendered a see-through
+     ghost whenever the GLB failed or timed out. The loading state is already
+     covered by the #arena-loader overlay (pages/player.php:195), so there is no
+     reason for this fallback to be translucent. */
   const bodyMaterial = new THREE.MeshStandardMaterial({
     color: 0xFF6B1A,
     emissive: 0xFF6B1A,
     emissiveIntensity: 0.5,
     roughness: 0.1,
-    metalness: 0.9,
-    transparent: true,
-    opacity: 0.85
+    metalness: 0.9
   });
   
   const jointMaterial = new THREE.MeshStandardMaterial({

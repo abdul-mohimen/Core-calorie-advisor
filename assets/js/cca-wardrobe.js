@@ -114,6 +114,49 @@
     return n;
   }
 
+  /* ============ PHASE D — the single opacity choke point ============
+     Lives here, not in titan3d.js, because this file is the only one loaded by
+     EVERY page that puts a character on screen: index.php, pages/features.php,
+     member/workouts.php and pages/player.php load both, but
+     pages/trainer-studio.php loads cca-wardrobe.js WITHOUT titan3d.js.
+
+     Called from: (a) titan3d.js fitModel() after a GLB is styled,
+                  (b) setMap() below after every texture swap,
+                  (c) character switch (Phase E).
+
+     Why this is needed at all — measured, not assumed:
+       · every character GLB declares its body material alphaMode=BLEND
+         (trainers.glb/trainer-pro.glb: Body_MAT, Brows_MAT, Eyes_MAT;
+          trainer-street.glb/trainer-ch06.glb: Ch06_body, Ch06_eyelashes).
+         Run `node _audit/opaque-check.mjs` to reproduce. THAT is the
+         see-through character — it ships that way in the asset.
+       · the outfit PNGs are RGBA with genuine holes (~1-2% of texels below
+         alpha 255, min 0). three.js does not derive `transparent` from a map's
+         alpha, so those holes stay inert only while transparent=false and
+         alphaTest=0 — which is exactly what a swap must re-assert. */
+  function forceOpaque(root) {
+    if (!root || !w.THREE) return 0;
+    var n = 0;
+    root.traverse(function (o) {
+      if (!o.isMesh && !o.isSkinnedMesh) return;
+      if (!o.material) return;
+      (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (m) {
+        if (!m) return;
+        m.transparent = false;
+        m.opacity     = 1;
+        m.alphaTest   = 0;
+        m.depthWrite  = true;
+        m.depthTest   = true;
+        m.side        = w.THREE.FrontSide;   // stop back-face bleed through the torso
+        m.alphaMap    = null;
+        if ('blending' in m) m.blending = w.THREE.NormalBlending;
+        m.needsUpdate = true;
+        n++;
+      });
+    });
+    return n;
+  }
+
   function apply(root, ld, onDone) {
     if (!root) return { cap: false, glasses: false };
     uncull(root);
@@ -154,6 +197,7 @@
         m.map = tex || m.__ccaBaseMap;
         m.needsUpdate = true;
       });
+      forceOpaque(root);   // PHASE D: re-assert after every swap — see forceOpaque() above
       if (onDone) onDone(state);
     }
 
@@ -182,8 +226,12 @@
   w.CCAWardrobe = {
     TRAINERS: TRAINERS, DEFAULT: DEFAULT,
     load: load, save: save, apply: apply, uncull: uncull, resetBaseMap: resetBaseMap,
+    forceOpaque: forceOpaque,
     modelUrlFor: modelUrlFor, trainerById: trainerById,
     outfitsFor: outfitsFor, outfitById: outfitById,
     extrasFor: extrasFor, EXTRA_LABEL: EXTRA_LABEL
   };
+  /* Top-level alias: titan3d.js fitModel() and any page-level scene code can
+     re-assert opacity without reaching into the wardrobe module. */
+  w.CCAForceOpaque = forceOpaque;
 })(window);
