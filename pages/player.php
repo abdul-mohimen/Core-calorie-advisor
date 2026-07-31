@@ -56,6 +56,25 @@ include dirname(__DIR__) . '/includes/header.php';
 #playerUI { display: none; }
 #playerUI[style*="display: block"] { display: flex !important; }
 
+/* PHASE G — session-length segmented control. Uses the existing accent tokens;
+   no new font, icon pack or CDN is introduced. */
+.dur-opt {
+  flex: 1; padding: 11px 8px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  color: #9CA3AF; font-weight: 800; font-size: 13px;
+  letter-spacing: .12em; text-transform: uppercase;
+  cursor: pointer; transition: all .24s cubic-bezier(.32,.72,.28,1);
+}
+.dur-opt:hover { background: rgba(255,255,255,0.08); color: #E5E7EB; }
+.dur-opt:active { transform: scale(.96); }
+.dur-opt:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.dur-opt.is-on {
+  background: linear-gradient(90deg, #FF6B1A, #FF3D00);
+  border-color: rgba(255,107,26,.5); color: #fff;
+  box-shadow: 0 6px 18px rgba(255,107,26,.22);
+}
+
 /* Segmented progress */
 .segmented-progress .progress-segment {
   height: 5px; border-radius: 3px;
@@ -177,6 +196,18 @@ include dirname(__DIR__) . '/includes/header.php';
                   text-[11px] font-black tracking-widest uppercase transition no-underline">Change</a>
       </div>
 
+      <!-- PHASE G: session length. The engine used to hard-cap every session at
+           600 s and silently splice off any exercise that did not fit. -->
+      <div class="w-full max-w-md mb-6">
+        <div class="text-[9px] font-black tracking-[3px] uppercase text-[#FF6B1A] font-mono mb-2 text-center">Session length</div>
+        <div id="durationPick" class="flex gap-2 justify-center" role="group" aria-label="Session length">
+          <button type="button" class="dur-opt is-on" data-seconds="600"  onclick="pickDuration(this)">10 min</button>
+          <button type="button" class="dur-opt"       data-seconds="900"  onclick="pickDuration(this)">15 min</button>
+          <button type="button" class="dur-opt"       data-seconds="1200" onclick="pickDuration(this)">20 min</button>
+        </div>
+        <p id="durationEcho" class="text-[11px] text-gray-500 font-mono text-center mt-2.5 tracking-wide"></p>
+      </div>
+
       <!-- Aggressive Action Button -->
       <button class="px-12 py-5 bg-gradient-to-r from-[#FF6B1A] to-[#FF3D00] hover:from-[#FF8833] hover:to-[#FF6B1A] text-white font-extrabold rounded-2xl shadow-xl shadow-[#FF6B1A]/20 active:scale-[0.97] transition-all tracking-[0.2em] text-base uppercase cca-font-disp"
               onclick="startPlayer()">
@@ -289,8 +320,27 @@ include dirname(__DIR__) . '/includes/header.php';
         <p class="text-xs text-gray-500 uppercase tracking-[4px] font-bold font-mono mb-2">Up Next</p>
         <span id="restNext" class="text-2xl font-extrabold text-white mb-8 block truncate uppercase tracking-wider cca-font-disp text-[#FF6B1A] drop-shadow-[0_0_8px_rgba(255,107,26,0.3)]">—</span>
 
-        <div id="restControls" class="flex justify-center gap-4">
-          <button type="button" class="px-8 py-3.5 bg-gradient-to-r from-[#FF6B1A] to-[#FF3D00] hover:from-[#FF8833] hover:to-[#FF6B1A] active:scale-95 text-white text-sm font-extrabold uppercase tracking-widest rounded-xl shadow-lg shadow-[#FF6B1A]/20 transition-all cca-font-disp" onclick="addRest()">+20s Rest</button>
+        <!-- PHASE G: session context during rest — the overlay used to show only
+             the countdown and the next move, with no sense of progress left. -->
+        <div class="flex justify-center items-center gap-3 mb-5 text-[11px] font-bold uppercase tracking-[2px] font-mono text-gray-500">
+          <span id="restBlock">Block 1 of 1</span>
+          <span class="text-gray-700">·</span>
+          <span id="restLeft" class="text-[#FF6B1A]">0:00 left</span>
+        </div>
+        <p id="restThen" class="text-xs text-gray-500 uppercase tracking-[3px] font-bold font-mono mb-6"></p>
+
+        <!-- PHASE G: three controls. Rest could previously only be EXTENDED —
+             skipping it meant reaching down to the bottom bar mid-rest. -->
+        <div id="restControls" class="flex flex-wrap justify-center gap-3">
+          <button type="button" id="restAddBtn"
+                  class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95 text-gray-300 text-sm font-extrabold uppercase tracking-widest rounded-xl transition-all cca-font-disp disabled:hover:bg-white/5"
+                  title="Add 20 seconds to this rest" onclick="addRest()">+20s</button>
+          <button type="button"
+                  class="px-8 py-3.5 bg-gradient-to-r from-[#FF6B1A] to-[#FF3D00] hover:from-[#FF8833] hover:to-[#FF6B1A] active:scale-95 text-white text-sm font-extrabold uppercase tracking-widest rounded-xl shadow-lg shadow-[#FF6B1A]/20 transition-all cca-font-disp"
+                  onclick="skipRest()">Skip Rest ▶</button>
+          <button type="button" data-role="pause"
+                  class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95 text-gray-300 text-sm font-extrabold uppercase tracking-widest rounded-xl transition-all cca-font-disp"
+                  onclick="togglePause(this)">⏸ Pause</button>
         </div>
       </div>
     </div>
