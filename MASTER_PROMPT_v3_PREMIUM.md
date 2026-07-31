@@ -117,7 +117,23 @@ Phase K.2 (`git rm`) **abhi execute hi nahi ho sakte**. Isi liye naya §0.4 pre-
 
 ---
 
-## 0.4 PRE-FLIGHT — PHASE A SE BHI PEHLE (one time, ~2 minutes)
+## 0.4 PRE-FLIGHT — ✅ EXECUTED 2026-07-31 (owner-approved)
+
+> **Ye gate chal chuka hai. Dobara mat chalao.** Result:
+> - `.gitignore` banaya gaya **`git init` se pehle** → `.env` kabhi stage hua hi nahi
+> - Repo initialized, **159 files** tracked, commit `ee427ab` "pre-phase-A baseline checkpoint"
+> - **Gate PASS:** `git check-ignore -v .env` → `.gitignore:6:.env`; history me `.env` zero hits
+> - Ignored: `.env`, `logs/`, `uploads/`, `_audit/` (57 MB), `*.zip/*.bak/*.old`
+> - Tracked: `assets/videos` (153 MB) + `assets/models` (22 MB) — jaan boojh kar, taake
+>   **Phase K ka media deletion revertible rahe**
+> - `git status` clean, `git rev-list --count HEAD` = 1
+>
+> **`ANTHROPIC_API_KEY` rotate karne ki zarurat NAHI** — order sahi tha, koi secret history me nahi gaya.
+> Ab Phase K unblocked hai.
+
+Neeche wala procedure reference/reproducibility ke liye rakha gaya hai:
+
+### 0.4 (original procedure)
 
 **Kyun:** har destructive phase ka rollback plan git par khara hai, aur git abhi hai hi nahi.
 Phase K akela ~200 MB delete karta hai **bina kisi undo path ke**. Ye gate us se bachata hai.
@@ -208,6 +224,22 @@ git commit -m "pre-phase-A baseline checkpoint"
      sirf note karo, kyunke wo file scope se bahar hai.
    - `MASTER_PROMPT_v3_PREMIUM.md` §0.3 khud `pages/` ko 26 kehta tha, asal 29 hai — ab fix ho chuka.
 6. **Line-ending drift.** `includes/header.php` CRLF hai, baqi files LF. Full list do.
+
+   > **⚠ §0.4 ke baad ye item badal gaya hai — pehle ye padho.**
+   > Git `core.autocrlf=true` par hai aur **`.gitattributes` mojood nahi**. Iska matlab:
+   > commit par git ne saari LF files ko normalize kar diya (`git add` ne 150+
+   > *"LF will be replaced by CRLF"* warnings diye). Ab agla `git checkout` har file ko
+   > CRLF me likh dega.
+   >
+   > Do nataij:
+   > 1. "kaun si file LF hai, kaun si CRLF" ka sawal ab **filesystem se reliably nahi**
+   >    poochha ja sakta — git beech me convert kar raha hai. Is item ko measure karne ke liye
+   >    `git ls-files --eol` use karo, `file`/`grep` nahi.
+   > 2. Ye ek din ek **massive spurious diff** paida kar sakta hai jo asli changes chhupa dega.
+   >
+   > **Faisla mujh se lo:** `.gitattributes` (`* text=auto eol=lf`) add karein ya nahi.
+   > Maine ye file **khud nahi banai** — ye ek naya file + repo-wide decision hai, aur
+   > tumhari approval ke baghair ye rule 0.1.5 ke qareeb hai. Phase A me sirf **report** karo.
 
 ### A.2 Acceptance
 - Report me har number ke sath wo command ho jisse wo number nikla.
