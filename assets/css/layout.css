@@ -1,0 +1,153 @@
+/* =============================================================================
+   CORE CALORIE ADVISOR — LAYOUT ENGINE  ·  single source of truth for the app shell
+   -----------------------------------------------------------------------------
+   Loaded AFTER style.css. Owns: sidebar, main offset, burger, responsive,
+   card grid and per-portal scoping. NO padding-top hacks — navbar clearance is
+   pure margin; sidebar/main can never overlap because they never share space
+   unless the sidebar is explicitly OPEN.
+
+   DOM contract (includes/header.php):
+     <body> #app[.auth-mode][.sb-open][data-portal="…"]
+              ├─ header.nav   fixed, real height measured into --nav-h
+              │    └─ .burger#burger   IMAGE toggle, always visible
+              ├─ #overlay     mobile scrim
+              ├─ #sidebar     260px glass panel — CLOSED by default (all viewports)
+              ├─ main
+              └─ footer
+   JS contract (assets/js/main.js):
+     #burger → toggles #sidebar.open + #app.sb-open (+ #overlay.on on mobile).
+     Sidebar starts CLOSED on every load — no persisted open state.
+   ============================================================================= */
+
+:root {
+  --sidebar-w: 260px;          /* spec: fixed sidebar width */
+  --nav-h: 80px;               /* spec: main margin-top; main.js overwrites with measured height */
+  --shell-bp: 1100px;          /* desktop breakpoint — MUST match isDesktop() in main.js */
+  --shell-gap: 24px;           /* grid gap for cards */
+  --portal-accent: var(--ember);   /* per-portal identity; set by [data-portal] scopes below */
+}
+
+.brand svg {
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  flex-shrink: 0 !important;
+}
+
+/* App shell = a single vertical flex column */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* =============================================================================
+   SIDEBAR  ·  fixed · glass · 260px · CLOSED by default on every viewport
+   ============================================================================= */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: calc(-1 * var(--sidebar-w) - 24px);    /* parked off-screen = closed */
+  width: var(--sidebar-w);
+  height: 100dvh;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(22, 24, 33, .94), rgba(11, 12, 17, .97));
+  -webkit-backdrop-filter: blur(30px) saturate(1.4);
+          backdrop-filter: blur(30px) saturate(1.4);
+  border-right: 1px solid var(--line2);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, .05), 44px 0 90px rgba(0, 0, 0, .55);
+  transition: left .34s cubic-bezier(.2, .8, .25, 1);
+}
+[data-theme="light"] #sidebar {
+  background: linear-gradient(180deg, rgba(248, 245, 238, .96), rgba(255, 255, 255, .98));
+}
+#sidebar.open {
+  left: 0;
+  box-shadow:
+    inset -1px 0 0 rgba(255, 255, 255, .06),
+    40px 0 130px rgba(0, 0, 0, .75),
+    4px 0 0 var(--portal-accent);               /* glowing accent edge */
+}
+
+/* Mobile scrim behind the open drawer */
+#overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(4, 5, 8, .6);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s;
+}
+#overlay.on { opacity: 1; pointer-events: auto; }
+
+/* =============================================================================
+   MAIN  ·  margin-top clears the navbar; full width when the sidebar is closed
+   ============================================================================= */
+#app:not(.auth-mode) > main {
+  margin-top: var(--nav-h);                     /* spec: margin-top 80px (measured) */
+  margin-left: 0;                               /* closed sidebar reserves NO space */
+  width: 100%;
+  padding: 0 0 40px;                            /* side spacing stays with .wrap */
+  min-height: calc(100vh - var(--nav-h));
+}
+#app.auth-mode > main.auth-main { margin-top: var(--nav-h); padding-top: 0; }   /* split-screen auth fills flush below the bar (kill base main padding-top) */
+
+/* The image toggle is ALWAYS visible so the sidebar can always be opened */
+.burger { display: grid; }
+.burger img { width: 22px; height: 22px; display: block; pointer-events: none; }
+
+/* =============================================================================
+   CARDS  ·  CSS Grid, no manual margins
+   ============================================================================= */
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min, 260px), 1fr));
+  gap: var(--shell-gap);
+  align-items: stretch;
+}
+.portal-grid > * { min-width: 0; }
+
+/* 3D model container: clip the canvas so it can NEVER break the layout */
+.hero-3d, #hero3d { overflow: hidden; }
+
+/* =============================================================================
+   PORTAL SCOPING  ·  each portal owns an accent; global gold brand untouched
+   Component styling per portal lives in assets/css/portals/<portal>.css.
+   ============================================================================= */
+/* PER-PORTAL IDENTITY — each portal gets its own accent so the five never read
+   as the same screen with different words.
+   Previously: admin used --steel, which is an alias of --bg3, i.e. a background
+   GREY, not the blue the comment claimed; and trainer (--ember) and member
+   (--molten) both resolved to orange, so those two portals were visually
+   identical. Each now maps to a real, distinct semantic token, and carries a
+   matching *-text variant for anything that colours TEXT with the accent
+   (the raw hues fail WCAG AA on light surfaces — see style.css). */
+[data-portal="admin"]   { --portal-accent: var(--info);          --portal-accent-text: var(--info-text);          }  /* blue   */
+[data-portal="doctor"]  { --portal-accent: var(--success);       --portal-accent-text: var(--success-text);       }  /* green  */
+[data-portal="patient"] { --portal-accent: var(--accent-violet); --portal-accent-text: var(--accent-violet-text); }  /* violet */
+[data-portal="trainer"] { --portal-accent: var(--accent-cyan);   --portal-accent-text: var(--accent-cyan-text);   }  /* cyan   */
+[data-portal="member"]  { --portal-accent: var(--primary);       --portal-accent-text: var(--primary-text);       }  /* orange */
+
+[data-portal] .sb-link.active {
+  color: var(--text);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--portal-accent) 16%, transparent), transparent 82%);
+  box-shadow: inset 3px 0 0 var(--portal-accent), 0 0 22px color-mix(in srgb, var(--portal-accent) 12%, transparent);
+}
+
+/* =============================================================================
+   DESKTOP (>=1100px)  ·  an OPEN sidebar pushes content by exactly --sidebar-w
+   (margin-left + width:calc so they can NEVER overlap). Closed = content full width.
+   ============================================================================= */
+@media (min-width: 1100px) {
+  #sidebar { top: var(--nav-h); height: calc(100dvh - var(--nav-h)); }
+  #overlay { display: none; }                   /* desktop pushes content, never scrims */
+
+  #app.sb-open:not(.auth-mode) > main,
+  #app.sb-open:not(.auth-mode) > footer {
+    margin-left: var(--sidebar-w);              /* spec: margin-left 260px (when open) */
+    width: calc(100% - var(--sidebar-w));       /* spec: width calc(100% - 260px) */
+  }
+}

@@ -1,0 +1,18 @@
+# ================= CORE CALORIE ADVISOR — git exclusions =================
+# Created by §0.4 PRE-FLIGHT before `git init`, so that no secret ever
+# enters git history. Do not reorder: .env MUST stay listed.
+
+# Secrets — .env holds 20 live keys (Anthropic, Stripe, Google/Facebook/Instagram OAuth, DB)
+.env
+
+# Runtime / user data — not product source
+logs/
+uploads/
+
+# Developer audit workspace (57 MB). Evidence PNGs stay on disk, just untracked.
+_audit/
+
+# Archives & backups
+*.zip
+*.bak
+*.old

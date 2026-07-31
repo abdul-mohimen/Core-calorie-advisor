@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!--
+    ORIGINAL MARK — not derived from, traced from, or inspired by any existing
+    game or brand (see CLAUDE.md).
+
+    Meaning: an open activity/calorie ring that reads as the "C" of Core
+    Calorie, with a flame at its core for the burn. The dot on the ring's
+    leading end is a progress head — this app measures, it doesn't just
+    decorate. Two solid shapes only, so it stays legible down to 16px where
+    the previous three-letter "CCA" lettermark turned to mush.
+  -->
+  <defs>
+    <linearGradient id="ccaFlame" x1="26" y1="76" x2="74" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF3D00"/>
+      <stop offset=".45" stop-color="#FF6B1A"/>
+      <stop offset="1" stop-color="#FFB800"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Activity ring, open at the top right: the "C" -->
+  <path d="M22.15 30.5 A34 34 0 1 0 77.85 30.5"
+        fill="none" stroke="url(#ccaFlame)" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- Progress head on the ring's leading end -->
+  <circle cx="77.85" cy="30.5" r="5.5" fill="#FFB800"/>
+
+  <!-- Flame core -->
+  <path d="M50 25c8 10 14 17 14 26 0 9.9-6.3 16-14 16s-14-6.1-14-16c0-7 4-13 8-18 1 7 4 10 6 11 1-5 0-13 0-19Z"
+        fill="url(#ccaFlame)"/>
+</svg>

@@ -1,0 +1,185 @@
+/* ============================================================================
+   CORE CALORIE ADVISOR — TAILWIND → TOKEN BRIDGE          (Phase 9)
+   ============================================================================
+   PURPOSE
+   The app loads the Tailwind Play CDN alongside a hand-rolled token system.
+   Tailwind's palette (`text-gray-900`, `dark:text-white`, `border-gray-200` …)
+   is a SECOND, fixed colour system that knows nothing about --text-1/--bg/
+   --border, so pages built with it ignored the theme. Phase 8 measured 1,178
+   colour-bearing Tailwind usages across 143 distinct classes.
+
+   WHAT THIS FILE DOES
+   Redefines ONLY the theme-following colour utilities so they resolve to
+   tokens. Layout utilities (flex, grid, mb-2, w-full — 1,998 usages across 236
+   classes) are deliberately untouched: they carry no colour, cannot break
+   theming, and rewriting them by hand would risk regressions for no gain.
+
+   SPECIFICITY, NOT LOAD ORDER
+   The Tailwind CDN injects its <style> at runtime, and four pages load the CDN
+   a second time after the header. Rather than depend on document order, every
+   selector here is prefixed with `html`, giving it one extra element of
+   specificity (0,1,1) over Tailwind's (0,1,0) — so it wins deterministically no
+   matter when the CDN injects. No !important is used anywhere in this file.
+
+   WHAT IS DELIBERATELY *NOT* REMAPPED  (this distinction is the whole point)
+   Some Tailwind colour classes are ABSOLUTE, not semantic:
+     .text-white on an orange CTA must stay white in BOTH themes — remapping it
+     to --text-1 would turn it near-black on orange in light theme.
+     .bg-black/70 scrims sit over photos and must stay dark in both themes.
+     .bg-[url(...)] are images.
+   Those are listed at the bottom as intentional exclusions so a later pass does
+   not "finish the job" and break them.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. TEXT — theme-following
+   --------------------------------------------------------------------------- */
+html .text-gray-900,
+html .text-gray-950            { color: var(--text-1); }
+html .text-gray-700,
+html .text-gray-600            { color: var(--text-2); }
+html .text-gray-500,
+html .text-gray-400,
+html .text-gray-300            { color: var(--text-3); }
+
+html.dark .dark\:text-white    { color: var(--text-1); }
+html.dark .dark\:text-gray-300 { color: var(--text-2); }
+html.dark .dark\:text-gray-400,
+html.dark .dark\:text-gray-500 { color: var(--text-3); }
+
+html .placeholder-gray-500::placeholder { color: var(--text-3); }
+
+/* ---------------------------------------------------------------------------
+   2. TEXT — brand / semantic accents (arbitrary hex values → tokens)
+   --------------------------------------------------------------------------- */
+/* NOTE: these use the *-text variants, not the raw brand tokens. As TEXT on a
+   light background the raw values measured --primary 2.70:1, --accent-sky
+   2.03:1 and --gold 1.65:1 — all WCAG AA failures. The *-text tokens are the
+   brand colour itself in dark theme and a darkened equivalent in light theme,
+   so fills/borders keep the brand hue while labels stay readable. */
+html .text-\[\#FF6B1A\]        { color: var(--primary-text); }
+html .text-\[\#38BDF8\]        { color: var(--accent-sky-text); }
+html .text-\[\#F59E0B\]        { color: var(--warning); }
+html .text-\[\#FFB800\]        { color: var(--gold-text); }
+html .text-red-500             { color: var(--danger); }
+html .text-emerald-500,
+html .text-emerald-600         { color: var(--success); }
+html.dark .dark\:text-emerald-400 { color: var(--success); }
+html .text-amber-400,
+html .text-amber-500           { color: var(--gold-text); }
+
+html .hover\:text-\[\#FF6B1A\]:hover      { color: var(--primary-text); }
+html .hover\:text-\[\#7dd3fc\]:hover      { color: var(--accent-sky-soft); }
+html .hover\:text-brand-accent:hover      { color: var(--accent-sky-text); }
+
+/* ---------------------------------------------------------------------------
+   3. SURFACES — theme-following
+   `dark:bg-[#0A0A0A]` and `dark:bg-[#121212]` were a SECOND and THIRD page
+   background competing with --bg (#0F1115) and --bg2 (#16181D). Per the
+   product owner's Phase 8 answer ("jo important ho web ke liye"), these
+   collapse into the single canonical background scale rather than adding new
+   near-black tokens. This is the change that unifies the page background.
+   --------------------------------------------------------------------------- */
+html .bg-white                    { background-color: var(--surface); }
+html .bg-gray-100,
+html .bg-gray-50                  { background-color: var(--bg2); }
+html .bg-neutral-900              { background-color: var(--bg2); }
+html .hover\:bg-gray-200:hover    { background-color: var(--bg3); }
+
+html.dark .dark\:bg-\[\#0A0A0A\]  { background-color: var(--bg); }
+html.dark .dark\:bg-\[\#121212\]  { background-color: var(--bg2); }
+html.dark .dark\:bg-\[\#181818\]  { background-color: var(--bg3); }
+
+html .bg-white\/5,
+html.dark .dark\:bg-white\/5,
+html.dark .dark\:bg-white\/\[0\.03\] { background-color: var(--surface); }
+html .bg-white\/10,
+html .bg-white\/20,
+html.dark .dark\:bg-white\/10        { background-color: var(--surface-elevated); }
+html.dark .dark\:hover\:bg-white\/15:hover,
+html.dark .dark\:hover\:bg-white\/10:hover { background-color: var(--surface-elevated); }
+
+html .bg-\[\#FF6B1A\]                 { background-color: var(--primary); }
+html .hover\:bg-\[\#7dd3fc\]:hover    { background-color: var(--accent-sky-soft); }
+html .hover\:bg-\[\#FF6B1A\]\/15:hover { background-color: color-mix(in srgb, var(--primary) 15%, transparent); }
+html .hover\:bg-\[\#FF6B1A\]\/25:hover { background-color: color-mix(in srgb, var(--primary) 25%, transparent); }
+
+/* ---------------------------------------------------------------------------
+   4. BORDERS — theme-following
+   --------------------------------------------------------------------------- */
+html .border-gray-200,
+html .border-gray-300             { border-color: var(--border); }
+html.dark .dark\:border-white\/5,
+html.dark .dark\:border-white\/10 { border-color: var(--border); }
+html.dark .dark\:border-white\/15,
+html.dark .dark\:border-white\/20 { border-color: var(--border-hover); }
+html .border-white\/10            { border-color: var(--border); }
+html .border-black\/10            { border-color: var(--border); }
+html .hover\:border-white\/20:hover { border-color: var(--border-hover); }
+
+html .divide-gray-200 > * + *     { border-color: var(--border); }
+html.dark .dark\:divide-white\/5 > * + * { border-color: var(--border); }
+
+html .border-brand-accent,
+html .focus\:border-brand-accent:focus,
+html .hover\:border-brand-accent:hover { border-color: var(--accent-sky); }
+html .hover\:border-brand-accent\/50:hover { border-color: color-mix(in srgb, var(--accent-sky) 50%, transparent); }
+
+html .border-\[\#FF6B1A\]\/15 { border-color: color-mix(in srgb, var(--primary) 15%, transparent); }
+html .border-\[\#FF6B1A\]\/20 { border-color: color-mix(in srgb, var(--primary) 20%, transparent); }
+html .border-\[\#FF6B1A\]\/25 { border-color: color-mix(in srgb, var(--primary) 25%, transparent); }
+html .border-\[\#FF6B1A\]\/30 { border-color: color-mix(in srgb, var(--primary) 30%, transparent); }
+html .border-\[\#FF6B1A\]\/70 { border-color: color-mix(in srgb, var(--primary) 70%, transparent); }
+html .border-t-\[\#FF6B1A\]   { border-top-color: var(--primary); }
+html .border-b-\[\#FF6B1A\]   { border-bottom-color: var(--primary); }
+html .hover\:border-\[\#FF6B1A\]:hover      { border-color: var(--primary); }
+html .hover\:border-\[\#FF6B1A\]\/30:hover  { border-color: color-mix(in srgb, var(--primary) 30%, transparent); }
+html .hover\:border-\[\#FF6B1A\]\/40:hover  { border-color: color-mix(in srgb, var(--primary) 40%, transparent); }
+html .hover\:border-\[\#FF6B1A\]\/60:hover  { border-color: color-mix(in srgb, var(--primary) 60%, transparent); }
+html .hover\:border-\[\#FFB800\]\/60:hover  { border-color: color-mix(in srgb, var(--gold) 60%, transparent); }
+
+/* ---------------------------------------------------------------------------
+   5. GRADIENT STOPS — brand ramp
+   --------------------------------------------------------------------------- */
+html .from-\[\#FF6B1A\] { --tw-gradient-from: var(--primary); }
+html .from-\[\#FF3D00\] { --tw-gradient-from: var(--primary-hot); }
+html .to-\[\#FF3D00\]   { --tw-gradient-to: var(--primary-hot); }
+html .to-\[\#FF6B1A\]   { --tw-gradient-to: var(--primary); }
+html .hover\:from-\[\#FF8833\]:hover { --tw-gradient-from: color-mix(in srgb, var(--primary) 80%, #FFF); }
+html .hover\:from-\[\#FF6B1A\]:hover { --tw-gradient-from: var(--primary); }
+html .hover\:to-\[\#FF6B1A\]:hover   { --tw-gradient-to: var(--primary); }
+html .hover\:to-\[\#FFB800\]:hover   { --tw-gradient-to: var(--gold); }
+
+/* ---------------------------------------------------------------------------
+   6. FOCUS RINGS — accessibility surface, must stay visible in both themes
+   --------------------------------------------------------------------------- */
+html .focus\:ring-brand-accent:focus { --tw-ring-color: var(--accent-sky); }
+
+/* ============================================================================
+   INTENTIONAL EXCLUSIONS — DO NOT "FINISH" THESE
+   ----------------------------------------------------------------------------
+   The following colour classes are ABSOLUTE by design. Remapping them to
+   theme tokens would be a regression, not an improvement:
+
+     .text-white (31 uses)  — sits on orange/red CTAs and dark photo scrims.
+                              Mapping to --text-1 makes it near-black on orange
+                              in light theme, i.e. unreadable.
+     .bg-black, .bg-black/5, /60, /70, /80  — photo scrims and modal backdrops;
+                              must stay dark under a dark image in both themes.
+     .bg-transparent, .border-transparent, .border-0, .focus:ring-0
+                            — explicit "no colour" utilities.
+     .bg-[url('https://images.unsplash.com/...')]  (11 distinct)
+                            — background IMAGES, not colours. These are also
+                              undeclared external CDN dependencies; logged in
+                              PHASE8_REALITY_REPORT.md §10f for a product
+                              decision, not silently changed here.
+     .bg-red-500/10, /15, .bg-emerald-500/10, /20, .text-red-800,
+     .dark:text-red-300, .bg-green-400, .text-pink-500
+                            — semi-transparent semantic badge tints that already
+                              read correctly on both light and dark surfaces.
+     .shadow-[0_0_*_rgba(255,107,26,*)]  — decorative brand glows; they are
+                              already brand-orange and theme-invariant.
+
+   Local (non-Tailwind) classes verified as correctly defined in-page and left
+   alone: .border-glow-cyan and .glow-cyan (pages/player.php:79-80).
+   ============================================================================ */

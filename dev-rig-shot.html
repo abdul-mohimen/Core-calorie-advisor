@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RIG SHOT</title>
+<style>html,body{margin:0;background:#101014;overflow:hidden}canvas{display:block}
+#tag{position:fixed;top:6px;left:10px;color:#fff;font:700 18px system-ui;z-index:5;text-shadow:0 1px 3px #000}</style>
+</head>
+<body>
+<div id="tag"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="assets/js/titan-rig.js"></script>
+<script>
+// Deterministic pose screenshotter: renders MODE at 4 rep phases × 2 camera angles.
+const Q = new URLSearchParams(location.search);
+const MODE = Q.get('mode') || 'pushup';
+// tunables consumed by CCARig.proneBrace (window.__inc / __incAxis / __armAxis / __armAng)
+for (const k of ['incAxis','armAxis']) if (Q.get(k)) window['__'+k] = Q.get(k);
+for (const k of ['inc','armAng','pk','pe','px']) if (Q.get(k)) window['__'+k] = parseFloat(Q.get(k));
+// rep phase times: cover a full cycle for the mode's oscillator speed
+const SPEED = { pushup:3.0, plank:8, mountain:6.5, crunch:2.8, legraise:2.4, squat:2.4,
+                curl:3.4, press:3.0, jumpingjack:6.0, highknees:6.5, twist:2.6, yoga:0.9,
+                warmup:2.6, idle:1.6 }[MODE] || 3.0;
+const CYCLE = 2*Math.PI/SPEED;
+const TS = Q.get('ts') ? Q.get('ts').split(',').map(Number) : [0, CYCLE*0.25, CYCLE*0.5, CYCLE*0.75];
+document.getElementById('tag').textContent = MODE + '  |  t = ' + TS.map(t=>t.toFixed(2)).join(', ');
+
+const W = 1600, H = 800, COLS = TS.length, ROWS = 2;
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setSize(W, H);
+renderer.setPixelRatio(1);
+if ('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
+document.body.appendChild(renderer.domElement);
+renderer.setScissorTest(true);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x14141a);
+scene.add(new THREE.HemisphereLight(0xbfd4ff, 0x1a120a, 0.6));
+scene.add(new THREE.AmbientLight(0x404656, 0.8));
+const key = new THREE.DirectionalLight(0xffe0b0, 1.5); key.position.set(3,5,4); scene.add(key);
+const grid = new THREE.GridHelper(12, 24, 0x557755, 0x2a2a33); scene.add(grid);
+// thin red floor plane marker at y=0 to reveal floating / sinking
+const fp = new THREE.Mesh(new THREE.PlaneGeometry(12,12),
+  new THREE.MeshBasicMaterial({color:0x223322, transparent:true, opacity:.5}));
+fp.rotation.x = -Math.PI/2; fp.position.y = -0.005; scene.add(fp);
+
+// player-matching camera + a 40° orbit camera
+const camDef = (window.CCARig && CCARig.cameraFor) ? CCARig.cameraFor(MODE)
+             : {pos:[0,1.9,5.6], target:[0,1.35,0]};
+function makeCam(px,py,pz,tx,ty,tz){
+  const c = new THREE.PerspectiveCamera(42, (W/COLS)/(H/ROWS), 0.1, 60);
+  c.position.set(px,py,pz); c.lookAt(tx,ty,tz); return c;
+}
+const camA = makeCam(camDef.pos[0],camDef.pos[1],camDef.pos[2],camDef.target[0],camDef.target[1],camDef.target[2]);
+const ang = Math.PI/4, R = 5.2;
+const camB = makeCam(Math.sin(ang)*R, 2.2, Math.cos(ang)*R, 0, 0.6, 0);
+
+const tag = document.getElementById('tag');
+const loader = new THREE.GLTFLoader();
+if (typeof THREE.DRACOLoader === 'function'){
+  const d = new THREE.DRACOLoader();
+  d.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+  d.setDecoderConfig({type:'js'});
+  loader.setDRACOLoader(d);
+}
+loader.load('assets/models/trainers.glb', (gltf)=>{
+  const root = gltf.scene;
+  CCARig.fit(root, 2.7);
+  scene.add(root);
+  if (!CCARig.attach(root)) { document.title='RIG FAIL'; return; }
+  // diagnostic markers at contact bones (hands red, feet blue, hips yellow)
+  const MARKS = { lHand:0xff2222, rHand:0xff2222, lFoot:0x2266ff, rFoot:0x2266ff, hips:0xffcc00, head:0x22ff88 };
+  const markers = {};
+  for (const k in MARKS){
+    const s = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 10),
+      new THREE.MeshBasicMaterial({color:MARKS[k], depthTest:false, transparent:true, opacity:0.95}));
+    s.renderOrder = 99; scene.add(s); markers[k] = s;
+  }
+  const boneOf = (key) => { // reach into rig internals via bone names
+    const names = { lHand:'LeftHand', rHand:'RightHand', lFoot:'LeftFoot', rFoot:'RightFoot', hips:'Hips', head:'Head' };
+    let hit = null; const target = names[key].toLowerCase();
+    root.traverse(o => { if (!hit && o.name && o.name.toLowerCase().replace(/[^a-z0-9]/g,'').endsWith(target.toLowerCase())) hit = o; });
+    return hit;
+  };
+  const bones = {}; for (const k in MARKS) bones[k] = boneOf(k);
+  const wp = new THREE.Vector3();
+  const stats = [];
+  // render grid of phases
+  const vw = W/COLS, vh = H/ROWS;
+  for (let r=0; r<ROWS; r++){
+    const cam = r===0 ? camA : camB;
+    for (let c=0; c<COLS; c++){
+      CCARig.update(MODE, TS[c]);
+      root.updateMatrixWorld(true);
+      const ys = {};
+      for (const k in MARKS){
+        if (bones[k]){ bones[k].getWorldPosition(wp); markers[k].position.copy(wp); ys[k] = wp.y; }
+      }
+      if (r===0) stats.push('t'+TS[c].toFixed(1)+' hand:'+(ys.lHand??0).toFixed(2)+' foot:'+(ys.lFoot??0).toFixed(2)+' hip:'+(ys.hips??0).toFixed(2)+' head:'+(ys.head??0).toFixed(2));
+      renderer.setViewport(c*vw, H-(r+1)*vh, vw, vh);
+      renderer.setScissor(c*vw, H-(r+1)*vh, vw, vh);
+      renderer.render(scene, cam);
+    }
+  }
+  tag.textContent += '   ‖ ' + stats.join('  ‖ ');
+  document.title = 'DONE';
+  tag.textContent += '  ✓ RENDERED';
+}, undefined, (e)=>{ document.title='LOAD FAIL'; tag.textContent += '  ✗ LOAD FAIL: '+(e && e.message || e); console.error(e); });
+</script>
+</body>
+</html>

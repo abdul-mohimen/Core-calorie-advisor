@@ -1,0 +1,12 @@
+<svg viewBox="0 0 512 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0,0)">
+    <!-- Progress Ring C -->
+    <circle cx="256" cy="256" r="200" stroke="#FF6B1A" stroke-width="40" stroke-dasharray="900 1200" stroke-linecap="round" transform="rotate(-90 256 256)"/>
+    <!-- Dumbbell -->
+    <rect x="180" y="230" width="152" height="52" rx="10" fill="currentColor"/>
+    <rect x="130" y="190" width="60" height="132" rx="12" fill="currentColor"/>
+    <rect x="322" y="190" width="60" height="132" rx="12" fill="currentColor"/>
+  </g>
+  <text x="256" y="550" text-anchor="middle" font-family="'Inter', 'Arial', sans-serif" font-weight="900" font-size="64" letter-spacing="-0.02em" fill="currentColor">CORE CALORIE</text>
+  <text x="256" y="620" text-anchor="middle" font-family="'Inter', 'Arial', sans-serif" font-weight="700" font-size="48" letter-spacing="0.1em" fill="#FF6B1A">ADVISOR</text>
+</svg>

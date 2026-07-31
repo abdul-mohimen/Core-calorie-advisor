@@ -1,0 +1,37 @@
+/* ============================================================================
+   CORE CALORIE ADVISOR · DOCTOR portal components   ·   scope: [data-portal="doctor"]
+   --portal-accent (clinical green) is set in layout.css.
+   ============================================================================ */
+
+[data-portal="doctor"] .portal-head {
+  background: linear-gradient(115deg, color-mix(in srgb, var(--portal-accent) 16%, transparent), transparent 60%), var(--surface);
+}
+[data-portal="doctor"] .portal-head .eyebrow { color: var(--portal-accent); }
+
+/* ---- KPI cards ---- */
+[data-portal="doctor"] .stat-card {
+  position: relative;
+  min-height: 108px;
+  border-top: 3px solid var(--portal-accent);
+  overflow: hidden;
+}
+[data-portal="doctor"] .stat-card::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(130% 90% at 100% 0, color-mix(in srgb, var(--portal-accent) 12%, transparent), transparent 62%);
+}
+[data-portal="doctor"] .stat-card b { color: var(--portal-accent); }
+
+/* ---- Tables ---- */
+[data-portal="doctor"] table.tf th {
+  border-bottom: 2px solid color-mix(in srgb, var(--portal-accent) 45%, var(--line));
+}
+[data-portal="doctor"] table.tf tr:hover td {
+  background: color-mix(in srgb, var(--portal-accent) 7%, transparent);
+}
+
+/* ---- Consult accept/reject actions sit side by side without wrapping ---- */
+[data-portal="doctor"] table.tf td form { display: inline-block; margin-right: 6px; }
+[data-portal="doctor"] table.tf td form:last-child { margin-right: 0; }
+
+/* ---- Patient condition pills read as clinical tags ---- */
+[data-portal="doctor"] .card.calc-card h3 { margin-bottom: 14px; }

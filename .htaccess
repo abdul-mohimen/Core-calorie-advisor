@@ -1,0 +1,28 @@
+# ================= CORE CALORIE ADVISOR — Security Rules =================
+Options -Indexes
+
+# Block sensitive files.
+# .txt/.json/.mjs/.zip/.fbx added 2026-07-30: _audit/titan_grep.txt (15 MB of source)
+# and phase9_results.json were both being served with HTTP 200.
+<FilesMatch "^\.env|\.gitignore|composer\.(json|lock)$|\.(sql|log|md|txt|json|mjs|zip|bak|old|fbx)$">
+  Require all denied
+</FilesMatch>
+
+# Block direct access to config, logs, includes and the developer audit folder
+RewriteEngine On
+RewriteRule ^(config|logs|includes|_audit)/ - [F,L]
+
+# PHP hardening
+<IfModule mod_php.c>
+  php_flag display_errors off
+  php_flag expose_php off
+</IfModule>
+
+# Basic security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "camera=(self), microphone=(), geolocation=(), payment=(self)"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+</IfModule>

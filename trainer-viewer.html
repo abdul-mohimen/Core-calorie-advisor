@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Calorie Advisor — Trainer GLB Viewer</title>
+<style>
+  :root { --orange:#FF6B1A; --amber:#FFB800; --ink:#0d0a07; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { height:100%; background:radial-gradient(120% 120% at 50% 0%, #1c140b 0%, #0d0a07 60%, #060402 100%); color:#f4ede2; font-family:system-ui,Segoe UI,Roboto,sans-serif; overflow:hidden; }
+  #stage { position:fixed; inset:0; }
+  canvas { display:block; }
+
+  .panel {
+    position:fixed; top:16px; left:16px; z-index:10;
+    background:rgba(20,14,8,.72); backdrop-filter:blur(10px);
+    border:1px solid rgba(255,184,0,.25); border-radius:14px;
+    padding:16px 18px; max-width:320px; box-shadow:0 12px 40px rgba(0,0,0,.5);
+    max-height:calc(100vh - 32px); overflow:auto;
+  }
+  .panel h1 { font-size:15px; letter-spacing:.3px; margin-bottom:2px; }
+  .panel h1 span { color:var(--amber); }
+  .panel .sub { font-size:11px; opacity:.6; margin-bottom:12px; }
+  .row { font-size:12px; display:flex; justify-content:space-between; gap:12px; padding:3px 0; border-bottom:1px dashed rgba(255,255,255,.08); }
+  .row b { color:var(--amber); font-weight:600; }
+  .lbl { font-size:11px; text-transform:uppercase; letter-spacing:1px; opacity:.55; margin:14px 0 6px; }
+  .btns button {
+    display:block; width:100%; text-align:left; margin:4px 0; padding:8px 10px; cursor:pointer;
+    background:rgba(255,107,26,.10); border:1px solid rgba(255,107,26,.35);
+    color:#ffd9b8; border-radius:8px; font-size:12px; transition:.15s;
+  }
+  .btns button:hover { background:rgba(255,107,26,.22); }
+  .btns button.on { background:linear-gradient(90deg,var(--orange),var(--amber)); color:#1a1206; border-color:transparent; font-weight:600; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .grid2 button { margin:0; text-align:center; }
+
+  .ctrls { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); z-index:10; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .ctrls button { padding:8px 14px; cursor:pointer; background:rgba(20,14,8,.75); border:1px solid rgba(255,184,0,.3); color:#f4ede2; border-radius:20px; font-size:12px; backdrop-filter:blur(8px); }
+  .ctrls button:hover { border-color:var(--amber); }
+
+  #status { position:fixed; top:16px; right:16px; z-index:10; font-size:12px; padding:8px 14px; border-radius:20px; background:rgba(20,14,8,.75); border:1px solid rgba(255,184,0,.3); }
+  #status.err { border-color:#ff5a5a; color:#ffb4b4; }
+  #status.ok  { border-color:#4ade80; color:#bff5d0; }
+
+  .hint { position:fixed; bottom:16px; right:16px; z-index:10; font-size:11px; opacity:.5; }
+</style>
+</head>
+<body>
+  <div id="stage"></div>
+
+  <div class="panel">
+    <h1>CCA<span>FORGE</span> · Trainer Viewer</h1>
+    <div class="sub">assets/models/trainers.glb</div>
+    <div class="row"><span>Meshes</span><b id="m-meshes">–</b></div>
+    <div class="row"><span>Skins (rigged)</span><b id="m-skins">–</b></div>
+    <div class="row"><span>Bones / nodes</span><b id="m-nodes">–</b></div>
+    <div class="row"><span>Triangles</span><b id="m-tris">–</b></div>
+    <div class="row"><span>Height (m)</span><b id="m-height">–</b></div>
+
+    <div class="lbl">Exercises (live procedural)</div>
+    <div class="btns grid2" id="ex-list"></div>
+
+    <div class="lbl">Embedded clips</div>
+    <div class="btns" id="clip-list"><em style="font-size:12px;opacity:.5">loading…</em></div>
+  </div>
+
+  <div id="status">Loading…</div>
+
+  <div class="ctrls">
+    <button id="btn-play">⏸ Pause</button>
+    <button id="btn-wire">▢ Wireframe</button>
+    <button id="btn-spin">⟳ Auto-rotate</button>
+    <button id="btn-reset">⌖ Reset view</button>
+  </div>
+  <div class="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="assets/js/titan-rig.js?v=fresh"></script>
+<script>
+const MODEL_URL = 'assets/models/trainers.glb';
+const EXERCISES = [
+  ['idle','Idle'], ['warmup','Warm-Up'], ['squat','Squat'], ['pushup','Push-Up'],
+  ['curl','Curl'], ['press','Press'], ['jumpingjack','Jack'], ['highknees','High Knees'],
+  ['twist','Twist'], ['plank','Plank'], ['crunch','Crunch'], ['legraise','Leg Raise'],
+  ['mountain','Mountain'], ['yoga','Yoga']
+];
+
+const stageEl = document.getElementById('stage');
+const statusEl = document.getElementById('status');
+
+let renderer, scene, camera, controls, clock, mixer;
+let root = null, actions = [], curAction = null, playing = true, wire = false, autoSpin = false;
+let rigMode = 'idle';   // string = procedural exercise; null = embedded clip playback
+let defaultCam = { pos:new THREE.Vector3(0,1.3,3.6), target:new THREE.Vector3(0,1.0,0) };
+
+function setStatus(txt, cls){ statusEl.textContent = txt; statusEl.className = cls||''; }
+
+function init(){
+  scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0d0a07, 8, 22);
+
+  const w = stageEl.clientWidth, h = stageEl.clientHeight;
+  camera = new THREE.PerspectiveCamera(42, w/h, 0.1, 100);
+  camera.position.copy(defaultCam.pos);
+
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  renderer.setSize(w,h);
+  if ('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
+  if ('toneMapping' in renderer) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08; }
+  stageEl.appendChild(renderer.domElement);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.target.copy(defaultCam.target);
+
+  // lighting — Core Calorie Advisor ember palette
+  scene.add(new THREE.HemisphereLight(0xbfd4ff, 0x1a120a, 0.5));
+  scene.add(new THREE.AmbientLight(0x404656, 0.7));
+  const key = new THREE.DirectionalLight(0xffe0b0, 1.6); key.position.set(3,5,4); scene.add(key);
+  const rim = new THREE.PointLight(0xFFB27A, 0.9, 25); rim.position.set(-4,3,-3); scene.add(rim);  // soft warm rim, not an orange wash
+  const fill= new THREE.PointLight(0x3D8BFF, 0.8, 25); fill.position.set(3,2,4); scene.add(fill);
+
+  // floor grid + glow ring
+  const grid = new THREE.GridHelper(20, 40, 0x40311a, 0x241a0d); grid.position.y=0; scene.add(grid);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.9,1.25,64),
+    new THREE.MeshBasicMaterial({ color:0xFF6B1A, transparent:true, opacity:.35, side:THREE.DoubleSide }));
+  ring.rotation.x = -Math.PI/2; ring.position.y = 0.02; scene.add(ring);
+
+  buildExerciseButtons();
+  clock = new THREE.Clock();
+  loadModel();
+  window.addEventListener('resize', onResize);
+  animate();
+}
+
+function buildExerciseButtons(){
+  const list = document.getElementById('ex-list');
+  EXERCISES.forEach(([mode,label])=>{
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    if (mode === rigMode) btn.classList.add('on');
+    btn.onclick = ()=>{
+      rigMode = mode;
+      document.querySelectorAll('#ex-list button').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      document.querySelectorAll('#clip-list button').forEach(b=>b.classList.remove('on'));
+    };
+    list.appendChild(btn);
+  });
+}
+
+function loadModel(){
+  const loader = new THREE.GLTFLoader();
+  if (typeof THREE.DRACOLoader === 'function'){
+    const d = new THREE.DRACOLoader();
+    d.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+    d.setDecoderConfig({ type:'js' });
+    loader.setDRACOLoader(d);
+  }
+  loader.load(MODEL_URL, (gltf)=>{
+    root = gltf.scene;
+    fitAndCenter(root);
+    scene.add(root);
+    collectStats(root, gltf);
+    setupClips(gltf.animations || []);
+    if (window.CCARig && CCARig.attach(root)) {
+      setStatus('Loaded ✓ — rig bound', 'ok');
+    } else {
+      rigMode = null;   // no rig → play embedded clip instead
+      setStatus('Loaded ✓ (no rig — clip mode)', 'ok');
+    }
+  }, (xhr)=>{
+    if (xhr.total) setStatus('Loading… '+Math.round(xhr.loaded/xhr.total*100)+'%');
+  }, (err)=>{
+    console.error(err);
+    setStatus('Failed to load GLB — serve this page over http://localhost (XAMPP)', 'err');
+  });
+}
+
+// Auto-fit via CCARig.measure (setFromObject mis-measures skinned Mixamo GLBs).
+function fitAndCenter(obj){
+  const targetH = 2.7;                      // match the live app scale exactly
+  let realH = targetH;
+  if (window.CCARig && CCARig.fit){
+    CCARig.fit(obj, targetH);
+    realH = CCARig.measure(obj).size.y * obj.scale.x;
+  } else {
+    obj.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(obj), size = new THREE.Vector3(), ctr = new THREE.Vector3();
+    box.getSize(size); box.getCenter(ctr);
+    const s = targetH/(size.y||1); obj.scale.setScalar(s);
+    obj.position.set(-ctr.x*s, -box.min.y*s, -ctr.z*s);
+  }
+  obj.traverse(o=>{ if(o.isMesh){ o.frustumCulled=false;
+    // same PBR clean-up as the live engines: sRGB + crisp anisotropy + matte skin/cloth
+    const mats = Array.isArray(o.material) ? o.material : (o.material ? [o.material] : []);
+    for (const mat of mats){
+      if (mat.map && 'encoding' in mat.map){ mat.map.encoding = THREE.sRGBEncoding; mat.map.needsUpdate = true; }
+      if (renderer && mat.map) mat.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      if ('roughness' in mat) mat.roughness = Math.min(mat.roughness ?? 0.8, 0.9);
+      if ('metalness' in mat && !/metal|chrome|steel|zip|buckle/i.test((o.name||'')+' '+(mat.name||''))) mat.metalness = Math.min(mat.metalness ?? 0, 0.15);
+    }
+  } });
+  const eye = targetH*0.52;
+  defaultCam.target.set(0, eye, 0);
+  defaultCam.pos.set(0, eye+0.3, targetH*1.65);
+  camera.position.copy(defaultCam.pos);
+  controls.target.copy(defaultCam.target);
+  document.getElementById('m-height').textContent = realH.toFixed(2);
+}
+
+function collectStats(obj, gltf){
+  let meshes=0, tris=0;
+  obj.traverse(o=>{ if(o.isMesh){ meshes++;
+    const g=o.geometry; if(g){ const idx=g.index?g.index.count:(g.attributes.position?g.attributes.position.count:0); tris+=idx/3; } } });
+  const p = gltf.parser && gltf.parser.json || {};
+  document.getElementById('m-meshes').textContent = meshes;
+  document.getElementById('m-skins').textContent  = (p.skins||[]).length || 0;
+  document.getElementById('m-nodes').textContent  = (p.nodes||[]).length || 0;
+  document.getElementById('m-tris').textContent   = Math.round(tris).toLocaleString();
+}
+
+function setupClips(clips){
+  const list = document.getElementById('clip-list');
+  list.innerHTML = '';
+  if (!clips.length){ list.innerHTML = '<em style="font-size:12px;opacity:.5">no embedded clips</em>'; return; }
+  mixer = new THREE.AnimationMixer(root);
+  actions = clips.map((c)=>{
+    const a = mixer.clipAction(c);
+    const btn = document.createElement('button');
+    btn.textContent = c.name + '  ('+c.duration.toFixed(1)+'s)';
+    btn.onclick = ()=> playClip(a, btn);
+    list.appendChild(btn);
+    return { action:a, btn, clip:c };
+  });
+}
+
+// Switch to embedded-clip playback (turns off procedural rig).
+function playClip(action, btn){
+  rigMode = null;
+  if (window.CCARig && CCARig.attached) CCARig.detach();
+  document.querySelectorAll('#ex-list button').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#clip-list button').forEach(b=>b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  action.reset().setEffectiveWeight(1).play();
+  if (curAction && curAction !== action) action.crossFadeFrom(curAction, 0.35, true);
+  curAction = action;
+  if (!playing){ playing = true; document.getElementById('btn-play').textContent='⏸ Pause'; }
+}
+
+function onResize(){
+  const w = stageEl.clientWidth, h = stageEl.clientHeight;
+  renderer.setSize(w,h); camera.aspect = w/h; camera.updateProjectionMatrix();
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta(), t = clock.getElapsedTime();
+  if (playing) {
+    if (rigMode && window.CCARig && CCARig.attached) CCARig.update(rigMode, t);
+    else if (mixer) mixer.update(dt);
+  }
+  if (autoSpin && root && !(rigMode)) root.rotation.y += dt*0.4;
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+// controls
+document.getElementById('btn-play').onclick = (e)=>{
+  playing = !playing; e.target.textContent = playing ? '⏸ Pause' : '▶ Play';
+};
+document.getElementById('btn-wire').onclick = (e)=>{
+  wire = !wire; e.target.classList.toggle('on', wire);
+  if (root) root.traverse(o=>{ if(o.isMesh && o.material){ (Array.isArray(o.material)?o.material:[o.material]).forEach(m=> m.wireframe = wire); } });
+};
+document.getElementById('btn-spin').onclick = (e)=>{ autoSpin = !autoSpin; e.target.classList.toggle('on', autoSpin); };
+document.getElementById('btn-reset').onclick = ()=>{
+  camera.position.copy(defaultCam.pos); controls.target.copy(defaultCam.target); controls.update();
+};
+
+window.tfCamera = camera;
+window.tfControls = controls;
+// We also need a setMode equivalent for the test since trainer-viewer uses exercise buttons instead of setMode
+window.setMode = (mode) => {
+  const btns = document.querySelectorAll('#ex-list button');
+  for (const b of btns) {
+    if (b.textContent.toLowerCase() === mode || b.textContent.toLowerCase().includes(mode)) {
+      b.click();
+      return;
+    }
+  }
+};
+
+init();
+</script>
+</body>
+</html>

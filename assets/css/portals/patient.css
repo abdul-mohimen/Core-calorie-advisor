@@ -1,0 +1,44 @@
+/* ============================================================================
+   CORE CALORIE ADVISOR · PATIENT portal components   ·   scope: [data-portal="patient"]
+   --portal-accent (violet) is set in layout.css.
+   ============================================================================ */
+
+[data-portal="patient"] .portal-head {
+  background: linear-gradient(115deg, color-mix(in srgb, var(--portal-accent) 16%, transparent), transparent 60%), var(--surface);
+}
+[data-portal="patient"] .portal-head .eyebrow { color: var(--portal-accent); }
+
+/* ---- KPI cards ---- */
+[data-portal="patient"] .stat-card {
+  position: relative;
+  min-height: 108px;
+  border-top: 3px solid var(--portal-accent);
+  overflow: hidden;
+}
+[data-portal="patient"] .stat-card::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(130% 90% at 100% 0, color-mix(in srgb, var(--portal-accent) 12%, transparent), transparent 62%);
+}
+[data-portal="patient"] .stat-card b { color: var(--portal-accent); }
+
+/* ---- Tables ---- */
+[data-portal="patient"] table.tf th {
+  border-bottom: 2px solid color-mix(in srgb, var(--portal-accent) 45%, var(--line));
+}
+[data-portal="patient"] table.tf tr:hover td {
+  background: color-mix(in srgb, var(--portal-accent) 7%, transparent);
+}
+
+/* ---- Doctor-approved SAFE workout cards → reassuring clinical green ---- */
+[data-portal="patient"] .card.rv .badge.free {
+  background: rgba(46, 204, 113, .18);
+  color: #2ECC71;
+  border: 1px solid rgba(46, 204, 113, .4);
+}
+[data-portal="patient"] .grid.g3 > .card.rv {
+  border-color: color-mix(in srgb, #2ECC71 30%, var(--line));
+}
+[data-portal="patient"] .grid.g3 > .card.rv .cbody { display: flex; flex-direction: column; }
+
+/* ---- "No safe plan yet" warning banner spacing ---- */
+[data-portal="patient"] .flash.flash-warn { border-radius: 14px; }
