@@ -700,6 +700,32 @@ p, span, a, b, td, th, li {
   text-transform: uppercase
 }
 
+/* ══ PHASE I — collapsible sidebar groups ══
+   .is-collapsible is added by main.js, so with JS off the heading stays a plain
+   label and every group remains open (nothing becomes unreachable). */
+.sb-sec.is-collapsible {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; cursor: pointer; user-select: none;
+  border-radius: 8px;
+  transition: color .2s var(--ease, ease), background .2s var(--ease, ease);
+}
+.sb-sec.is-collapsible:hover { color: var(--text-2, #b9b9c4); background: rgba(255,255,255,.04); }
+.sb-sec.is-collapsible:focus-visible {
+  outline: 2px solid var(--portal-accent, #FF6B1A); outline-offset: -2px;
+}
+/* Chevron: points down when open, right when collapsed. */
+.sb-sec.is-collapsible::after {
+  content: ''; flex: none; width: 7px; height: 7px; margin-right: 2px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translate(-1px,-1px);
+  transition: transform .22s var(--ease, ease);
+}
+.sb-sec.is-collapsible.is-collapsed::after { transform: rotate(-45deg) translate(-1px,1px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-sec.is-collapsible, .sb-sec.is-collapsible::after { transition: none; }
+}
+
 .sb-link {
   display: flex;
   align-items: center;

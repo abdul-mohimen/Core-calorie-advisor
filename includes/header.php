@@ -3,6 +3,9 @@
    Har page pehle config require kare, phir: $pageTitle='...'; include header.php
    Auth pages (login/register) set $authMinimal = true; for a clean, link-less bar. */
 if (!defined('BASE_URL')) { die('Config load nahi hui — page ke top par config/config.php require karo.'); }
+/* PHASE I: makes portal_hero() available to every portal page without each one
+   requiring it. Defines a function only — emits nothing. */
+require_once __DIR__ . '/portal-hero.php';
 $u          = current_user();
 $role       = $u['role'] ?? null;
 $authMinimal = $authMinimal ?? false;

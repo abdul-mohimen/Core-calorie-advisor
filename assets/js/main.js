@@ -38,7 +38,75 @@ if($('#burger')){
   setSidebar(false);                                   /* never open on reload */
   $('#burger').onclick=()=>setSidebar(!sb.classList.contains('open'));
   ov.onclick=()=>setSidebar(false);
+
+  /* ══ PHASE I — drawer a11y: Esc to close, focus trap while open ══
+     The drawer already had a scrim and click-to-close; keyboard users had no way
+     out and Tab walked straight out of the open drawer into the page behind it. */
+  const focusables = () => Array.prototype.slice.call(
+    sb.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])')
+  ).filter(n => n.offsetParent !== null);
+
+  document.addEventListener('keydown', e => {
+    if (!sb.classList.contains('open')) return;
+
+    if (e.key === 'Escape') {
+      setSidebar(false);
+      const b = $('#burger'); if (b) b.focus();       /* return focus to opener */
+      return;
+    }
+    /* Trap Tab only while the drawer overlays content (mobile). On desktop the
+       sidebar pushes rather than covers, so the rest of the page is legitimately
+       reachable and trapping there would be hostile. */
+    if (e.key !== 'Tab' || isDesktop()) return;
+    const f = focusables();
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
 }
+
+/* ══ PHASE I — collapsible sidebar groups ══
+   header.php already renders the groups (.sb-sec headings followed by .sb-link
+   siblings); what was missing was the ability to collapse them and have that
+   stick. Done as progressive enhancement: with JS off every group stays open,
+   so nothing becomes unreachable. */
+(function collapsibleSidebarGroups() {
+  const KEY = 'cca-sb-collapsed';
+  const secs = document.querySelectorAll('#sidebar .sb-sec');
+  if (!secs.length) return;
+
+  let collapsed;
+  try { collapsed = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); }
+  catch (e) { collapsed = new Set(); }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...collapsed])); } catch (e) {} };
+
+  secs.forEach((sec, i) => {
+    /* Members of a group = siblings until the next .sb-sec. */
+    const members = [];
+    for (let n = sec.nextElementSibling; n && !n.classList.contains('sb-sec'); n = n.nextElementSibling) members.push(n);
+    if (!members.length) return;
+
+    const id = (sec.textContent || ('grp' + i)).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    sec.setAttribute('role', 'button');
+    sec.setAttribute('tabindex', '0');
+    sec.classList.add('is-collapsible');
+
+    const paint = () => {
+      const off = collapsed.has(id);
+      sec.classList.toggle('is-collapsed', off);
+      sec.setAttribute('aria-expanded', String(!off));
+      members.forEach(m => { m.style.display = off ? 'none' : ''; });
+    };
+    const toggle = () => { collapsed.has(id) ? collapsed.delete(id) : collapsed.add(id); save(); paint(); };
+
+    sec.addEventListener('click', toggle);
+    sec.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+    paint();
+  });
+})();
 
 /* ---- Theme (Global Light / Dark Mode Toggle) ---- */
 const initTheme = () => {

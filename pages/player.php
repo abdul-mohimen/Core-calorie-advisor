@@ -331,15 +331,17 @@ include dirname(__DIR__) . '/includes/header.php';
 
         <!-- PHASE G: three controls. Rest could previously only be EXTENDED —
              skipping it meant reaching down to the bottom bar mid-rest. -->
-        <div id="restControls" class="flex flex-wrap justify-center gap-3">
+        <!-- One row, no wrap: tracking is tightened rather than letting PAUSE
+             drop to a second line, which read as a layout bug. -->
+        <div id="restControls" class="flex flex-nowrap justify-center items-center gap-2">
           <button type="button" id="restAddBtn"
-                  class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95 text-gray-300 text-sm font-extrabold uppercase tracking-widest rounded-xl transition-all cca-font-disp disabled:hover:bg-white/5"
+                  class="px-4 py-3.5 shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95 text-gray-300 text-[13px] font-extrabold uppercase tracking-wider rounded-xl transition-all cca-font-disp disabled:hover:bg-white/5"
                   title="Add 20 seconds to this rest" onclick="addRest()">+20s</button>
           <button type="button"
-                  class="px-8 py-3.5 bg-gradient-to-r from-[#FF6B1A] to-[#FF3D00] hover:from-[#FF8833] hover:to-[#FF6B1A] active:scale-95 text-white text-sm font-extrabold uppercase tracking-widest rounded-xl shadow-lg shadow-[#FF6B1A]/20 transition-all cca-font-disp"
+                  class="px-6 py-3.5 shrink-0 bg-gradient-to-r from-[#FF6B1A] to-[#FF3D00] hover:from-[#FF8833] hover:to-[#FF6B1A] active:scale-95 text-white text-[13px] font-extrabold uppercase tracking-wider rounded-xl shadow-lg shadow-[#FF6B1A]/20 transition-all cca-font-disp"
                   onclick="skipRest()">Skip Rest ▶</button>
           <button type="button" data-role="pause"
-                  class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95 text-gray-300 text-sm font-extrabold uppercase tracking-widest rounded-xl transition-all cca-font-disp"
+                  class="px-4 py-3.5 shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95 text-gray-300 text-[13px] font-extrabold uppercase tracking-wider rounded-xl transition-all cca-font-disp"
                   onclick="togglePause(this)">⏸ Pause</button>
         </div>
       </div>
