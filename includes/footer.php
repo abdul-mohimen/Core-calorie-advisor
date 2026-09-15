@@ -96,6 +96,15 @@ SVG;
 <script src="<?= asset('js/account-menu.js') ?>"></script><?php endif; ?>
 <?php endif; ?>
 <script defer src="<?= asset('js/motion.js') ?>"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('<?= url('sw.js') ?>')
+        .then(function(reg) { /* console.log('[PWA] ServiceWorker active:', reg.scope); */ })
+        .catch(function(err) { console.warn('[PWA] ServiceWorker skipped:', err); });
+    });
+  }
+</script>
 <?= $extraScripts ?? '' ?>
 </body>
 </html>

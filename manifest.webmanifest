@@ -1,0 +1,42 @@
+{
+  "name": "Core Calorie Advisor",
+  "short_name": "CCA",
+  "description": "Cinematic 3D Fitness, Nutrition & Health Platform",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#06080C",
+  "theme_color": "#FF6B1A",
+  "icons": [
+    {
+      "src": "assets/brand/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/logo-mark.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["fitness", "health", "lifestyle", "sports"],
+  "shortcuts": [
+    {
+      "name": "Workouts Library",
+      "short_name": "Workouts",
+      "description": "Access 3D workouts and biomechanical routines",
+      "url": "pages/workouts.php",
+      "icons": [{ "src": "assets/brand/logo-mark.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Diet Planner",
+      "short_name": "Diet",
+      "description": "Log daily meals and macro calories",
+      "url": "member/diet-planner.php",
+      "icons": [{ "src": "assets/brand/logo-mark.svg", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -176,6 +176,12 @@ $BRAND_SVG = (static function (): string {
      icon can never drift from the brand again (it used to be a separate
      hand-typed data-URI copy). -->
 <link rel="icon" type="image/svg+xml" href="<?= asset('brand/favicon.svg') ?>">
+<link rel="manifest" href="<?= url('manifest.webmanifest') ?>">
+<meta name="theme-color" content="#FF6B1A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CCA">
+<link rel="apple-touch-icon" href="<?= asset('brand/logo-mark.svg') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Rajdhani:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
