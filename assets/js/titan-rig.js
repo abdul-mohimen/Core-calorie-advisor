@@ -471,7 +471,7 @@
   // camera low and tilt it DOWN toward the floor and pull in closer — the old preset
   // (y 1.55, target 0.68) barely dipped below the standing shot, leaving the athlete
   // sinking off the bottom of the view. Now the whole prone/supine body stays centred.
-  var CAM_FLOOR = { pos: [0, 1.2, 4.7], target: [0, 0.32, 0] };
+  var CAM_FLOOR = { pos: [0, 1.35, 5.0], target: [0, 0.45, 0] };
   function cameraFor(mode) { return FLOOR_MODES[mode] ? CAM_FLOOR : CAM_STAND; }
 
   /* ---- floor-anchor: plant the body ON the ground so it stops "swimming" --------

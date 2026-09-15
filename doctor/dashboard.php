@@ -37,6 +37,7 @@ include dirname(__DIR__) . '/includes/header.php';
   </div>
 </section>
 <?= portal_nav('doctor') ?>
+<?= portal_dashboard_hub('doctor') ?>
 <div class="cca-page-container">
   <div class="cca-grid-4">
     <div class="cca-metric"><span class="cca-metric-icon c1">👥</span><div><div class="cca-metric-val"><?= count($patients) ?></div><div class="cca-metric-lbl">Patients</div></div></div>

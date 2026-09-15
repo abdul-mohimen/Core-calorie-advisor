@@ -41,7 +41,7 @@ include dirname(__DIR__) . '/includes/header.php';
         <p class="mb-4">We do not sell your data. Health and fitness information is shared only with the trainers or doctors you actively book or consult, and only to the extent needed to deliver that service. We may disclose data if required by law.</p>
 
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-6 mb-2">5. Data Security</h3>
-        <p class="mb-4">We apply prepared-statement database access, CSRF tokens on every state-changing form, MIME-validated uploads, role-based access control, login throttling, and HttpOnly/SameSite session cookies. No system is perfectly secure, but we work continuously to protect the forge.</p>
+        <p class="mb-4">We apply prepared-statement database access, CSRF tokens on every state-changing form, MIME-validated uploads, role-based access control, login throttling, and HttpOnly/SameSite session cookies. No system is perfectly secure, but we work continuously to protect your data and privacy.</p>
 
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-6 mb-2">6. Your Rights</h3>
         <ul class="list-disc pl-5 space-y-2 mb-4">

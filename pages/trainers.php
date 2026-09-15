@@ -8,19 +8,6 @@ include dirname(__DIR__) . '/includes/header.php';
 <style>
   .page-hero::before, .page-hero::after { display: none !important; }
 </style>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    corePlugins: { preflight: false },
-    theme: {
-      extend: {
-        colors: {
-          'brand-accent': '#38BDF8',
-        }
-      }
-    }
-  }
-</script>
 
 <!-- Isolated Hero Header Section -->
 <div class="relative h-[35vh] min-h-[300px] w-full bg-[url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1600&q=80&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat flex items-center">

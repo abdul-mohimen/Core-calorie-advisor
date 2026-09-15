@@ -14,6 +14,7 @@ $selection = $plans[$plan];
 $priceLabel = '$' . number_format($selection['price'], 2);
 $priceKey = $plan === 'pro' ? 'STRIPE_PRICE_PRO_MONTHLY' : 'STRIPE_PRICE_ELITE_MONTHLY';
 $stripeReady = env('STRIPE_SECRET_KEY') !== '' && env($priceKey) !== '';
+$sandboxEnabled = sandbox_checkout_enabled();
 $pageTitle = 'Secure Checkout';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
@@ -69,9 +70,10 @@ include dirname(__DIR__) . '/includes/header.php';
           <button class="btn btn-fire pay-btn" type="submit">Continue to secure payment →</button>
         </form>
         <p class="checkout-lock">🔒 Subscription access is granted after Stripe's signed webhook confirms payment.</p>
-      <?php else: ?>
+      <?php elseif ($sandboxEnabled): ?>
         <div style="margin-top:18px">
-          <span class="sandbox-pill">⚡ Secure Checkout — Payment via Gemini Pay</span>
+          <span class="sandbox-pill">Local demo checkout</span>
+          <p>This development-only flow activates demo access. It does not process payments; never enter a real card number.</p>
           <form id="sandboxPay" method="post" action="<?= url('api/sandbox-checkout.php') ?>" novalidate>
             <?= csrf_field() ?>
             <input type="hidden" name="plan" value="<?= e($plan) ?>">
@@ -85,8 +87,7 @@ include dirname(__DIR__) . '/includes/header.php';
             <div class="pay-field">
               <label for="payMethod">Payment Method</label>
               <select id="payMethod" name="payment_method" style="width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);font-size:15px;outline:none;">
-                <option value="Gemini Pay" selected>⚡ Gemini Secure Pay (Recommended)</option>
-                <option value="Credit/Debit Card">💳 Credit / Debit Card (Sandbox)</option>
+                <option value="local-demo" selected>Local sandbox — no payment processed</option>
               </select>
             </div>
 
@@ -121,6 +122,12 @@ include dirname(__DIR__) . '/includes/header.php';
           <div class="pm-icons"><span>Method:</span> 🤖 Gemini Pay · 💳 Visa/Mastercard <span>(demo)</span></div>
           <p class="checkout-lock">🔒 Sandbox checkout is secure. Purchases are simulated locally.</p>
         </div>
+      <?php else: ?>
+        <div style="margin-top:18px">
+          <span class="sandbox-pill">Billing setup required</span>
+          <p>Secure payments are not configured for this environment. Add Stripe credentials, or explicitly enable the local sandbox in development.</p>
+          <a class="btn btn-ghost" href="<?= url('pages/pricing.php') ?>">Back to plans</a>
+        </div>
       <?php endif; ?>
     </article>
 
@@ -140,6 +147,7 @@ include dirname(__DIR__) . '/includes/header.php';
 
 <?php if (!$stripeReady): ?>
 <script>
+(() => {
   const $ = (id) => document.getElementById(id);
   const form = $('sandboxPay'), num = $('ccNum'), exp = $('ccExp'), cvc = $('ccCvc'), name = $('ccName'), brand = $('ccBrand'), payMethod = $('payMethod'), cardSection = $('cardSection');
 
@@ -217,7 +225,7 @@ include dirname(__DIR__) . '/includes/header.php';
       form.dataset.processing = '1';
       const btn = $('payBtn');
       btn.disabled = true; btn.classList.add('busy');
-      $('payLabel').textContent = 'Confirming subscription via ' + payMethod.value + '...';
+      $('payLabel').textContent = 'Activating local demo access...';
       setTimeout(() => form.submit(), 1400);
     }
   });

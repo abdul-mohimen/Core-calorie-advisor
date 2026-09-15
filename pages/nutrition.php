@@ -13,19 +13,7 @@ include dirname(__DIR__) . '/includes/header.php';
 <style>
   .page-hero::before, .page-hero::after { display: none !important; }
 </style>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    corePlugins: { preflight: false },
-    theme: {
-      extend: {
-        colors: {
-          'brand-accent': '#38BDF8',
-        }
-      }
-    }
-  }
-</script>
+
 
 <!-- Isolated Hero Header Section -->
 <div class="relative h-[35vh] min-h-[300px] w-full bg-[url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1600&q=80&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat flex items-center tf-hero-anim">
@@ -33,7 +21,7 @@ include dirname(__DIR__) . '/includes/header.php';
   <div class="absolute inset-0 bg-black/80 z-0"></div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-6 w-full text-left">
-    <span class="eyebrow text-[#38BDF8] font-bold tracking-widest uppercase text-xs md:text-sm">Fuel The Forge</span>
+    <span class="eyebrow text-[#38BDF8] font-bold tracking-widest uppercase text-xs md:text-sm">Fuel Your Performance</span>
     <h1 class="text-white font-black tracking-wider uppercase mt-2 text-2xl md:text-4xl">Nutrition Database</h1>
     <p class="text-gray-300 max-w-2xl mt-3 leading-relaxed text-xs md:text-sm">Optimize your diet with our clean food library. High-quality fuel for legendary performance.</p>
   </div>

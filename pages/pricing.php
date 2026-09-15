@@ -42,14 +42,6 @@ function plan_btn(string $p, string $label, bool $featured = false): void {
   .plan-card:nth-child(3) { animation-delay: .2s; }
   .plan-card:hover { transform: translateY(-6px); }
 </style>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    corePlugins: { preflight: false },
-    darkMode: 'class',
-    theme: { extend: { colors: { brand: '#FF6B1A' } } }
-  }
-</script>
 
 <!-- Hero -->
 <div class="relative h-[32vh] min-h-[280px] w-full bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=1600&q=80&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat flex items-center tf-hero-anim">

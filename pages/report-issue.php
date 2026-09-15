@@ -56,7 +56,7 @@ include dirname(__DIR__) . '/includes/header.php';
     <div id="issDone" style="display:none;text-align:center;padding:20px 0">
       <div class="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-3xl mx-auto mb-4">✓</div>
       <h3 class="text-xl font-bold text-gray-900 dark:text-white" style="margin:8px 0">Report submitted</h3>
-      <p class="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto">The Admin team has been notified and will review it. Thank you for keeping the forge safe.</p>
+      <p class="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto">The Admin team has been notified and will review it. Thank you for keeping the platform safe.</p>
     </div>
   </div>
 </div>

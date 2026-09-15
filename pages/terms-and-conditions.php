@@ -16,7 +16,7 @@ include dirname(__DIR__) . '/includes/header.php';
 <div class="-mt-16 relative z-10 max-w-4xl mx-auto px-6 pb-24 text-gray-900 dark:text-white">
   <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10 rounded-2xl p-8 shadow-xl text-left">
       <div class="legal-body text-gray-700 dark:text-gray-300">
-        <p class="mb-4">Welcome to <b>Core Calorie Advisor</b>. By creating an account or using our platform, portals, and AI tools, you agree to these Terms. Please read them — they keep the forge fair for every warrior.</p>
+        <p class="mb-4">Welcome to <b>Core Calorie Advisor</b>. By creating an account or using our platform, portals, and AI tools, you agree to these Terms. Please read them — they keep our platform fair for every member.</p>
 
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-6 mb-2">1. Eligibility &amp; Accounts</h3>
         <ul class="list-disc pl-5 space-y-2 mb-4">

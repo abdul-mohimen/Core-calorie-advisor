@@ -12,10 +12,20 @@ require_login();
 $itemId = (int)post('item_id');
 $name = post('name');
 $address = post('address');
-$paymentMethod = post('payment_method', 'Gemini Pay');
+$paymentMethod = post('payment_method', 'local-demo');
 
-if ($itemId <= 0 || strlen($name) < 3 || strlen($address) < 10) {
+if ($itemId <= 0 || mb_strlen($name) < 3 || mb_strlen($name) > 120 || mb_strlen($address) < 10 || mb_strlen($address) > 300) {
     flash('err', 'Inputs incomplete or incorrect. Address detailed hona chahiye.');
+    redirect('pages/shop.php');
+}
+
+if (!in_array($paymentMethod, ['local-demo', 'cash_on_delivery'], true)) {
+    flash('err', 'Invalid payment method.');
+    redirect('pages/shop.php');
+}
+if ($paymentMethod === 'local-demo' && !sandbox_checkout_enabled()) {
+    http_response_code(403);
+    flash('err', 'Local demo checkout is disabled. Configure a live payment provider.');
     redirect('pages/shop.php');
 }
 
@@ -30,7 +40,8 @@ if (!$item) {
 }
 
 $uid = (int)current_user()['id'];
-$totalPrice = $item['price'];
+$totalPrice = (float)$item['price'];
+$orderStatus = $paymentMethod === 'cash_on_delivery' ? 'pending' : 'completed';
 
 try {
     $pdo = db();
@@ -41,8 +52,8 @@ try {
     // nowhere, and pages/receipt.php then rendered a PHP warning trying to
     // print $order['address']. It is now persisted with the order.
     $ins = $pdo->prepare("INSERT INTO shop_orders (user_id, item_id, quantity, total_price, payment_method, status, address)
-                          VALUES (?, ?, 1, ?, ?, 'completed', ?)");
-    $ins->execute([$uid, $itemId, $totalPrice, $paymentMethod, $address]);
+                          VALUES (?, ?, 1, ?, ?, ?, ?)");
+    $ins->execute([$uid, $itemId, $totalPrice, $paymentMethod, $orderStatus, $address]);
     $orderId = (int)$pdo->lastInsertId();
     
     $pdo->commit();

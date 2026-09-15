@@ -6,7 +6,7 @@
 - **Wordmark**: The full wordmark lockup should never be rendered smaller than **80px wide**.
 
 ## Clear Space
-- A minimum clear space equal to the height of the inner "dumbbell" must be maintained around the logo on all sides.
+- A minimum clear space equal to the height of the inner flame must be maintained around the logo on all sides.
 - No other graphic elements, typography, or borders should enter this clear space.
 
 ## Colors

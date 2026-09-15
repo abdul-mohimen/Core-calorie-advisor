@@ -25,6 +25,8 @@ PHP 8 + MySQL + Three.js · XAMPP ready
    DB_USER=root
    DB_PASS=          # XAMPP me khali hota hai
    APP_URL=http://localhost/Core calorie advisor
+   APP_ENV=development
+   ALLOW_SANDBOX_CHECKOUT=true  # sirf local demo ke liye
    ```
 
 5. **Site kholo** 👉 `http://localhost/Core calorie advisor`
@@ -68,7 +70,7 @@ may only appear next to the command output or screenshot path that proves them.
 ### 💎 Backend PRO Access (sab kuch unlocked)
 | Email | Password | Access |
 |---|---|---|
-| `pro@corecalorieadvisor.com` | `CCAPro2026!` | Elite plan — tamam PRO workouts, AI body/food scanners, appointments, sab features |
+| `pro@corecalorieadvisor.com` | `cca123` | Elite plan — tamam PRO workouts, AI body/food scanners, appointments, sab features |
 
 Admin portal ke **All Users** table se bhi kisi bhi account ko FREE/PRO/ELITE par switch kiya ja sakta hai.
 
@@ -163,7 +165,7 @@ core_calorie_advisor/
 
 ## 🚀 Next Steps (production ke liye)
 
-1. **Stripe subscription checkout** — `.env` me `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, aur `STRIPE_PRICE_ELITE_MONTHLY` add karo. Stripe webhook ko `api/stripe-webhook.php` par point karo. Plan sirf signed webhook se active hota hai.
+1. **Stripe subscription checkout** — `.env` me `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, aur `STRIPE_PRICE_ELITE_MONTHLY` add karo. Stripe webhook ko `api/stripe-webhook.php` par point karo. Plan sirf signed webhook se active hota hai. Production mein `ALLOW_SANDBOX_CHECKOUT` ko remove/false rakho; sandbox endpoint fail closed rehta hai.
 2. **Real emails** — `.env` me `MAIL_FROM` aur server SMTP configure karo. Development reset links protected `logs/password-reset.log` me hain; UI par kabhi show nahi hote.
 3. **Real OAuth** — `auth/oauth-*.php` me guide comments hain. `composer require league/oauth2-client`.
 4. **Real AI scanning** — `.env` me `ANTHROPIC_API_KEY` (aur zarurat par `ANTHROPIC_MODEL`) add karo. Body scanner photo-only estimates ko medical diagnosis nahi banata; raw scan photos server par retain nahi hotin.

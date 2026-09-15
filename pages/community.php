@@ -52,7 +52,7 @@ include dirname(__DIR__) . '/includes/header.php';
         </div>
         <form id="commForm">
           <?= csrf_field() ?>
-          <textarea id="commBody" name="body" maxlength="500" placeholder="What did you forge today, <?= e(explode(' ', $me['name'])[0]) ?>? 🔥"></textarea>
+          <textarea id="commBody" name="body" maxlength="500" placeholder="What did you train today, <?= e(explode(' ', $me['name'])[0]) ?>? 🔥"></textarea>
           <div class="cc-actions">
             <span class="cc-hint"><span id="commCount">0</span>/500</span>
             <button class="btn btn-fire btn-sm" type="submit">Post to Community →</button>

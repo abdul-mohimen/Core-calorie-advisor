@@ -13,7 +13,7 @@ $categories = [
 $categoryHeroes = [
     'strength' => [
         'title' => 'Strength',
-        'desc'  => 'Forge unbreakable power. Master compound lifts, progressive overload, and raw force — sculpt every muscle fibre to its absolute peak.',
+        'desc'  => 'Build unbreakable power. Master compound lifts, progressive overload, and raw force — sculpt every muscle fibre to its absolute peak.',
         'img'   => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&auto=format&fit=crop',
         'accent' => 'var(--warning)'
     ],

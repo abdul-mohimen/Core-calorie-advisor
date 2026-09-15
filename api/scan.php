@@ -1,9 +1,9 @@
 <?php
 /* ============================================================
    AI SCAN ENDPOINT — Google-Lens-style Body / Food scanner.
-   Configure ANTHROPIC_API_KEY (and optionally ANTHROPIC_MODEL) in .env
-   for live vision analysis. Without it the UI is clearly labelled as a
-   reference preview; it does not invent body or medical measurements.
+   Configure OPENROUTER_API_KEY in .env for live vision analysis through the
+   free vision router. The endpoint never fabricates body measurements or
+   medical claims from a photograph.
    ============================================================ */
 require_once dirname(__DIR__) . '/config/config.php';
 header('Content-Type: application/json');
@@ -76,7 +76,90 @@ $prompt = $type === 'food'
   ? 'Analyze the food photo. Return ONLY JSON with: name, serving, kcal, protein, carbs, fats, verdict. Values are estimates for the visible serving. If the meal is unclear, say so in verdict and use null for uncertain numbers.'
   : 'Analyze only visible fitness presentation in this body photo. The user\'s training goal is: ' . $goal . ' (gain = build muscle, cut = lose fat, recomp = recomposition). Return ONLY JSON with: body_type, verdict, advice, training_focus, muscle_focus (array of {muscle, priority: High|Medium|Low, action} for which visible muscle groups to develop toward the goal), next_steps (array of 3-4 short actionable strings). Never infer or invent weight, BMI, body-fat percentage, muscle mass, a medical condition, age, gender, or a diagnosis from an image. State uncertainty clearly. If no human body is clearly visible in the photo, return {"no_body": true} only.';
 
-/* Live vision provider. Configure ANTHROPIC_API_KEY (+ optionally ANTHROPIC_MODEL)
+function tf_scan_json(string $text): ?array {
+    $text = trim((string)(preg_replace('/^```(?:json)?\s*|\s*```$/i', '', $text) ?? ''));
+    $decoded = json_decode($text, true);
+    if (is_array($decoded)) return $decoded;
+    $start = strpos($text, '{');
+    $end = strrpos($text, '}');
+    if ($start === false || $end === false || $end <= $start) return null;
+    $decoded = json_decode(substr($text, $start, $end - $start + 1), true);
+    return is_array($decoded) ? $decoded : null;
+}
+
+/* OpenRouter's `openrouter/free` router selects an available free model that
+   accepts image input. A key is still mandatory and stays server-side in .env.
+   Local image data is sent only for this request and is never written to disk. */
+$openRouterKey = env('OPENROUTER_API_KEY');
+if ($openRouterKey !== '' && !str_starts_with($openRouterKey, 'your_') && function_exists('curl_init')) {
+    $payload = [
+        'model' => env('OPENROUTER_MODEL', 'openrouter/free'),
+        'temperature' => 0.15,
+        /* Free-router models occasionally spend part of the response budget on
+           internal reasoning. Leave enough room for the requested JSON report. */
+        'max_tokens' => 1100,
+        'messages' => [[
+            'role' => 'user',
+            'content' => [
+                ['type' => 'text', 'text' => $prompt],
+                ['type' => 'image_url', 'image_url' => ['url' => 'data:' . $mime . ';base64,' . $imgData]],
+            ],
+        ]],
+    ];
+    $ch = curl_init('https://openrouter.ai/api/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 45,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $openRouterKey,
+            'HTTP-Referer: ' . (defined('APP_URL') ? APP_URL : 'http://localhost'),
+            'X-Title: Core Calorie Advisor',
+        ],
+    ]);
+    $raw = curl_exec($ch);
+    $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+    $provider = json_decode((string)$raw, true);
+    $providerText = trim((string)($provider['choices'][0]['message']['content'] ?? ''));
+    $providerResult = tf_scan_json($providerText);
+    if ($code >= 200 && $code < 300 && is_array($providerResult)) {
+        if ($type === 'food') {
+            foreach (['kcal', 'protein', 'carbs', 'fats'] as $metric) {
+                if (isset($providerResult[$metric]) && !is_numeric($providerResult[$metric])) $providerResult[$metric] = null;
+            }
+        } else {
+            if (!empty($providerResult['no_body'])) {
+                echo json_encode(['ok' => false, 'error' => 'Photo mein poora body clearly nazar nahi aa raha — full-body photo, acchi lighting mein dobara try karein.']);
+                exit;
+            }
+            $providerResult['weight_kg'] = null;
+            $providerResult['body_fat_pct'] = null;
+            $providerResult['bmi'] = null;
+            $providerResult['muscle_mass_kg'] = null;
+            $providerResult['health_flag'] = false;
+            $providerResult['health_note'] = null;
+            $providerResult['trainer'] = 'CCA coach matching';
+            $providerResult['program'] = 'Browse a suitable workout';
+            $providerResult['program_id'] = 0;
+            if (empty($providerResult['muscle_focus']) || !is_array($providerResult['muscle_focus'])) $providerResult['muscle_focus'] = tf_muscle_focus($goal);
+            if (empty($providerResult['next_steps']) || !is_array($providerResult['next_steps'])) $providerResult['next_steps'] = tf_next_steps($goal);
+            db()->prepare('INSERT INTO body_scans (user_id, body_type, verdict, health_flag) VALUES (?,?,?,0)')
+                ->execute([$_SESSION['user']['id'], mb_substr((string)($providerResult['body_type'] ?? 'Photo-only profile'), 0, 40), mb_substr((string)($providerResult['verdict'] ?? 'Training guidance'), 0, 60)]);
+            $providerResult['saved'] = true;
+        }
+        echo json_encode(['ok' => true, 'demo' => false, 'type' => $type, 'result' => $providerResult]);
+        exit;
+    }
+    $providerMessage = trim((string)($provider['error']['message'] ?? 'The free AI vision service did not return a usable result.'));
+    http_response_code($code >= 400 ? $code : 502);
+    echo json_encode(['ok' => false, 'error' => $providerMessage]);
+    exit;
+}
+
+/* Optional paid live vision provider. Configure ANTHROPIC_API_KEY (+ optionally ANTHROPIC_MODEL)
    in .env. Invalid/empty keys safely fall through to the clearly-labelled preview. */
 $apiKey = env('ANTHROPIC_API_KEY');
 if ($apiKey !== '' && !str_starts_with($apiKey, 'your_') && function_exists('curl_init')) {
@@ -104,8 +187,7 @@ if ($apiKey !== '' && !str_starts_with($apiKey, 'your_') && function_exists('cur
     curl_close($ch);
     $provider = json_decode((string)$raw, true);
     $providerText = trim((string)($provider['content'][0]['text'] ?? ''));
-    $providerText = preg_replace('/^```(?:json)?\s*|\s*```$/i', '', $providerText) ?? '';
-    $providerResult = json_decode($providerText, true);
+    $providerResult = tf_scan_json($providerText);
     if ($code >= 200 && $code < 300 && is_array($providerResult)) {
         if ($type === 'food') {
             foreach (['kcal', 'protein', 'carbs', 'fats'] as $metric) {
@@ -136,7 +218,13 @@ if ($apiKey !== '' && !str_starts_with($apiKey, 'your_') && function_exists('cur
     }
 }
 
-/* ---------- REFERENCE PREVIEW (clearly labelled in the UI) ---------- */
+/* Do not turn uploaded photos into a random reference result. A live provider
+   must be configured before scans are accepted. */
+http_response_code(503);
+echo json_encode(['ok' => false, 'error' => 'Live AI scanner is not configured. Add OPENROUTER_API_KEY to .env to enable free vision scans.']);
+exit;
+
+/* ---------- Legacy reference preview (intentionally unreachable) ---------- */
 if ($type === 'food') {
     $food = db()->query('SELECT * FROM foods ORDER BY RAND() LIMIT 1')->fetch();
     if (!$food) { http_response_code(500); echo json_encode(['ok' => false, 'error' => 'Food reference data is not installed.']); exit; }

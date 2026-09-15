@@ -56,7 +56,41 @@
   --font-disp: 'Russo One', sans-serif;
   --font-tech: 'Rajdhani', sans-serif;
   --font-body: 'Manrope', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* FLUID TYPE SCALE — MR-1. clamp(min, preferred, max); preferred uses vw so it scales
+     smoothly between the min at ~360px viewport and max at ~1600px+, no breakpoint jumps. */
+  --fs-display:  clamp(2.75rem, 2rem + 3.5vw, 5.5rem);    /* hero H1 */
+  --fs-h2:       clamp(2rem, 1.65rem + 1.6vw, 3.25rem);   /* section headers */
+  --fs-h3:       clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem); /* card/portal titles */
+  --fs-h4:       clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem); /* card headings */
+  --fs-body:     clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);  /* barely moves, protects readability */
+  --fs-small:    clamp(0.8125rem, 0.8rem + 0.1vw, 0.875rem); /* meta rows, labels */
+  --fs-stat:     clamp(2.25rem, 1.8rem + 2vw, 3.75rem);    /* big kcal/macro numbers */
+
+  --tracking-display: -0.03em;
+  --tracking-h2:      -0.02em;
+  --tracking-label:   0.04em;   /* uppercase eyebrow/meta labels */
+
   --nav-h: 74px;
+
+  /* PORTAL & CARD SYSTEM TOKENS */
+  --portal-accent: #FF6B1A;
+  --portal-accent-text: #FFFFFF;
+  --card-radius: 16px;
+  --card-pad: 22px;
+  --card-gap: 16px;
+  --card-icon-size: 42px;
+  --card-media-h: 180px;
+  --card-lift: -4px;
+  --card-min: 280px;
+  --sidebar-w: 260px;
+  --shell-gap: 24px;
+  --fg: var(--text-1);
+  --hub-image: none;
+  --portal-hero-image: none;
+  --hero-img: none;
+  --r: 12px;
 }
 
 [data-theme="light"] {
@@ -268,16 +302,45 @@ button {
   border-radius: 9px
 }
 
-h1,
-h2,
-h3 {
-  font-family: var(--disp);
-  letter-spacing: .3px;
-  line-height: 1.16;
+h1 {
+  font-family: var(--font-disp, var(--disp));
+  font-size: var(--fs-display);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.12;
   text-transform: uppercase;
   font-weight: 900;
   overflow-wrap: break-word;
-  word-break: break-word
+  word-break: break-word;
+}
+
+h2 {
+  font-family: var(--font-disp, var(--disp));
+  font-size: var(--fs-h2);
+  letter-spacing: var(--tracking-h2);
+  line-height: 1.18;
+  text-transform: uppercase;
+  font-weight: 900;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+h3 {
+  font-family: var(--font-disp, var(--disp));
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  text-transform: uppercase;
+  font-weight: 900;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+h4 {
+  font-family: var(--font-tech, var(--tech));
+  font-size: var(--fs-h4);
+  line-height: 1.35;
+  font-weight: 700;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 p, span, a, b, td, th, li {
@@ -3635,7 +3698,7 @@ footer {
 
 /* Light theme: the homepage hero sits on a DARK photo in BOTH themes, so its copy
    must stay light — inheriting the flipped --text made the headline vanish into
-   the image ("FORGE YOUR ULTIMATE" in near-black on a black gym photo). */
+   the image ("BUILD YOUR ULTIMATE" in near-black on a black gym photo). */
 [data-theme="light"] .hero h1 { color: #f7f3ec; }
 [data-theme="light"] .hero > div > p { color: rgba(247, 243, 236, .84); }
 [data-theme="light"] .hero .eyebrow { color: var(--gold); }
@@ -4092,11 +4155,12 @@ footer {
 /* ============ CCA DESIGN SYSTEM (PHASE 4) ============ */
 
 /* Typography Hierarchy */
-.cca-h1 { font-family: var(--font-disp); font-size: 32px; font-weight: 900; line-height: 1.2; margin: 0; color: var(--text-1); }
-.cca-h2 { font-family: var(--font-disp); font-size: 24px; font-weight: 900; line-height: 1.2; margin: 0; color: var(--text-1); }
-.cca-h3 { font-family: var(--font-tech); font-size: 18px; font-weight: 700; line-height: 1.3; margin: 0; color: var(--text-1); }
-.cca-p  { font-family: var(--font-body); font-size: 14px; font-weight: 400; line-height: 1.5; margin: 0; color: var(--text-2); }
-.cca-small { font-family: var(--font-body); font-size: 12px; font-weight: 500; line-height: 1.5; color: var(--text-3); }
+.cca-h1 { font-family: var(--font-disp); font-size: var(--fs-display); letter-spacing: var(--tracking-display); font-weight: 900; line-height: 1.15; margin: 0; color: var(--text-1); }
+.cca-h2 { font-family: var(--font-disp); font-size: var(--fs-h2); letter-spacing: var(--tracking-h2); font-weight: 900; line-height: 1.2; margin: 0; color: var(--text-1); }
+.cca-h3 { font-family: var(--font-tech); font-size: var(--fs-h3); font-weight: 700; line-height: 1.3; margin: 0; color: var(--text-1); }
+.cca-h4 { font-family: var(--font-tech); font-size: var(--fs-h4); font-weight: 700; line-height: 1.35; margin: 0; color: var(--text-1); }
+.cca-p  { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 400; line-height: 1.5; margin: 0; color: var(--text-2); }
+.cca-small { font-family: var(--font-body); font-size: var(--fs-small); letter-spacing: var(--tracking-label); font-weight: 500; line-height: 1.5; color: var(--text-3); }
 .cca-number { font-variant-numeric: tabular-nums; }
 
 /* Buttons */
@@ -4211,7 +4275,7 @@ footer {
 .cca-page-container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: var(--space-4) clamp(14px, 3vw, 26px) 60px;
+  padding: 8px clamp(14px, 3vw, 26px) 60px;
 }
 
 .cca-page-header {
@@ -4336,5 +4400,32 @@ footer {
 .cca-trainer-info b { display: block; font: 700 13px var(--font-tech); color: var(--text-1); }
 .cca-trainer-info span { font-size: 11px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .cca-trainer-info .cca-trainer-rating { color: #F59E0B; font-size: 12px; font-weight: 700; margin-top: 4px; display: block; }
+
+/* ============================================================================
+   MOTION SYSTEM — SCROLL REVEAL (MR-2)
+   ============================================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 640ms var(--ease-in-out), transform 640ms var(--ease-in-out);
+  transition-delay: calc(var(--reveal-i, 0) * 70ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 
 

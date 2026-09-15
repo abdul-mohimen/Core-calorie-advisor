@@ -18,6 +18,34 @@ if ($portal !== null && !in_array($portal, ['admin', 'member', 'doctor', 'traine
 $curFile = basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: 'index.php');
 if ($curFile === '' || !str_contains($curFile, '.php')) $curFile = 'index.php';
 
+/* Hero imagery is page-aware but remains presentation-only. Dashboard heroes
+   keep their looping video; other portal pages receive a relevant still image
+   through --portal-hero-image (consumed by hero-system.css). */
+$portalHeroImages = [
+    'workouts.php'               => 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1800&q=82',
+    'diet-planner.php'           => 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1800&q=82',
+    'trainers-doctors.php'       => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1800&q=82',
+    'appointments.php'           => 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1800&q=82',
+    'billing.php'                => 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1800&q=82',
+    'client-roster.php'          => 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1800&q=82',
+    'routine-creator.php'        => 'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=1800&q=82',
+    'earnings-payouts.php'       => 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1800&q=82',
+    'reviews-ratings.php'        => 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=82',
+    'vitals-log.php'             => 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1800&q=82',
+    'prescriptions.php'          => 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=1800&q=82',
+    'doctors.php'                => 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1800&q=82',
+    'patient-queue.php'          => 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1800&q=82',
+    'consultations.php'          => 'https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=1800&q=82',
+    'financials.php'             => 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1800&q=82',
+    'user-management.php'        => 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1800&q=82',
+    'reviews-moderation.php'     => 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=82',
+    'monetization-stripe.php'    => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=82',
+    'exercise-library-admin.php' => 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=82',
+    'appointments-master.php'    => 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=82',
+    'ratings.php'                => 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=82',
+];
+$portalHeroImage = $portalHeroImages[$curFile] ?? 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1800&q=82';
+
 /* ============================================================
    NAVIGATION — navbar ($navMenu) and sidebar ($sideMenu) are
    kept DISJOINT (no link appears in both). Primary links live in
@@ -76,6 +104,13 @@ if (!$u) {
         default => [[$dash], []],
     };
 }
+$platformMenu = $navMenu;
+/* The portal section strip used to sit below every hero. It now owns the
+   logged-in desktop navbar; platform-discovery links are surfaced as cards on
+   each dashboard instead of competing with portal work. */
+if ($u && in_array($role, ['member', 'trainer', 'doctor', 'patient', 'admin'], true)) {
+    $navMenu = portal_links($role);
+}
 $unread = $u ? unread_count((int)$u['id']) : 0;
 
 /* ---- Search index (reflects only what this user can reach) ----
@@ -86,7 +121,7 @@ $unread = $u ? unread_count((int)$u['id']) : 0;
    the wrong title for EVERY workout and its Start-Session link sent players into the
    Yoga session regardless of what they picked. Prefixed names + unset() prevent it. */
 $searchIndex = [];
-foreach (array_merge($navMenu, $sideMenu) as [$hdrNavTitle, $hdrNavLink]) $searchIndex[] = ['t' => $hdrNavTitle, 'k' => 'Page', 'u' => $hdrNavLink, 'img' => null];
+foreach (array_merge($navMenu, $sideMenu, $platformMenu) as [$hdrNavTitle, $hdrNavLink]) $searchIndex[] = ['t' => $hdrNavTitle, 'k' => 'Page', 'u' => $hdrNavLink, 'img' => null];
 if ($u && $role === 'member') {
     $searchIndex[] = ['t' => 'AI Body Scanner', 'k' => 'Pro Tool', 'u' => url('pages/scanner-body.php'), 'img' => null];
     $searchIndex[] = ['t' => 'AI Food Scanner', 'k' => 'Pro Tool', 'u' => url('pages/scanner-food.php'), 'img' => null];
@@ -156,6 +191,9 @@ $BRAND_SVG = (static function (): string {
 <!-- Phase 10: the one card anatomy. Loaded last so it governs every card,
      including the legacy .cat-card / .portal-card / .wk-card definitions. -->
 <link rel="stylesheet" href="<?= asset('css/cca-cards.css') ?>">
+<!-- Final visual layer: keeps navigation, cards and typography consistently
+     sized across legacy pages and the newer portal components. -->
+<link rel="stylesheet" href="<?= asset('css/premium-ui.css') ?>">
 <script>
 window.TF = {
   baseUrl: <?= json_encode(BASE_URL) ?>,
@@ -176,8 +214,19 @@ window.TF_INDEX = <?= json_encode($searchIndex, JSON_UNESCAPED_SLASHES) ?>;
     theme: {
       extend: {
         colors: {
+          'brand': '#FF6B1A',
           'brand-accent': '#38BDF8',
           'brand-gold': '#F59E0B',
+          neonCyan: '#FF6B1A',
+          neonRed: '#FF3300',
+          darkBg: '#0A0A0A',
+          darkCard: '#111827',
+          darkGlass: 'rgba(255,107,26,0.06)',
+          goldAccent: '#FF6B1A'
+        },
+        fontFamily: {
+          inter: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace']
         },
         keyframes: {
           scan: {
@@ -190,7 +239,7 @@ window.TF_INDEX = <?= json_encode($searchIndex, JSON_UNESCAPED_SLASHES) ?>;
         }
       }
     }
-  }
+  };
 </script>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-[#0A0A0A] dark:text-white transition-colors duration-200">
@@ -200,11 +249,14 @@ if (empty($_SESSION['cca_splash_shown'])):
     include __DIR__ . '/intro.php';
 endif;
 ?>
-<div id="app"<?= $authMinimal ? ' class="auth-mode"' : '' ?><?= $portal ? ' data-portal="' . e($portal) . '"' : '' ?>>
+<div id="app"<?= $authMinimal ? ' class="auth-mode"' : '' ?><?= $portal ? ' data-portal="' . e($portal) . '" style="--portal-hero-image:url(\'' . e($portalHeroImage) . '\')"' : '' ?> data-page="<?= e($curFile) ?>">
 
 <?php if ($authMinimal): ?>
 <header class="nav nav-min">
-  <a class="brand" href="<?= url('index.php') ?>"><?= $BRAND_SVG ?><b>CORE<em>CALORIE</em></b></a>
+  <a class="brand" href="<?= url('index.php') ?>">
+    <?= $BRAND_SVG ?>
+    <span class="brand-copy"><span class="brand-name">Core <em>Calorie</em></span><span class="brand-tagline">Performance intelligence</span></span>
+  </a>
 </header>
 <main class="auth-main">
 <?= flash_render() ?>
@@ -214,20 +266,29 @@ endif;
   <button class="burger" id="burger" aria-label="Toggle Navigation Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <a class="brand" href="<?= $u ? url("portals/$role.php") : url('index.php') ?>">
     <?= $BRAND_SVG ?>
-    <b>CORE<em>CALORIE</em></b>
+    <span class="brand-copy"><span class="brand-name">Core <em>Calorie</em></span><span class="brand-tagline">Performance intelligence</span></span>
   </a>
-  <nav class="nav-links">
-    <?php foreach ($navMenu as [$label, $href]): ?>
-      <a href="<?= $href ?>"<?= str_ends_with($href, $curFile) ? ' class="active"' : '' ?>><?= e($label) ?></a>
-    <?php endforeach; ?>
-  </nav>
+  <?php if (!$u): ?>
+    <nav class="nav-links" aria-label="Public navigation">
+      <?php foreach ($navMenu as [$label, $href]): ?>
+        <a href="<?= $href ?>"<?= str_ends_with($href, $curFile) ? ' class="active"' : '' ?>><?= e($label) ?></a>
+      <?php endforeach; ?>
+    </nav>
+  <?php endif; ?>
   <div class="nav-spacer"></div>
-  <div class="searchbox">
-    <span class="sicon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20 L16.5 16.5"/></svg></span>
-    <input id="searchIn" type="text" placeholder="Search workouts, trainers, food &amp; more..." autocomplete="off">
-    <div class="search-drop" id="searchDrop"><div id="searchResults"></div></div>
-  </div>
-  
+  <?php if ($u): ?>
+    <nav class="nav-links nav-links--portal" aria-label="Portal navigation">
+      <?php foreach ($navMenu as [$label, $href]): ?>
+        <a href="<?= $href ?>"<?= str_ends_with($href, $curFile) ? ' class="active"' : '' ?>><?= e($label) ?></a>
+      <?php endforeach; ?>
+    </nav>
+  <?php else: ?>
+    <div class="searchbox nav-public-search" role="search">
+      <span class="sicon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20 L16.5 16.5"/></svg></span>
+      <input id="searchIn" type="search" placeholder="Search workouts, nutrition, trainers &amp; more" autocomplete="off" aria-label="Search Core Calorie Advisor">
+      <div class="search-drop" id="searchDrop"><div id="searchResults"></div></div>
+    </div>
+  <?php endif; ?>
   <!-- Global Theme Toggle -->
   <button id="themeToggle" class="ml-4 p-2 text-gray-400 hover:text-brand-accent transition-colors flex items-center justify-center cursor-pointer" title="Toggle Theme" aria-label="Toggle Theme">
     <svg class="sun-icon hidden dark:block" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -341,3 +402,10 @@ endif;
 
 <main>
 <?= flash_render() ?>
+<?php if ($u && $portal): ?>
+  <div class="searchbox portal-hero-search" role="search">
+    <span class="sicon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20 L16.5 16.5"/></svg></span>
+    <input id="searchIn" type="search" placeholder="Search workouts, experts, nutrition &amp; more..." autocomplete="off" aria-label="Search Core Calorie Advisor">
+    <div class="search-drop" id="searchDrop"><div id="searchResults"></div></div>
+  </div>
+<?php endif; ?>

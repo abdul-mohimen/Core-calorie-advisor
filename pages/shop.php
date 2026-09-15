@@ -77,7 +77,7 @@ try {
                 'Equipment'
             ],
             [
-                'CCA Whey Protein Iso-Forge', 
+                'CCA Whey Protein Pure-Iso', 
                 'Premium grass-fed whey isolate. 25g protein per scoop, zero sugar, chocolate fudge flavor for clean muscle recovery.', 
                 59.99, 
                 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=500&q=60&auto=format&fit=crop', 
@@ -98,7 +98,7 @@ try {
                 'Accessories'
             ],
             [
-                'Forge Iron Kettlebell 16kg', 
+                'Cast Iron Kettlebell 16kg', 
                 'Solid cast-iron kettlebell with powder coat finish. Wide textured handle for ultimate grip and conditioning loops.', 
                 49.99, 
                 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=500&q=60&auto=format&fit=crop', 
@@ -161,7 +161,7 @@ if (is_logged_in()) {
     $wishIds = array_map('intval', $w->fetchAll(PDO::FETCH_COLUMN));
 }
 
-$pageTitle = 'Forge Shop';
+$pageTitle = 'CCA Shop';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
 
@@ -170,7 +170,7 @@ include dirname(__DIR__) . '/includes/header.php';
   <div class="absolute inset-0 bg-black/80 z-0"></div>
   <div class="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
     <span class="text-[#FFB800] font-bold tracking-[0.25em] uppercase text-xs md:text-sm block">Gear Up</span>
-    <h1 class="text-white font-black tracking-wider uppercase mt-2 text-3xl md:text-5xl">Forge Shop</h1>
+    <h1 class="text-white font-black tracking-wider uppercase mt-2 text-3xl md:text-5xl">CCA Shop</h1>
     <p class="text-gray-300 max-w-2xl mx-auto mt-3 leading-relaxed text-xs md:text-sm">Premium gym equipment, clothing, and recovery accessories built to elevate your athletic performance.</p>
   </div>
 </div>

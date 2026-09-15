@@ -39,10 +39,10 @@ include dirname(__DIR__) . '/includes/header.php';
     </div>
     <div class="cca-hero__glass">
       <div class="cca-hero__glass-title">Today's Intake</div>
-      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c1">🔥</span><div><div class="cca-hero__kpi-val"><?= number_format($todayKcal) ?></div><div class="cca-hero__kpi-lbl"><?= $remaining ?> kcal remaining</div></div></div>
-      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c2">💪</span><div><div class="cca-hero__kpi-val"><?= number_format($todayProtein, 1) ?>g</div><div class="cca-hero__kpi-lbl">Protein</div></div></div>
-      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c3">🍞</span><div><div class="cca-hero__kpi-val"><?= number_format($todayCarbs, 1) ?>g</div><div class="cca-hero__kpi-lbl">Carbs</div></div></div>
-      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c4">🥑</span><div><div class="cca-hero__kpi-val"><?= number_format($todayFats, 1) ?>g</div><div class="cca-hero__kpi-lbl">Fats</div></div></div>
+      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c1">🔥</span><div><div class="cca-hero__kpi-val"><span data-count-to="<?= $todayKcal ?>"><?= number_format($todayKcal) ?></span></div><div class="cca-hero__kpi-lbl"><span data-count-to="<?= $remaining ?>"><?= $remaining ?></span> kcal remaining</div></div></div>
+      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c2">💪</span><div><div class="cca-hero__kpi-val"><span data-count-to="<?= $todayProtein ?>"><?= number_format($todayProtein, 1) ?></span>g</div><div class="cca-hero__kpi-lbl">Protein</div></div></div>
+      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c3">🍞</span><div><div class="cca-hero__kpi-val"><span data-count-to="<?= $todayCarbs ?>"><?= number_format($todayCarbs, 1) ?></span>g</div><div class="cca-hero__kpi-lbl">Carbs</div></div></div>
+      <div class="cca-hero__kpi-row"><span class="cca-hero__kpi-icon c4">🥑</span><div><div class="cca-hero__kpi-val"><span data-count-to="<?= $todayFats ?>"><?= number_format($todayFats, 1) ?></span>g</div><div class="cca-hero__kpi-lbl">Fats</div></div></div>
     </div>
   </div>
 </section>
@@ -60,7 +60,7 @@ include dirname(__DIR__) . '/includes/header.php';
         <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-3)"><span>1200</span><span id="calGoalVal"><?= $dailyGoal ?> kcal</span><span>4000</span></div>
       </div>
       <div style="text-align:center">
-        <div style="font-family:var(--font-disp); font-size:36px; color:var(--primary-text)"><?= number_format($todayKcal) ?></div>
+        <div style="font-family:var(--font-disp); font-size:36px; color:var(--primary-text)"><span data-count-to="<?= $todayKcal ?>"><?= number_format($todayKcal) ?></span></div>
         <div style="font-size:12px; color:var(--text-3)">consumed today</div>
       </div>
     </div>

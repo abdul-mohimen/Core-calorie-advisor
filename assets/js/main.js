@@ -145,7 +145,7 @@ if(sIn&&window.TF_INDEX){
     if(!q){sRes.innerHTML='<div class="sr-hint">Start typing to search workouts, food, trainers &amp; more…</div>';return}
     const ql=q.toLowerCase();
     const list=TF_INDEX.filter(i=>i.t.toLowerCase().includes(ql));
-    if(!list.length){sRes.innerHTML='<div class="sr-hint">No results in the forge for "'+esc(q)+'"…</div>';return}
+    if(!list.length){sRes.innerHTML='<div class="sr-hint">No results found for "'+esc(q)+'"…</div>';return}
     sRes.innerHTML=list.slice(0,10).map(i=>
       '<div class="sr-item" data-href="'+esc(i.u)+'">'+
         '<img class="sr-thumb" src="'+esc(i.img||GENERIC_ICON)+'" alt="" loading="lazy" onerror="this.src=\''+GENERIC_ICON+'\'">'+

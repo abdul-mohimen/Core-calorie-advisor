@@ -71,6 +71,7 @@ include dirname(__DIR__) . '/includes/header.php';
 </section>
 
 <?= portal_nav('patient') ?>
+<?= portal_dashboard_hub('patient') ?>
 
 <div class="cca-page-container">
   <div class="cca-grid-4">

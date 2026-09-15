@@ -11,12 +11,12 @@
 .cca-hero {
   position: relative;
   width: 100%;
-  min-height: 320px;
+  min-height: 280px;
   display: flex;
   align-items: center;
   overflow: hidden;
   border-radius: 0 0 24px 24px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 /* Portal hero scrim.
@@ -134,11 +134,13 @@
 
 .cca-hero__title {
   font-family: var(--font-disp, 'Russo One', sans-serif);
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: var(--fs-display);
+  letter-spacing: var(--tracking-display);
   color: var(--text-1);
-  line-height: 1.15;
+  line-height: 1.1;
   margin-bottom: 10px;
 }
+.cca-hero__title.reveal { transform: translateY(28px); }
 
 .cca-hero__title .grad {
   background: linear-gradient(135deg, #FF6B1A, #FFC02E);
@@ -220,7 +222,7 @@
 
 .cca-hero__kpi-val {
   font-family: var(--font-disp, 'Russo One', sans-serif);
-  font-size: 22px;
+  font-size: var(--fs-stat);
   color: var(--text-1);
   line-height: 1;
 }
@@ -233,7 +235,7 @@
 
 /* ─── VIDEO HERO VARIANT ─── */
 .cca-hero--video {
-  min-height: 380px;
+  min-height: 300px;
 }
 
 .cca-hero--video video,
@@ -248,7 +250,7 @@
 
 /* ─── PARTICLE / CANVAS HERO VARIANT ─── */
 .cca-hero--particles {
-  min-height: 340px;
+  min-height: 280px;
 }
 
 .cca-hero--particles canvas {
@@ -284,6 +286,68 @@
     radial-gradient(ellipse at 20% 30%, rgba(255,107,26,0.12) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 70%, rgba(56,189,248,0.08) 0%, transparent 50%),
     linear-gradient(135deg, var(--bg) 0%, #0D0D15 100%);
+}
+
+/* Contextual imagery now reads as an art-directed accent instead of an
+   unrelated photo behind the whole hero. The copy side stays intentionally
+   dark; the image is isolated to the right and unified by the portal colour. */
+#app[data-portal] .cca-hero:not(.cca-hero--video) {
+  isolation: isolate;
+  background:
+    radial-gradient(900px 420px at 0 0, color-mix(in srgb, var(--portal-accent) 22%, transparent), transparent 68%),
+    linear-gradient(135deg, #080a10 0%, #10121b 100%);
+}
+#app[data-portal] .cca-hero:not(.cca-hero--video)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 0 42%;
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg, #080a10 0%, rgba(8,10,16,.68) 18%, color-mix(in srgb, var(--portal-accent) 25%, rgba(8,10,16,.16)) 100%),
+    var(--portal-hero-image);
+  background-size: cover;
+  background-position: center;
+  filter: saturate(.72) contrast(1.06);
+  opacity: .86;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20%, #000);
+          mask-image: linear-gradient(90deg, transparent, #000 20%, #000);
+}
+#app[data-portal] .cca-hero:not(.cca-hero--video) .cca-hero__overlay {
+  background:
+    linear-gradient(90deg, rgba(7,9,14,.46), transparent 65%),
+    linear-gradient(to top, var(--bg) 0%, transparent 20%);
+}
+
+/* The old "patti" remains in markup for backwards compatibility, but portal
+   navigation now lives in the main navbar. This prevents duplicate navigation
+   below every hero and frees the dashboard for useful platform cards. */
+#app[data-portal] .cca-portal-nav { display: none; }
+
+/* Search belongs to the portal hero rather than competing for navbar space. */
+#app[data-portal] > main { position: relative; }
+.portal-hero-search {
+  position: absolute;
+  z-index: 8;
+  top: 22px;
+  left: 50%;
+  width: min(520px, calc(100% - 48px));
+  max-width: none;
+  transform: translateX(-50%);
+}
+.portal-hero-search input {
+  background: rgba(10,12,17,.72);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 16px 34px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.portal-hero-search .search-drop { z-index: 20; }
+#app[data-portal] .cca-hero__content { padding-top: 84px; padding-bottom: 26px; }
+
+@media (max-width: 760px) {
+  #app[data-portal] .cca-hero:not(.cca-hero--video)::before { inset: 0; opacity: .38; -webkit-mask-image:none; mask-image:none; }
+  .portal-hero-search { top: 14px; width: calc(100% - 32px); }
+  .portal-hero-search input { padding-top: 11px; padding-bottom: 11px; font-size: 13px; }
+  #app[data-portal] .cca-hero__content { padding: 82px 20px 32px; }
 }
 
 /* ─── PORTAL-SPECIFIC ACCENT OVERLAYS ───
@@ -585,6 +649,19 @@
       rgba(255,255,255,0.93) 52%,
       color-mix(in srgb, var(--portal-accent, var(--primary)) 16%, rgba(255,255,255,0.90)) 100%),
     linear-gradient(to top, var(--bg) 0%, transparent 26%);
+}
+
+/* Preserve the art-directed portal composition in light mode too. The text
+   panel remains calm and opaque on the left while contextual imagery has room
+   to breathe on the right. */
+[data-theme="light"] #app[data-portal] .cca-hero:not(.cca-hero--video) .cca-hero__overlay {
+  background:
+    linear-gradient(90deg,
+      rgba(250,251,253,.97) 0%,
+      rgba(250,251,253,.94) 44%,
+      rgba(250,251,253,.66) 61%,
+      rgba(250,251,253,.10) 100%),
+    linear-gradient(to top, var(--bg) 0%, transparent 22%);
 }
 
 [data-theme="light"] .cca-hero__glass {

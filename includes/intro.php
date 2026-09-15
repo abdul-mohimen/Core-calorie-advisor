@@ -10,11 +10,13 @@
 
 #cca-intro-shell {
   position: fixed; inset: 0; z-index: 99999;
-  background: var(--cca-dark); color: var(--on-media);
+  background: radial-gradient(ellipse at 50% 78%, rgba(255,78,12,.15), transparent 42%), var(--cca-dark); color: var(--on-media);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   overflow: hidden; pointer-events: auto;
   transition: opacity 0.3s ease, transform 0.4s ease;
 }
+.intro-grid { position:absolute; inset:0; opacity:.26; pointer-events:none; background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px); background-size:42px 42px; -webkit-mask-image:linear-gradient(to bottom,transparent,black 28%,transparent); mask-image:linear-gradient(to bottom,transparent,black 28%,transparent); }
+.intro-kicker { position:relative; z-index:2; margin-bottom:18px; padding:6px 10px; border:1px solid rgba(255,150,71,.34); border-radius:999px; background:rgba(255,107,26,.08); color:#ffb274; font:800 10px var(--font-tech,monospace); letter-spacing:.2em; text-transform:uppercase; opacity:0; }
 
 #cca-intro-shell.hide-intro {
   opacity: 0; pointer-events: none; transform: scale(1.04);
@@ -199,12 +201,13 @@
 .do-flash { animation: flash 0.1s ease-out forwards; }
 .do-sweep { animation: maskSweep 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
 .do-tagline { animation: taglineFade 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+.do-kicker { animation: taglineFade .38s cubic-bezier(.2,.9,.2,1) forwards; }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .intro-mark { transform: scale(1) rotate(0deg); transition: opacity 0.4s; }
   .intro-wordmark { -webkit-mask-image: none; mask-image: none; transition: opacity 0.4s; }
-  .do-bloom, .do-slam, .do-shake, .do-flash, .do-sweep, .do-tagline { animation: none !important; opacity: 1 !important; transform: none !important; letter-spacing: 0.06em !important; }
+  .do-bloom, .do-slam, .do-shake, .do-flash, .do-sweep, .do-tagline, .do-kicker { animation: none !important; opacity: 1 !important; transform: none !important; letter-spacing: 0.06em !important; }
   .intro-sparks { display: none; }
 }
 </style>
@@ -213,6 +216,7 @@
   <button id="cca-intro-skip" class="intro-skip">Skip</button>
   <div class="intro-flash" id="cca-flash"></div>
   <div class="intro-bloom" id="cca-bloom"></div>
+  <div class="intro-grid"></div>
   
   <div class="intro-sparks" id="cca-sparks"></div>
   <div class="intro-shock" id="cca-shock"></div>
@@ -223,6 +227,7 @@
        The sequence is built FROM the mark's own meaning: the activity ring
        draws itself, then the flame ignites inside it. Original work; no game's
        assets, wordmark or layout are reproduced (see CLAUDE.md). -->
+  <div class="intro-kicker" id="cca-kicker">Performance system online</div>
   <div class="intro-mark" id="cca-mark">
     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -244,7 +249,7 @@
   <div class="intro-wordmark" id="cca-wordmark">
     CORE CALORIE <span>ADVISOR</span>
   </div>
-  <div class="intro-tagline" id="cca-tagline">Precision nutrition meets 3D coaching.</div>
+  <div class="intro-tagline" id="cca-tagline">Train sharper. Fuel smarter. Keep moving.</div>
   
   <div class="intro-loader-wrap" id="cca-loader">
     <div class="intro-loader-track"><div class="intro-loader-bar" id="cca-bar"></div></div>
@@ -304,6 +309,7 @@
           createSparks();
         }
     }},
+    { t: 1060, f: () => document.getElementById('cca-kicker').classList.add('do-kicker') },
     { t: 1250, f: () => document.getElementById('cca-wordmark').classList.add('do-sweep') },
     { t: 1600, f: () => document.getElementById('cca-tagline').classList.add('do-tagline') },
     { t: 1720, f: () => { document.getElementById('cca-loader').style.opacity = 1; startLoader(); } }

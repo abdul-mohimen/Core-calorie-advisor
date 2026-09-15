@@ -162,9 +162,10 @@ const CCAMuscleMap = (() => {
     onSelectCb = opts.onSelect || null;
 
     /* Build HTML */
+    const anatomyMarkup = opts.showAnatomy === false ? '' : SVG_TEMPLATE;
     container.innerHTML = STYLE + `
       <div class="cca-muscle-map">
-        ${SVG_TEMPLATE}
+        ${anatomyMarkup}
         <div class="cca-muscle-buttons" id="muscleButtons"></div>
       </div>
     `;

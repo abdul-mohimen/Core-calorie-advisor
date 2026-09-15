@@ -231,7 +231,7 @@ foreach ($catDefs as $slug => $def) {
   <div class="sec-head rv">
     <div>
       <span class="eyebrow">Programs</span>
-      <h2>Forge Your Path</h2>
+      <h2>Choose Your Path</h2>
     </div>
     <a class="btn btn-ghost btn-sm" href="<?= url('pages/workouts.php') ?>">Explore All Programs →</a>
   </div>
@@ -288,9 +288,10 @@ foreach ($catDefs as $slug => $def) {
   <div class="portal-grid">
     <!-- Member Portal (PRIMARY) -->
     <div class="portal-card featured rv" style="--portal-accent: var(--primary); --portal-accent-text: var(--primary-text)">
-      <div class="portal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-      </div>
+      <figure class="portal-visual">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&amp;fit=crop&amp;w=760&amp;q=84" alt="Athlete training in a gym" loading="lazy">
+        <figcaption>Personal performance</figcaption>
+      </figure>
       <div>
         <h3 class="portal-title">Member Portal</h3>
         <p class="portal-desc">3D workouts, calorie tracking, AI body & food scanners, nutrition log, and trainer appointments.</p>
@@ -309,9 +310,10 @@ foreach ($catDefs as $slug => $def) {
 
     <!-- Patient Portal (PRIMARY) -->
     <div class="portal-card featured rv" style="--portal-accent: var(--success); --portal-accent-text: var(--success-text)">
-      <div class="portal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      </div>
+      <figure class="portal-visual">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&amp;fit=crop&amp;w=760&amp;q=84" alt="Doctor reviewing a patient's care plan" loading="lazy">
+        <figcaption>Guided health</figcaption>
+      </figure>
       <div>
         <h3 class="portal-title">Patient Portal</h3>
         <p class="portal-desc">Doctor-approved disease-safe workout plans, health reminders, and medical consultations.</p>
@@ -329,9 +331,10 @@ foreach ($catDefs as $slug => $def) {
 
     <!-- Trainer Portal (SECONDARY) -->
     <div class="portal-card rv" style="--portal-accent: var(--info); --portal-accent-text: var(--info-text)">
-      <div class="portal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      </div>
+      <figure class="portal-visual">
+        <img src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&amp;fit=crop&amp;w=760&amp;q=84" alt="Trainer coaching an athlete" loading="lazy">
+        <figcaption>Coach command</figcaption>
+      </figure>
       <div>
         <h3 class="portal-title">Trainer Portal</h3>
         <p class="portal-desc">Manage client bookings, review performance, and assign custom training plans.</p>
@@ -349,9 +352,10 @@ foreach ($catDefs as $slug => $def) {
 
     <!-- Doctor Portal (SECONDARY) -->
     <div class="portal-card rv" style="--portal-accent: var(--accent-cyan); --portal-accent-text: var(--accent-cyan-text)">
-      <div class="portal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M12 9v6M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
-      </div>
+      <figure class="portal-visual">
+        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&amp;fit=crop&amp;w=760&amp;q=84" alt="Doctor working in a modern clinic" loading="lazy">
+        <figcaption>Clinical oversight</figcaption>
+      </figure>
       <div>
         <h3 class="portal-title">Doctor Portal</h3>
         <p class="portal-desc">Authorize safe workout plans, review patient health data, and manage medical consultations.</p>
@@ -369,9 +373,10 @@ foreach ($catDefs as $slug => $def) {
 
     <!-- Admin Portal (RESTRICTED) -->
     <div class="portal-card restricted rv" style="--portal-accent: var(--gold); --portal-accent-text: var(--gold-text)">
-      <div class="portal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
+      <figure class="portal-visual">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&amp;fit=crop&amp;w=760&amp;q=84" alt="Analytics dashboard on a computer screen" loading="lazy">
+        <figcaption>Platform control</figcaption>
+      </figure>
       <div>
         <h3 class="portal-title">Admin Portal</h3>
         <p class="portal-desc">Full system control — user management, subscriptions, issue reports, and warnings.</p>

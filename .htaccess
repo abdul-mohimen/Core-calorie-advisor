@@ -1,6 +1,20 @@
 # ================= CORE CALORIE ADVISOR — Security Rules =================
 Options -Indexes
 
+# MIME types for 3D GLTF/GLB models and modern web formats
+AddType model/gltf-binary .glb
+AddType model/gltf+json .gltf
+AddType image/webp .webp
+AddType image/svg+xml .svg
+
+# CORS headers for 3D models and media loaders (Three.js FileLoader)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(glb|gltf|bin|png|jpg|jpeg|webp|svg|mp4)$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+  </FilesMatch>
+</IfModule>
+
 # Block sensitive files.
 # .txt/.json/.mjs/.zip/.fbx added 2026-07-30: _audit/titan_grep.txt (15 MB of source)
 # and phase9_results.json were both being served with HTTP 200.

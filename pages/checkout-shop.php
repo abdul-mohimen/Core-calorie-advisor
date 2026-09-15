@@ -13,6 +13,7 @@ if (!$product) {
 }
 
 $pageTitle = 'Secure Shop Checkout';
+$sandboxEnabled = sandbox_checkout_enabled();
 include dirname(__DIR__) . '/includes/header.php';
 ?>
 
@@ -57,7 +58,8 @@ include dirname(__DIR__) . '/includes/header.php';
       <p>Signed in as <b><?= e(current_user()['email']) ?></b>. Items will be dispatched within 24 hours.</p>
 
       <div style="margin-top:18px">
-        <span class="sandbox-pill">⚡ Secure Checkout — Payment via Gemini Pay</span>
+        <span class="sandbox-pill">Order checkout</span>
+        <p>Use cash on delivery, or the explicitly enabled local demo. This page never collects card details.</p>
         <form id="sandboxPay" method="post" action="<?= url('api/buy-item.php') ?>" novalidate>
           <?= csrf_field() ?>
           <input type="hidden" name="item_id" value="<?= e($product['id']) ?>">
@@ -77,13 +79,12 @@ include dirname(__DIR__) . '/includes/header.php';
           <div class="pay-field">
             <label for="payMethod">Payment Method</label>
             <select id="payMethod" name="payment_method">
-              <option value="Gemini Pay" selected>⚡ Gemini Secure Pay (Recommended)</option>
-              <option value="Credit/Debit Card">💳 Credit / Debit Card (Sandbox)</option>
-              <option value="Cash on Delivery">📦 Cash on Delivery</option>
+              <?php if ($sandboxEnabled): ?><option value="local-demo" selected>Local sandbox — no payment processed</option><?php endif; ?>
+              <option value="cash_on_delivery"<?= $sandboxEnabled ? '' : ' selected' ?>>Cash on delivery</option>
             </select>
           </div>
 
-          <div id="cardSection">
+          <div id="cardSection" hidden aria-hidden="true">
             <div class="pay-field">
               <label for="ccNum">Card number</label>
               <div class="card-wrap">
@@ -111,8 +112,8 @@ include dirname(__DIR__) . '/includes/header.php';
             <span class="pay-spin"></span><span id="payLabel">Confirm Order · $<?= number_format($product['price'], 2) ?></span>
           </button>
         </form>
-        <div class="pm-icons"><span>Method:</span> 🤖 Gemini Pay · 💳 Visa/Mastercard · 📦 Cash on Delivery</div>
-        <p class="checkout-lock">🔒 Purchases are secured with modern end-to-end tokenization protocol.</p>
+        <div class="pm-icons"><span>Methods:</span> local demo (development only) · cash on delivery</div>
+        <p class="checkout-lock">No card data is collected or stored by this application.</p>
       </div>
     </article>
 

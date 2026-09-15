@@ -112,6 +112,136 @@ a.cat-card:hover,
   border-color: var(--portal-accent, var(--primary));
 }
 
+/* Homepage portal gateway: a more deliberate, premium treatment than five
+   ordinary panels. The accent is supplied by each portal card in index.php. */
+#app > main .portal-grid .portal-card {
+  isolation: isolate;
+  min-height: 388px;
+  overflow: hidden;
+  padding: 22px;
+  background:
+    radial-gradient(circle at 100% 0, color-mix(in srgb, var(--portal-accent) 18%, transparent), transparent 44%),
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, var(--portal-accent) 8%), var(--surface));
+}
+#app > main .portal-grid .portal-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 150px; height: 150px;
+  right: -78px; bottom: -90px;
+  border: 1px solid color-mix(in srgb, var(--portal-accent) 32%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 22px color-mix(in srgb, var(--portal-accent) 8%, transparent),
+              0 0 0 45px color-mix(in srgb, var(--portal-accent) 5%, transparent);
+  transition: transform .5s var(--ease);
+}
+#app > main .portal-grid .portal-card:hover::after { transform: scale(1.12) rotate(18deg); }
+#app > main .portal-grid .portal-visual {
+  position: relative;
+  display: block;
+  height: 112px;
+  margin: -22px -22px 2px;
+  overflow: hidden;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+  background: color-mix(in srgb, var(--portal-accent) 18%, var(--bg3));
+}
+#app > main .portal-grid .portal-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--portal-accent) 58%, rgba(5,7,12,.46)), rgba(5,7,12,.08) 70%), linear-gradient(0deg, rgba(5,7,12,.35), transparent 52%);
+  pointer-events: none;
+}
+#app > main .portal-grid .portal-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transition: transform .65s var(--ease), filter .4s var(--ease);
+  filter: saturate(.84) contrast(1.08);
+}
+#app > main .portal-grid .portal-card:hover .portal-visual img { transform: scale(1.07); filter: saturate(1.02) contrast(1.08); }
+#app > main .portal-grid .portal-visual figcaption {
+  position: absolute;
+  z-index: 1;
+  bottom: 12px;
+  left: 14px;
+  color: #fff;
+  font: 800 9px var(--font-tech);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(0,0,0,.55);
+}
+#app > main .portal-grid .portal-title { font-size: 17px; }
+#app > main .portal-grid .portal-desc { min-height: 62px; }
+#app > main .portal-grid .portal-features { margin-top: 2px; }
+#app > main .portal-grid .portal-feat {
+  background: color-mix(in srgb, var(--surface) 72%, var(--portal-accent) 10%);
+  border-color: color-mix(in srgb, var(--portal-accent) 20%, var(--border));
+}
+#app > main .portal-grid .portal-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-top: auto; padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--portal-accent) 16%, var(--border));
+}
+#app > main .portal-grid .portal-badge {
+  color: var(--portal-accent-text, var(--primary-text));
+  background: color-mix(in srgb, var(--portal-accent) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--portal-accent) 25%, transparent);
+  padding: 5px 8px; border-radius: 7px;
+}
+@media (max-width: 600px) {
+  #app > main .portal-grid .portal-card { min-height: auto; }
+  #app > main .portal-grid .portal-visual { height: 138px; }
+  #app > main .portal-grid .portal-desc { min-height: auto; }
+}
+
+/* Dashboard discovery cards replace the old generic navbar links. They share
+   the same card anatomy, but make secondary destinations feel intentional. */
+.portal-dashboard-hub { max-width: 1300px; margin: 0 auto 16px; padding: 0 32px; }
+.portal-dashboard-hub__head { margin: 0 0 8px; }
+.portal-dashboard-hub__head span { color: var(--portal-accent-text, var(--primary-text)); font: 700 11px var(--font-tech); letter-spacing: .14em; text-transform: uppercase; }
+.portal-dashboard-hub__head h2 { margin: 4px 0 0; color: var(--text-1); font: 700 clamp(18px, 2vw, 24px) var(--font-tech); }
+.portal-dashboard-hub__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.portal-dashboard-hub__card {
+  position:relative; isolation:isolate; overflow:hidden;
+  min-width: 0; display: flex; align-items: center; gap: 11px; padding: 15px;
+  color: var(--text-1); text-decoration: none;
+  background:linear-gradient(140deg, color-mix(in srgb, var(--surface) 94%, var(--portal-accent) 6%), var(--surface)); border: 1px solid var(--border);
+  border-radius: 15px; box-shadow: var(--shadow-1); transition: transform var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
+}
+.portal-dashboard-hub__card::before { content:""; position:absolute; z-index:-1; width:92px; height:92px; right:-51px; bottom:-58px; border-radius:50%; background:color-mix(in srgb, var(--portal-accent) 12%, transparent); transition:transform .35s var(--ease); }
+.portal-dashboard-hub__card:hover::before { transform:scale(1.45); }
+.portal-dashboard-hub__card:hover { transform: translateY(-3px); border-color: var(--portal-accent); box-shadow: var(--shadow-2); }
+.portal-dashboard-hub__icon { width: 38px; height: 38px; flex: 0 0 38px; display:grid; place-items:center; border-radius:11px; color:var(--portal-accent); background:color-mix(in srgb, var(--portal-accent) 14%, transparent); }
+.portal-dashboard-hub__icon svg { width: 20px; height: 20px; }
+.portal-dashboard-hub__visual {
+  position:relative; width:52px; height:52px; flex:0 0 52px; overflow:hidden; border-radius:14px;
+  background-image:linear-gradient(145deg, color-mix(in srgb, var(--portal-accent) 20%, transparent), rgba(6,8,13,.28)),var(--hub-image);
+  background-size:cover; background-position:center; box-shadow:0 10px 22px color-mix(in srgb, var(--portal-accent) 18%, transparent);
+}
+.portal-dashboard-hub__visual::after { content:""; position:absolute; inset:0; border:1px solid color-mix(in srgb, var(--portal-accent) 40%, rgba(255,255,255,.3)); border-radius:inherit; }
+.portal-dashboard-hub__card > span:nth-child(2) { min-width: 0; display:grid; gap:2px; }
+.portal-dashboard-hub__card b { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:700 13px var(--font-tech); }
+.portal-dashboard-hub__card small { color:var(--text-3); font-size:11px; line-height:1.35; }
+.portal-dashboard-hub__card i { margin-left:auto; color:var(--portal-accent-text, var(--primary-text)); font-style:normal; }
+@media (max-width: 900px) { .portal-dashboard-hub__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .portal-dashboard-hub { padding: 0 16px; }.portal-dashboard-hub__grid { grid-template-columns: 1fr; } }
+
+/* Legacy portal pages still use simple .cca-card markup. Give every one the
+   same layered, role-coloured surface without changing its content or actions. */
+#app[data-portal] .cca-page-container .cca-card:not(.workout-studio-card) {
+  background:
+    radial-gradient(270px 130px at 100% 0, color-mix(in srgb, var(--portal-accent) 10%, transparent), transparent 72%),
+    var(--surface);
+  border-color: color-mix(in srgb, var(--portal-accent) 17%, var(--border));
+}
+#app[data-portal] .cca-page-container .cca-card:not(.workout-studio-card):hover {
+  border-color: color-mix(in srgb, var(--portal-accent) 46%, var(--border));
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--portal-accent) 11%, transparent), var(--shadow-1);
+}
+
 /* ---------------------------------------------------------------------------
    MEDIA SLOT — the reason the marketing cards diverged in the first place
    --------------------------------------------------------------------------- */
@@ -120,7 +250,8 @@ a.cat-card:hover,
 .hero-wk-img-wrap {
   position: relative;
   margin: calc(var(--card-pad) * -1) calc(var(--card-pad) * -1) 0;
-  height: var(--card-media-h);
+  height: auto;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--card-radius) var(--card-radius) 0 0;
   background: var(--bg3);
@@ -128,15 +259,19 @@ a.cat-card:hover,
 }
 .cca-card__media img,
 .wk-thumb img,
-.hero-wk-img-wrap img {
+.hero-wk-img-wrap img,
+.portal-card__media img,
+.workout-studio-card__media img {
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform .6s var(--ease);
+  transition: transform 480ms var(--ease-in-out);
 }
 .cca-card:hover .cca-card__media img,
 .wk-card:hover .wk-thumb img,
-.hero-wk-card:hover .hero-wk-img-wrap img { transform: scale(1.05); }
+.hero-wk-card:hover .hero-wk-img-wrap img,
+.portal-card:hover .portal-card__media img,
+.workout-studio-card:hover .workout-studio-card__media img { transform: scale(1.055); }
 
 /* Legibility scrim so a badge or caption over the photo always reads. */
 .cca-card__media::after,
@@ -180,17 +315,20 @@ a.cat-card:hover,
 }
 .cca-card__title,
 .cca-card-title,
-.portal-title,
 .wk-title,
 .hero-wk-title,
 .cat-card-title {
   margin: 0;
   font-family: var(--font-tech);
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--fs-h4);
   letter-spacing: .01em;
   color: var(--text-1);
   display: flex; align-items: center; gap: 8px;
+}
+.portal-title,
+.plan-title {
+  font-size: var(--fs-h3);
 }
 .cca-card__subtitle,
 .portal-desc,
@@ -212,7 +350,7 @@ a.cat-card:hover,
 .cca-card-value {
   margin: 2px 0 0;
   font-family: var(--font-disp);
-  font-size: clamp(26px, 3.2vw, 34px);
+  font-size: var(--fs-stat);
   line-height: 1.05;
   letter-spacing: -.02em;
   color: var(--text-1);
@@ -220,8 +358,8 @@ a.cat-card:hover,
   font-feature-settings: "tnum" 1;
 }
 .cca-card__label {
-  font: 600 11px var(--font-tech);
-  letter-spacing: .12em;
+  font: 600 var(--fs-small) var(--font-tech);
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--text-3);
 }
@@ -319,8 +457,10 @@ a.cat-card:hover,
 .cat-card-meta {
   display: flex; align-items: center; flex-wrap: wrap;
   gap: 10px;
-  font: 600 12px var(--font-tech);
-  color: var(--text-2);
+  font: 600 var(--fs-small) var(--font-tech);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
   font-variant-numeric: tabular-nums;
 }
 .wk-stats b, .hero-wk-stats b { color: var(--text-1); font-weight: 700; }
@@ -539,10 +679,10 @@ a.cat-card:hover,
 
 /* Users who prefer reduced motion get no lift and no photo zoom. */
 @media (prefers-reduced-motion: reduce) {
-  .cca-card, .portal-card, .plan-card, .wk-card, .cat-card, .hero-wk-card,
-  .cca-card__media img, .wk-thumb img, .cat-card-bg { transition: none !important; }
-  a.cca-card:hover, .cat-card:hover, .wk-card:hover, .portal-card:hover, .plan-card:hover { transform: none; }
-  .cca-card:hover .cca-card__media img, .wk-card:hover .wk-thumb img, .cat-card:hover .cat-card-bg { transform: none; }
+  .cca-card, .portal-card, .plan-card, .wk-card, .cat-card, .hero-wk-card, .workout-studio-card,
+  .cca-card__media img, .wk-thumb img, .hero-wk-img-wrap img, .portal-card__media img, .workout-studio-card__media img, .cat-card-bg { transition: none !important; }
+  a.cca-card:hover, .cat-card:hover, .wk-card:hover, .portal-card:hover, .plan-card:hover, .workout-studio-card:hover { transform: none !important; }
+  .cca-card:hover .cca-card__media img, .wk-card:hover .wk-thumb img, .hero-wk-card:hover .hero-wk-img-wrap img, .portal-card:hover .portal-card__media img, .workout-studio-card:hover .workout-studio-card__media img, .cat-card:hover .cat-card-bg { transform: none !important; }
 }
 
 /* ============================================================================

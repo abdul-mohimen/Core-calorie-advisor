@@ -13,6 +13,12 @@ require_login();
 $plan = post('plan');
 if (!in_array($plan, ['pro', 'elite'], true)) { flash('err', 'Invalid subscription plan.'); redirect('pages/pricing.php'); }
 
+if (!sandbox_checkout_enabled()) {
+    http_response_code(403);
+    flash('err', 'Local demo checkout is disabled. Configure Stripe to accept payments.');
+    redirect('pages/pricing.php');
+}
+
 $priceKey = $plan === 'pro' ? 'STRIPE_PRICE_PRO_MONTHLY' : 'STRIPE_PRICE_ELITE_MONTHLY';
 if (env('STRIPE_SECRET_KEY') !== '' && env($priceKey) !== '') {
     // Real billing is live — sandbox path is permanently closed.

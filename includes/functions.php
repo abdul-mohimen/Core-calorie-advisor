@@ -113,6 +113,13 @@ function is_logged_in(): bool { return isset($_SESSION['user']); }
 function user_plan(): string { return $_SESSION['user']['plan'] ?? 'free'; }
 function is_pro(): bool { return in_array(user_plan(), ['pro', 'elite'], true); }
 
+/* Local simulated billing must be deliberately enabled; it is never a
+   production fallback when a payment provider is unavailable. */
+function sandbox_checkout_enabled(): bool {
+    return APP_ENV === 'development'
+        && in_array(strtolower(env('ALLOW_SANDBOX_CHECKOUT')), ['1', 'true', 'yes'], true);
+}
+
 function require_login(): void {
     if (!is_logged_in()) {
         flash('warn', 'Pehle login karo!');
@@ -146,6 +153,20 @@ function flash_render(): string {
 /* ---- Input sanitize ---- */
 function post(string $key, string $default = ''): string { return trim((string)($_POST[$key] ?? $default)); }
 function get(string $key, string $default = ''): string { return trim((string)($_GET[$key] ?? $default)); }
+
+/* JSON endpoints share one predictable response contract.  Several booking,
+   payout and review handlers use these helpers, so defining them centrally
+   prevents a runtime fatal before an API response can be sent. */
+function json_response(array $payload, int $status = 200): never {
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
+    echo json_encode($payload, JSON_UNESCAPED_SLASHES);
+    exit;
+}
+function json_error(string $message, int $status = 422): never {
+    json_response(['success' => false, 'error' => $message], $status);
+}
 
 /* ---- Asset / url helpers ---- */
 function url(string $path = ''): string { return BASE_URL . '/' . ltrim($path, '/'); }
@@ -379,6 +400,65 @@ function portal_nav(string $portal, ?array $links = null): string {
     }
     $html .= '</nav>';
     return $html;
+}
+
+/* Platform discovery was moved out of the navbar so portal work stays focused.
+   Dashboards expose these same destinations as clear, task-oriented cards. */
+function portal_dashboard_hub(string $portal): string {
+    $sets = [
+        'member' => [
+            ['Workout Library', 'Train with guided sessions', 'pages/workouts.php', 'dumbbell'],
+            ['Nutrition Lab', 'Plan meals and log fuel', 'pages/nutrition.php', 'diet'],
+            ['Expert Directory', 'Book a trainer or doctor', 'pages/trainers.php', 'users'],
+            ['CCA Shop', 'Browse performance equipment', 'pages/shop.php', 'billing'],
+        ],
+        'patient' => [
+            ['Safe Workouts', 'Explore approved movement plans', 'pages/workouts.php', 'heart'],
+            ['Doctor Directory', 'Find the right clinical expert', 'pages/trainers.php', 'stethoscope'],
+            ['Nutrition Lab', 'Build sustainable daily habits', 'pages/nutrition.php', 'diet'],
+            ['CCA Shop', 'Browse recovery essentials', 'pages/shop.php', 'billing'],
+        ],
+        'trainer' => [
+            ['Expert Directory', 'Keep your public profile visible', 'pages/trainers.php', 'users'],
+            ['Community', 'Share expertise with members', 'pages/community.php', 'users'],
+            ['CCA Shop', 'Recommend useful equipment', 'pages/shop.php', 'billing'],
+            ['Calculators', 'Plan targets with confidence', 'pages/calculators.php', 'chart'],
+        ],
+        'doctor' => [
+            ['Expert Directory', 'Manage your public presence', 'pages/trainers.php', 'stethoscope'],
+            ['Community', 'Publish practical health guidance', 'pages/community.php', 'users'],
+            ['CCA Shop', 'Review recovery equipment', 'pages/shop.php', 'billing'],
+            ['Calculators', 'Check member targets quickly', 'pages/calculators.php', 'chart'],
+        ],
+        'admin' => [
+            ['Community', 'Monitor the member conversation', 'pages/community.php', 'users'],
+            ['Pricing', 'Review member plans and offers', 'pages/pricing.php', 'billing'],
+            ['CCA Shop', 'Review storefront presentation', 'pages/shop.php', 'billing'],
+            ['Calculators', 'Open the platform tools', 'pages/calculators.php', 'chart'],
+        ],
+    ];
+    $items = $sets[$portal] ?? [];
+    if (!$items) return '';
+    $visuals = [
+        'dumbbell'    => 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=520&q=82',
+        'diet'        => 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=520&q=82',
+        'users'       => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=520&q=82',
+        'billing'     => 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=520&q=82',
+        'heart'       => 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=520&q=82',
+        'stethoscope' => 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=520&q=82',
+        'chart'       => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=520&q=82',
+    ];
+    $html = '<section class="portal-dashboard-hub" aria-label="Explore Core Calorie Advisor">'
+          . '<div class="portal-dashboard-hub__head"><div><span>Next move</span><h2>Keep your momentum moving</h2></div></div>'
+          . '<div class="portal-dashboard-hub__grid">';
+    foreach ($items as [$title, $desc, $href, $icon]) {
+        $visual = $visuals[$icon] ?? $visuals['users'];
+        $html .= '<a class="portal-dashboard-hub__card" href="' . e(url($href)) . '">'
+              . '<span class="portal-dashboard-hub__visual" style="--hub-image:url(\'' . e($visual) . '\')" aria-hidden="true"></span>'
+              . '<span><b>' . e($title) . '</b><small>' . e($desc) . '</small></span>'
+              . '<i aria-hidden="true">→</i></a>';
+    }
+    return $html . '</div></section>';
 }
 
 /* ---- SVG Icon Library (compact icons for portal sub-navigation) ---- */

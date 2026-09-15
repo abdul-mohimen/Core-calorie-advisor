@@ -22,11 +22,50 @@ $B    = BASE_URL;
 
 if ($msg === '') { echo json_encode(['ok' => true, 'reply' => 'Type a question and I\'ll guide you through Core Calorie Advisor 🔥']); exit; }
 
-/* helper: does the message contain ANY of these keywords? */
-$has = fn(array $kw) => array_reduce($kw, fn($c, $k) => $c || str_contains($msg, $k), false);
-
 $reply = null;
 $links = [];
+
+/* ---- Real AI Layer: OpenRouter LLM Call (if API key configured) ---- */
+$openRouterKey = env('OPENROUTER_API_KEY', '');
+if ($openRouterKey !== '' && strlen($msg) > 3 && !in_array($msg, ['hi', 'hello', 'hey', 'salam', 'yo', 'thanks', 'thank you'])) {
+    $systemPrompt = "You are the AI Assistant for Core Calorie Advisor (CCA), a modern 3D workout and precision calorie tracking platform. The user is " . ($u ? "logged in as {$name} ({$role} role)" : "a guest visitor") . ". Be helpful, encouraging, concise (2-4 sentences max), and professional in English.";
+    
+    $ch = curl_init('https://openrouter.ai/api/v1/chat/completions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+        'model' => env('OPENROUTER_MODEL', 'openrouter/free'),
+        'messages' => [
+            ['role' => 'system', 'content' => $systemPrompt],
+            ['role' => 'user', 'content' => $msg]
+        ],
+        'max_tokens' => 200,
+        'temperature' => 0.7
+    ]));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $openRouterKey,
+        'Content-Type: application/json',
+        'HTTP-Referer: ' . BASE_URL,
+        'X-Title: Core Calorie Advisor'
+    ]);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $res = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    if ($httpCode === 200 && $res) {
+        $data = json_decode($res, true);
+        $aiText = trim((string)($data['choices'][0]['message']['content'] ?? ''));
+        if ($aiText !== '') {
+            $reply = $aiText;
+        }
+    }
+}
+
+/* ---- Fallback Knowledge Base (rules & deep links) ---- */
+if ($reply === null) {
+    /* helper: does the message contain ANY of these keywords? */
+    $has = fn(array $kw) => array_reduce($kw, fn($c, $k) => $c || str_contains($msg, $k), false);
 
 if ($has(['hi', 'hello', 'hey', 'salam', 'assalam', 'yo '])) {
     $reply = $u
@@ -91,7 +130,7 @@ elseif ($has(['privacy', 'data', 'terms', 'policy', 'secure', 'security'])) {
     $links[] = ['Terms', "$B/pages/terms-and-conditions.php"];
 }
 elseif ($has(['thank', 'thanks', 'shukriya', 'great', 'awesome', 'cool'])) {
-    $reply = "Anytime! Stay strong and keep forging 💪🔥";
+    $reply = "Anytime! Stay strong and keep training 💪🔥";
 }
 elseif ($has(['who are you', 'what are you', 'your name', 'help', 'what can you do'])) {
     $reply = "I'm the CCA Assistant — your guide to Core Calorie Advisor. Ask me about workouts, the AI Body/Food scanners, trainers, doctors, pricing, calculators or your portal.";
@@ -101,5 +140,6 @@ else {
     $links[] = ['Browse Workouts', "$B/pages/workouts.php"];
     $links[] = ['View Pricing', "$B/pages/pricing.php"];
 }
+} // end fallback block
 
 echo json_encode(['ok' => true, 'reply' => $reply, 'links' => $links]);

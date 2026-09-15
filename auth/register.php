@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user'] = ['id' => $id, 'name' => $name, 'email' => $email, 'role' => $role, 'plan' => 'free'];
             session_regenerate_id(true);
             rotate_csrf_token();
-            flash('ok', '🔥 Account created! Welcome to the forge, ' . $name . '!');
+            flash('ok', '🔥 Account created! Welcome to Core Calorie Advisor, ' . $name . '!');
             $next = safe_next_path(get('next'));
             if ($next !== '') redirect($next);
             redirect('portals/' . $role . '.php');

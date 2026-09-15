@@ -95,6 +95,7 @@ SVG;
 <?php if ($u): ?><script src="<?= asset('js/notifications.js') ?>"></script>
 <script src="<?= asset('js/account-menu.js') ?>"></script><?php endif; ?>
 <?php endif; ?>
+<script defer src="<?= asset('js/motion.js') ?>"></script>
 <?= $extraScripts ?? '' ?>
 </body>
 </html>

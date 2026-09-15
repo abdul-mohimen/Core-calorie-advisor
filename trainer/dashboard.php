@@ -40,6 +40,7 @@ include dirname(__DIR__) . '/includes/header.php';
   </div>
 </section>
 <?= portal_nav('trainer') ?>
+<?= portal_dashboard_hub('trainer') ?>
 <div class="cca-page-container">
   <div class="cca-grid-4">
     <div class="cca-metric"><span class="cca-metric-icon c1">👥</span><div><div class="cca-metric-val"><?= $clients ?></div><div class="cca-metric-lbl">My Clients</div></div></div>

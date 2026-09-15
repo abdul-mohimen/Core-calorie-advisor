@@ -1,0 +1,299 @@
+/* =============================================================================
+   PREMIUM UI FINISH
+   Loaded after the legacy and component styles. This is an intentionally small
+   visual layer: it gives the whole product one confident, readable scale without
+   changing page markup or the app's behaviour.
+   ============================================================================= */
+
+:root {
+  --nav-h: 88px;
+  --shell-gap: 26px;
+  --card-radius: 18px;
+  --card-pad: 24px;
+  --card-gap: 16px;
+  --card-media-h: 196px;
+  --card-icon-size: 48px;
+  --card-lift: -5px;
+}
+
+/* ---- Navigation: a quiet, high-quality app bar rather than a dense strip. */
+.nav {
+  min-height: var(--nav-h);
+  gap: 16px;
+  padding: 13px clamp(18px, 2.6vw, 42px);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--bg2) 96%, var(--primary) 4%), var(--bg2)) !important;
+  border-bottom-color: color-mix(in srgb, var(--primary) 16%, var(--line2)) !important;
+  box-shadow: 0 12px 38px rgba(0, 0, 0, .28) !important;
+}
+.nav::after {
+  content: "";
+  position: absolute;
+  left: clamp(18px, 2.6vw, 42px);
+  right: clamp(18px, 2.6vw, 42px);
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 54%, transparent), transparent);
+  pointer-events: none;
+}
+[data-theme="light"] .nav {
+  background: linear-gradient(90deg, #fffdf9, #ffffff) !important;
+  box-shadow: 0 10px 30px rgba(32, 25, 15, .09) !important;
+}
+
+.burger,
+.icon-btn,
+#themeToggle {
+  width: 46px;
+  height: 46px;
+  padding: 0 !important;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 82%, var(--bg3));
+  color: var(--text-2);
+}
+.burger:hover,
+.icon-btn:hover,
+#themeToggle:hover {
+  color: var(--primary-text);
+  border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+  background: color-mix(in srgb, var(--primary) 9%, var(--surface));
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 16%, transparent);
+}
+.burger svg { width: 22px; height: 22px; }
+
+.nav .brand { gap: 12px; min-width: max-content; }
+.nav .brand svg,
+.brand svg {
+  width: 48px !important;
+  height: 48px !important;
+  max-width: 48px !important;
+  max-height: 48px !important;
+  filter: drop-shadow(0 8px 13px rgba(255, 107, 26, .26));
+}
+.brand-copy { display: grid; gap: 3px; line-height: 1; }
+.brand-name {
+  color: var(--text-1);
+  font: 400 20px/1 var(--font-disp);
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.brand-name em { color: var(--gold); font-style: normal; }
+.brand-tagline {
+  color: var(--text-3);
+  font: 800 8.5px/1 var(--font-tech);
+  letter-spacing: .17em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* Retire the old pseudo-tagline; the actual markup above is accessible and
+   remains correctly spaced if the font fails to load. */
+.nav .brand b::after { content: none; }
+
+.nav-links { gap: 5px; margin-left: 14px; }
+.nav .nav-links a,
+.nav .nav-links--portal a {
+  padding: 10px 12px;
+  border-radius: 11px;
+  font-size: 13px;
+  letter-spacing: .045em;
+  color: var(--text-2);
+}
+.nav .nav-links a:hover {
+  color: var(--text-1);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+.nav .nav-links a.active {
+  color: var(--text-1);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  text-shadow: none;
+}
+.nav .nav-links a.active::after {
+  left: 12px;
+  right: 12px;
+  bottom: 5px;
+  background: var(--primary);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 65%, transparent);
+}
+
+.nav .nav-public-search { max-width: 440px; }
+.searchbox input,
+.nav .nav-public-search input {
+  min-height: 46px;
+  padding: 12px 16px 12px 48px;
+  border-radius: 14px;
+  font-size: 15px;
+  letter-spacing: .01em;
+  background: color-mix(in srgb, var(--surface) 90%, var(--bg3));
+}
+.searchbox .sicon { left: 17px; }
+.nav-avatar {
+  width: 46px !important;
+  height: 46px !important;
+  font-size: 18px;
+  border: 2px solid color-mix(in srgb, var(--primary) 48%, transparent);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+/* ---- Drawer: wider type and better hierarchy make it feel intentional. */
+#sidebar { width: 286px; left: calc(-1 * 286px - 24px); }
+#sidebar .sb-head { padding: 26px 22px 22px; }
+#sidebar .sb-head .avatar { width: 50px; height: 50px; font-size: 20px; }
+#sidebar .sb-head b { font-size: 18px; }
+#sidebar .sb-head small { font-size: 12.5px; }
+#sidebar .sb-sec { margin-top: 12px; padding-top: 13px; font-size: 11px; }
+#sidebar .sb-link { min-height: 46px; margin: 4px 12px; padding: 11px 12px; font-size: 15.5px; }
+#sidebar .sb-link .ti { width: 32px !important; height: 32px !important; }
+#sidebar .sb-acct { margin-inline: 14px; padding: 14px; }
+@media (min-width: 1100px) {
+  #app.sb-open:not(.auth-mode) > main,
+  #app.sb-open:not(.auth-mode) > footer { margin-left: 286px; width: calc(100% - 286px); }
+}
+
+/* ---- Shared cards: medium density, more legible text, softer depth. */
+.cca-card,
+.portal-card,
+.plan-card,
+.checkout-card,
+.wk-card,
+.cat-card,
+.hero-wk-card,
+.invoice-card,
+.card {
+  border-radius: var(--card-radius);
+  border-color: color-mix(in srgb, var(--border) 86%, var(--primary) 14%);
+}
+.cca-card,
+.portal-card,
+.plan-card,
+.checkout-card,
+.wk-card,
+.cat-card { padding: var(--card-pad); }
+.cca-card:hover,
+.portal-card:hover,
+.plan-card:hover,
+.checkout-card:hover,
+.wk-card:hover,
+.cat-card:hover { box-shadow: 0 18px 42px rgba(0, 0, 0, .18); }
+[data-theme="light"] .cca-card:hover,
+[data-theme="light"] .portal-card:hover,
+[data-theme="light"] .plan-card:hover,
+[data-theme="light"] .checkout-card:hover,
+[data-theme="light"] .wk-card:hover,
+[data-theme="light"] .cat-card:hover { box-shadow: 0 18px 36px rgba(39, 28, 18, .1); }
+
+.cca-card__title,
+.cca-card-title,
+.wk-title,
+.hero-wk-title,
+.cat-card-title { font-size: var(--fs-h4); line-height: 1.25; }
+.portal-title,
+.plan-title { font-size: var(--fs-h3); }
+.cca-card__subtitle,
+.portal-desc,
+.wk-desc,
+.hero-wk-desc,
+.cat-card-desc { font-size: 14.5px; line-height: 1.65; }
+.cca-card__label { font-size: var(--fs-small); letter-spacing: var(--tracking-label); }
+.cca-card__meta,
+.wk-stats,
+.hero-wk-stats,
+.cat-card-meta { font-size: var(--fs-small); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-3); gap: 11px; }
+.cca-card__value,
+.cca-card-value { font-size: var(--fs-stat); }
+.cca-card__icon { width: 48px; height: 48px; font-size: 22px; }
+.cca-card__media,
+.wk-thumb { height: auto; min-height: 0; aspect-ratio: 4 / 3; }
+.wk-body { gap: 12px; }
+.wk-title { font-size: 17px; }
+.wk-desc { font-size: 14px; }
+.wk-btn { min-height: 44px; padding: 11px 16px; font-size: 13px; }
+.cat-card-title { font-size: 18px; }
+.cat-card-desc { font-size: 14px; }
+.cat-card-icon { width: 48px; height: 48px; font-size: 23px; }
+.cat-card-count { padding: 5px 10px; font-size: 11px; }
+.cat-card-cta { font-size: 12.5px; }
+.portal-feat { padding: 5px 9px; font-size: 11px; }
+.portal-badge { padding: 5px 10px; font-size: 10.5px; }
+.hero-wk-info { padding: 32px; }
+.hero-wk-desc { font-size: 15px; }
+
+.btn { min-height: 46px; padding: 12px 22px; font-size: 14px; }
+.btn-sm { min-height: 42px; padding: 10px 17px; font-size: 13px; }
+
+@media (max-width: 1180px) {
+  .nav .nav-links--portal a { padding-inline: 8px; font-size: 12px; }
+}
+@media (max-width: 930px) {
+  :root { --nav-h: 80px; }
+  .nav { padding-inline: 18px; }
+  .nav .brand svg, .brand svg { width: 42px !important; height: 42px !important; }
+  .brand-name { font-size: 18px; }
+  .nav .nav-links { display: none; }
+}
+@media (max-width: 620px) {
+  :root { --nav-h: 72px; --card-pad: 20px; --card-media-h: 176px; --shell-gap: 18px; }
+  .nav { min-height: var(--nav-h); gap: 10px; padding: 10px 14px; }
+  .burger, .icon-btn, #themeToggle { width: 42px; height: 42px; border-radius: 12px; }
+  .nav .brand { gap: 8px; }
+  .nav .brand svg, .brand svg { width: 38px !important; height: 38px !important; }
+  .brand-name { font-size: 16px; }
+  .brand-tagline { display: none; }
+  .nav .btn-fire { display: none; }
+  .cca-card__title, .cca-card-title, .wk-title, .hero-wk-title, .cat-card-title { font-size: var(--fs-h4); }
+  .portal-title, .plan-title { font-size: var(--fs-h3); }
+  .cca-card__subtitle, .portal-desc, .wk-desc, .hero-wk-desc, .cat-card-desc { font-size: 14px; }
+  .wk-thumb { height: auto; aspect-ratio: 4 / 3; }
+  .hero-wk-info { padding: 24px; }
+}
+
+/* ---- Account & support: settings pages should feel like product spaces, not
+   a stack of generic forms. These classes only enhance their dedicated pages. */
+.profile-page { max-width: 1240px; }
+.profile-page__head {
+  position: relative;
+  padding: 26px 28px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+  border-radius: 20px;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--primary) 12%, var(--surface)), var(--surface) 64%);
+}
+.profile-page__head::after {
+  content: ""; position: absolute; width: 210px; height: 210px; right: -78px; top: -138px;
+  border: 1px solid color-mix(in srgb, var(--gold) 42%, transparent); border-radius: 50%;
+  box-shadow: 0 0 0 28px color-mix(in srgb, var(--primary) 6%, transparent), 0 0 0 58px color-mix(in srgb, var(--primary) 4%, transparent);
+  pointer-events: none;
+}
+.profile-page__head > * { position: relative; z-index: 1; }
+.profile-page__head h1 { font-family: var(--font-disp); letter-spacing: -.02em; }
+.profile-grid { grid-template-columns: minmax(300px, .92fr) minmax(340px, 1.04fr) minmax(340px, 1.04fr) !important; align-items: start; }
+.profile-page .card { min-height: 100%; padding: 26px !important; border-radius: 18px; background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 94%, var(--primary) 6%), var(--surface)); }
+.profile-overview { position: relative; overflow: hidden; }
+.profile-overview::before { content:""; position:absolute; inset:0 0 auto; height:4px; background:linear-gradient(90deg,var(--primary),var(--gold)); }
+.profile-overview > :first-child > :first-child { width:74px !important; height:74px !important; font:700 28px var(--font-disp) !important; }
+.profile-overview > :nth-child(4) > div { padding:16px !important; border-radius:13px !important; background:color-mix(in srgb,var(--primary) 8%,var(--bg2)) !important; }
+.profile-form-card h3 { padding-bottom:15px; border-bottom:1px solid var(--border); font-family:var(--font-tech); letter-spacing:.02em; }
+.profile-form-card .field label { color:var(--text-2); font:700 12px var(--font-tech); letter-spacing:.06em; text-transform:uppercase; }
+.profile-form-card .field input, .profile-form-card .field select { min-height:47px; border-radius:12px; }
+.profile-security-card { background: linear-gradient(145deg, color-mix(in srgb, var(--accent-violet) 8%, var(--surface)), var(--surface)) !important; }
+
+.support-page { max-width: 1120px !important; }
+.support-page__head { position:relative; padding:42px 28px; overflow:hidden; border:1px solid color-mix(in srgb,var(--primary) 18%,var(--border)); border-radius:22px; background:radial-gradient(circle at 78% 25%,color-mix(in srgb,var(--primary) 18%,transparent),transparent 24%),linear-gradient(140deg,color-mix(in srgb,var(--surface) 92%,var(--primary) 8%),var(--surface)); }
+.support-page__head h1 { font-family:var(--font-disp); letter-spacing:-.025em; }
+.support-page__head p { font-size:15px; line-height:1.65; }
+.support-grid { grid-template-columns: minmax(280px,.88fr) minmax(420px,1.35fr) !important; align-items:start; }
+.support-options { gap:14px !important; }
+.support-option { position:relative; min-height:132px; padding:20px !important; overflow:hidden; border-radius:16px !important; transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease); }
+.support-option::after { content:""; position:absolute; right:-28px; bottom:-36px; width:92px; height:92px; border-radius:50%; background:color-mix(in srgb,var(--primary) 9%,transparent); }
+.support-option:hover { transform:translateY(-3px); border-color:color-mix(in srgb,var(--primary) 48%,var(--border)); box-shadow:var(--shadow-2); }
+.support-option > div:first-child { width:46px; height:46px; flex:0 0 46px; display:grid; place-items:center; border-radius:13px; font-size:21px !important; background:color-mix(in srgb,var(--primary) 13%,transparent); }
+.support-option h4 { font-family:var(--font-tech); letter-spacing:.02em; }
+.support-form-card { padding:28px !important; border-radius:19px !important; background:linear-gradient(145deg,color-mix(in srgb,var(--surface) 94%,var(--primary) 6%),var(--surface)) !important; }
+.support-form-card h3 { margin-bottom:24px !important; font-family:var(--font-tech); font-size:22px !important; }
+.support-form-card .field label { color:var(--text-2); font:700 12px var(--font-tech); letter-spacing:.06em; text-transform:uppercase; }
+.support-form-card .field input,.support-form-card .field select,.support-form-card .field textarea { min-height:47px; border-radius:12px !important; }
+.support-form-card .field textarea { min-height:138px !important; line-height:1.55; }
+
+@media (max-width: 1060px) { .profile-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }.profile-overview { grid-column:span 2; }.support-grid { grid-template-columns:1fr !important; }.support-options { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)); }.support-option { min-height:160px; } }
+@media (max-width: 680px) { .profile-page__head,.support-page__head { padding:24px 20px; border-radius:17px; }.profile-grid,.support-options { grid-template-columns:1fr !important; }.profile-overview { grid-column:auto; }.profile-page .card,.support-form-card { padding:21px !important; }.support-option { min-height:auto; }.profile-page__head .btn { width:100%; justify-content:center; }.support-page__head h1 { font-size:30px !important; } }

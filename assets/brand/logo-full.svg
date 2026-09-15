@@ -1,12 +1,17 @@
-<svg viewBox="0 0 1200 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(0,0)">
-    <!-- Progress Ring C -->
-    <circle cx="256" cy="256" r="200" stroke="#FF6B1A" stroke-width="40" stroke-dasharray="900 1200" stroke-linecap="round" transform="rotate(-90 256 256)"/>
-    <!-- Dumbbell -->
-    <rect x="180" y="230" width="152" height="52" rx="10" fill="currentColor"/>
-    <rect x="130" y="190" width="60" height="132" rx="12" fill="currentColor"/>
-    <rect x="322" y="190" width="60" height="132" rx="12" fill="currentColor"/>
+<svg viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ccaFlame" x1="26" y1="76" x2="74" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF3D00"/>
+      <stop offset=".45" stop-color="#FF6B1A"/>
+      <stop offset="1" stop-color="#FFB800"/>
+    </linearGradient>
+  </defs>
+  <!-- Same activity-ring + flame mark used by the live navbar. -->
+  <g transform="translate(46 80) scale(2)">
+    <path d="M22.15 30.5 A34 34 0 1 0 77.85 30.5" fill="none" stroke="url(#ccaFlame)" stroke-width="11" stroke-linecap="round"/>
+    <circle cx="77.85" cy="30.5" r="5.5" fill="#FFB800"/>
+    <path d="M50 25c8 10 14 17 14 26 0 9.9-6.3 16-14 16s-14-6.1-14-16c0-7 4-13 8-18 1 7 4 10 6 11 1-5 0-13 0-19Z" fill="url(#ccaFlame)"/>
   </g>
-  <text x="540" y="270" font-family="'Inter', 'Arial', sans-serif" font-weight="900" font-size="120" letter-spacing="-0.02em" fill="currentColor">CORE CALORIE</text>
-  <text x="545" y="380" font-family="'Inter', 'Arial', sans-serif" font-weight="700" font-size="90" letter-spacing="0.1em" fill="#FF6B1A">ADVISOR</text>
+  <text x="290" y="164" font-family="'Russo One', 'Arial Black', sans-serif" font-weight="900" font-size="94" letter-spacing="4" fill="currentColor">CORE CALORIE</text>
+  <text x="298" y="224" font-family="'Rajdhani', 'Arial', sans-serif" font-weight="700" font-size="30" letter-spacing="12" fill="#FF9A45">ADVISOR · PERFORMANCE INTELLIGENCE</text>
 </svg>

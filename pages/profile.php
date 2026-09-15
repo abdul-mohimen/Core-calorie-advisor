@@ -71,8 +71,8 @@ $pageTitle = 'My Profile & Account Settings';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<div class="wrap" style="padding-top:40px;padding-bottom:60px">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:30px">
+<div class="wrap profile-page" style="padding-top:40px;padding-bottom:60px">
+    <div class="profile-page__head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:30px">
         <div>
             <span class="eyebrow">ACCOUNT MANAGEMENT</span>
             <h1 style="font-size:32px;margin-top:6px">User Profile &amp; Settings</h1>
@@ -89,9 +89,9 @@ include dirname(__DIR__) . '/includes/header.php';
         <div class="flash flash-ok" style="margin-bottom:20px"><?= e($success) ?></div>
     <?php endif; ?>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px">
+    <div class="profile-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px">
         <!-- Overview Card -->
-        <div class="card" style="display:flex;flex-direction:column;gap:16px">
+        <div class="card profile-overview" style="display:flex;flex-direction:column;gap:16px">
             <div style="display:flex;align-items:center;gap:16px">
                 <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg, var(--fire), var(--purple));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:var(--on-media);box-shadow:0 4px 15px rgba(255,87,34,0.4)">
                     <?= strtoupper(substr(e($user['name']), 0, 1)) ?>
@@ -136,7 +136,7 @@ include dirname(__DIR__) . '/includes/header.php';
         </div>
 
         <!-- Edit Profile Card -->
-        <div class="card">
+        <div class="card profile-form-card">
             <h3 style="font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:8px">✏️ Edit Personal Details</h3>
             <form method="post">
                 <?= csrf_field() ?>
@@ -169,7 +169,7 @@ include dirname(__DIR__) . '/includes/header.php';
         </div>
 
         <!-- Security & Password Card -->
-        <div class="card">
+        <div class="card profile-form-card profile-security-card">
             <h3 style="font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:8px">🔒 Change Password</h3>
             <form method="post">
                 <?= csrf_field() ?>

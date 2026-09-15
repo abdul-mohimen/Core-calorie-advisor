@@ -23,29 +23,7 @@ include dirname(__DIR__) . '/includes/header.php';
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    corePlugins: { preflight: false },
-    theme: {
-      extend: {
-        colors: {
-          neonCyan: '#FF6B1A',
-          neonRed: '#FF3300',
-          darkBg: '#0A0A0A',
-          darkCard: '#111827',
-          darkGlass: 'rgba(255,107,26,0.06)',
-          goldAccent: '#FF6B1A'
-        },
-        fontFamily: {
-          inter: ['Inter', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace'],
 
-        }
-      }
-    }
-  }
-</script>
 <style>
 /* ── ExactFit 3D Dark Theme Overrides ── */
 .wrap.player.page-hero {
@@ -171,7 +149,7 @@ include dirname(__DIR__) . '/includes/header.php';
 
       <!-- Subtext description -->
       <p class="text-gray-400 text-sm md:text-base max-w-xl mx-auto mb-10 leading-relaxed font-medium">
-        <?= e($w['description'] ?? 'Prepare to forge your ultimate physique. Follow the 3D trainer and synchronize your heart rate with our dynamic soundscapes.') ?>
+        <?= e($w['description'] ?? 'Prepare to build your ultimate physique. Follow the 3D trainer and synchronize your heart rate with our dynamic soundscapes.') ?>
       </p>
 
       <div class="flex items-center justify-center gap-4 mb-10 flex-wrap">
@@ -211,7 +189,7 @@ include dirname(__DIR__) . '/includes/header.php';
       <!-- Aggressive Action Button -->
       <button class="px-12 py-5 bg-gradient-to-r from-[#FF6B1A] to-[#FF3D00] hover:from-[#FF8833] hover:to-[#FF6B1A] text-white font-extrabold rounded-2xl shadow-xl shadow-[#FF6B1A]/20 active:scale-[0.97] transition-all tracking-[0.2em] text-base uppercase cca-font-disp"
               onclick="startPlayer()">
-        ▶ Begin Forging
+        ▶ Start Workout
       </button>
     </div>
   </div>
@@ -227,7 +205,7 @@ include dirname(__DIR__) . '/includes/header.php';
       <div class="relative w-24 h-24 flex items-center justify-center mb-6">
         <div class="absolute inset-0 rounded-full border-2 border-[#FF6B1A]/20 border-t-[#FF6B1A] animate-spin shadow-[0_0_15px_rgba(255,107,26,0.4)]"></div>
         <div class="absolute inset-2 rounded-full border border-[#FF6B1A]/25 border-b-[#FF6B1A] animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
-        <div class="text-[#FF6B1A] text-2xl font-black font-mono tracking-widest cca-font-disp drop-shadow-[0_0_8px_rgba(255,107,26,0.5)]">TF</div>
+        <div class="text-[#FF6B1A] text-2xl font-black font-mono tracking-widest cca-font-disp drop-shadow-[0_0_8px_rgba(255,107,26,0.5)]">CCA</div>
       </div>
       <h3 class="text-xl font-bold tracking-[6px] uppercase text-[#FF6B1A] cca-font-disp drop-shadow-[0_0_10px_rgba(255,107,26,0.5)]">Initializing 3D Arena</h3>
       <p class="text-xs text-gray-500 mt-3 font-semibold uppercase tracking-[4px] animate-pulse">Syncing muscle sensors...</p>
@@ -401,7 +379,7 @@ include dirname(__DIR__) . '/includes/header.php';
     <h2>Congratulations, <span class="grad-text" style="background: linear-gradient(135deg, var(--primary), var(--primary-hot)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CCA!</span></h2>
     <p style="color:var(--muted);font-family:var(--tech);letter-spacing:2px;text-transform:uppercase">Workout Complete — Calories Burned</p>
     <div class="cal-count" id="congCal" style="color:var(--primary-text);">0</div>
-    <p style="color:var(--muted);margin:6px 0 24px">Aap <b style="color:var(--primary-text)" id="congMsg">0 kcal</b> apne goal ke qareeb ho. Forge ne aaj aap ko stronger banaya. 🔥</p>
+    <p style="color:var(--muted);margin:6px 0 24px">Aap <b style="color:var(--primary-text)" id="congMsg">0 kcal</b> apne goal ke qareeb ho. Core Calorie Advisor ne aaj aap ko stronger banaya. 🔥</p>
     <div class="hero-cta" style="justify-content:center">
       <a class="btn btn-fire" href="<?= url('pages/workouts.php') ?>" style="background: linear-gradient(135deg, var(--primary), var(--primary-hot));">More Workouts</a>
       <a class="btn btn-ghost" href="<?= url('index.php') ?>">Home</a>
@@ -428,6 +406,9 @@ $extraScripts = <<<HTML
 <script src="{$ccaWardrobeJs}"></script>
 <script src="{$titanRigJs}"></script>
 <script>
+fetch('../assets/models/trainer-street.glb')
+  .then(r => console.log('>>> DIRECT RELATIVE FETCH STATUS:', r.status))
+  .catch(e => console.error('>>> DIRECT RELATIVE FETCH ERROR:', e));
 // ═══════════ EXACTFIT 3D ENGINE — VANILLA THREE.JS ═══════════
 
 const MODE_MAP = {
@@ -450,12 +431,11 @@ const TRAINER_MODEL = {
   /* The model follows the user's saved loadout (assets/js/cca-wardrobe.js), so
      the trainer they picked on the start screen is the one that trains them. */
   get url() {
-    var base = (window.TF && TF.baseUrl) ? TF.baseUrl : '';
     var f = (window.CCAWardrobe && CCAWardrobe.modelUrlFor)
       ? CCAWardrobe.modelUrlFor() : 'assets/models/trainer-street.glb';
-    return base + '/' + f;
+    return '../' + f;
   },
-  fallbackUrl: ((window.TF && TF.baseUrl) ? TF.baseUrl : '') + '/assets/models/trainers.glb',
+  fallbackUrl: '../assets/models/trainers.glb',
   clips: {
     warmup:      ['Warm Up','Warmup','Jumping','Idle','Breathing Idle'],
     idle:        ['Warm Up','Warmup','Breathing Idle','Idle','Stretching'],

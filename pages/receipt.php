@@ -79,7 +79,7 @@ include dirname(__DIR__) . '/includes/header.php';
     <div class="invoice-header">
       <a class="invoice-logo" href="<?= url('index.php') ?>">
         <?= $BRAND_SVG ?? '' ?>
-        <b>CCA<em>FORGE</em></b>
+        <b>CORE<em>CALORIE</em></b>
       </a>
       <div class="invoice-meta">
         <h2>INVOICE</h2>

@@ -40,3 +40,47 @@
   display: flex; flex-direction: column;
 }
 [data-portal="member"] .grid.g2 > .card.calc-card > .table-wrap { flex: 1; }
+
+/* ---- Workout studio: anatomy explorer + movement library ---- */
+[data-portal="member"] .workout-anatomy-card {
+  padding: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(150px 150px at 50% 33%, color-mix(in srgb, var(--portal-accent) 16%, transparent), transparent 72%),
+    linear-gradient(155deg, color-mix(in srgb, var(--surface) 94%, var(--portal-accent) 6%), var(--surface));
+  border-color: color-mix(in srgb, var(--portal-accent) 25%, var(--border));
+}
+[data-portal="member"] .workout-anatomy-card__head > span {
+  display:block; margin-bottom:5px; color:var(--portal-accent-text, var(--primary-text));
+  font:800 10px var(--font-tech); letter-spacing:.15em; text-transform:uppercase;
+}
+[data-portal="member"] .workout-anatomy-card__head h3 { margin:0; font-size:20px; }
+[data-portal="member"] .workout-anatomy-card__head p { margin:7px 0 12px; color:var(--text-2); font-size:12px; line-height:1.55; }
+[data-portal="member"] .workout-anatomy-stage { position:relative; height:292px; margin:2px -8px 0; overflow:hidden; border-radius:15px; background:radial-gradient(ellipse at 50% 85%, color-mix(in srgb, var(--portal-accent) 25%, transparent), transparent 58%), linear-gradient(180deg, color-mix(in srgb, var(--portal-accent) 9%, transparent), transparent); }
+[data-portal="member"] #anatomyHuman3d { position:absolute; inset:0; overflow:hidden; }
+[data-portal="member"] #anatomyHuman3d canvas { width:100% !important; height:100% !important; display:block; filter:drop-shadow(0 16px 19px rgba(0,0,0,.26)); }
+[data-portal="member"] .workout-anatomy-stage__tag { position:absolute; z-index:3; top:10px; left:10px; display:flex; align-items:center; gap:6px; padding:5px 8px; border:1px solid color-mix(in srgb, var(--portal-accent) 33%, transparent); border-radius:999px; background:color-mix(in srgb, var(--bg2) 80%, transparent); color:var(--text-2); font:700 9px var(--font-tech); letter-spacing:.1em; text-transform:uppercase; pointer-events:none; }
+[data-portal="member"] .workout-anatomy-stage__tag i { width:6px; height:6px; border-radius:50%; background:var(--success); box-shadow:0 0 10px var(--success); animation:ccaAnatomyPulse 1.8s ease-in-out infinite; }
+[data-portal="member"] #muscleMap .cca-muscle-buttons { justify-content:flex-start; gap:6px; margin-top:12px; }
+[data-portal="member"] #muscleMap .cca-muscle-btn { padding:6px 8px; font-size:10px; border-radius:8px; }
+[data-portal="member"] .workout-anatomy-card__status {
+  display:flex; align-items:center; gap:8px; margin-top:14px; padding:10px 11px;
+  border:1px solid color-mix(in srgb, var(--portal-accent) 23%, var(--border)); border-radius:10px;
+  background:color-mix(in srgb, var(--portal-accent) 8%, transparent); color:var(--text-2); font-size:11px;
+}
+[data-portal="member"] .workout-anatomy-card__status i { width:7px; height:7px; border-radius:50%; background:var(--portal-accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--portal-accent) 17%, transparent); }
+[data-portal="member"] .workout-studio-card { min-width:0; padding:0; overflow:hidden; gap:0; border-color:color-mix(in srgb, var(--portal-accent) 14%, var(--border)); }
+[data-portal="member"] .workout-studio-card:hover { border-color:var(--portal-accent); }
+[data-portal="member"] .workout-studio-card__media { position:relative; height:180px; overflow:hidden; background:var(--bg3); }
+[data-portal="member"] .workout-studio-card__media::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 45%, rgba(3,5,10,.56)); pointer-events:none; }
+[data-portal="member"] .workout-studio-card__media img { width:100%; height:100%; display:block; object-fit:cover; transition:transform .55s var(--ease); }
+[data-portal="member"] .workout-studio-card:hover .workout-studio-card__media img { transform:scale(1.06); }
+[data-portal="member"] .workout-studio-card__body { display:flex; flex:1; flex-direction:column; padding:17px; }
+[data-portal="member"] .workout-studio-card__body h4 { color:var(--text-1); font-family:var(--font-tech); }
+[data-portal="member"] .workout-studio-card__body .cca-btn { margin-top:auto; min-height:38px; }
+[data-portal="member"] .workout-studio-summary { position:relative; flex-direction:column; gap:9px; overflow:hidden; background:radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--portal-accent) 18%, transparent), transparent 43%),rgba(255,255,255,.04); }
+[data-portal="member"] .workout-studio-summary::before { content:"3D"; display:grid; place-items:center; width:72px; height:72px; border-radius:24px; border:1px solid color-mix(in srgb, var(--portal-accent) 43%, transparent); background:color-mix(in srgb, var(--portal-accent) 16%, transparent); color:var(--portal-accent); font:800 23px var(--font-disp); box-shadow:0 14px 30px color-mix(in srgb, var(--portal-accent) 17%, transparent); }
+[data-portal="member"] .workout-studio-summary::after { content:"Choose a target muscle to filter your library and cue the coach."; max-width:210px; color:var(--text-2); text-align:center; font-size:12px; line-height:1.5; }
+[data-portal="member"] .workout-studio-summary .h3d-tag { position:static !important; color:var(--text-1); font:800 11px var(--font-tech); letter-spacing:.13em; text-transform:uppercase; opacity:1 !important; }
+@keyframes ccaAnatomyPulse { 50% { transform:scale(1.35); opacity:.62; } }
+@media (max-width: 800px) { [data-portal="member"] .workout-anatomy-card { position:static !important; } }

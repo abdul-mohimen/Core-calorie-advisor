@@ -69,6 +69,46 @@
     4px 0 0 var(--portal-accent);               /* glowing accent edge */
 }
 
+/* Premium navigation surface: profile area becomes a clear signed-in state,
+   links gain a consistent icon tile, and the account card stays anchored at
+   the bottom of the drawer without changing the existing PHP markup. */
+#sidebar { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--portal-accent) 44%, transparent) transparent; }
+#sidebar::-webkit-scrollbar { width: 7px; }
+#sidebar::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--portal-accent) 44%, transparent); border-radius: 999px; }
+#sidebar .sb-head {
+  position: relative;
+  padding: 22px 18px 19px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--portal-accent) 14%, transparent), transparent 68%);
+}
+#sidebar .sb-head::after {
+  content: ""; position: absolute; width: 80px; height: 80px; right: -37px; top: -44px;
+  border: 1px solid color-mix(in srgb, var(--portal-accent) 38%, transparent); border-radius: 50%;
+}
+#sidebar .sb-head .avatar, #sidebar .sb-acct-avatar {
+  background: linear-gradient(135deg, var(--portal-accent), color-mix(in srgb, var(--portal-accent) 58%, var(--primary)));
+  color: var(--on-accent, #fff);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--portal-accent) 30%, transparent);
+}
+#sidebar .sb-sec { margin: 8px 10px 2px; padding: 12px 8px 5px; letter-spacing: .15em; }
+#sidebar .sb-link { margin: 3px 10px; padding: 10px 11px; font-size: 14px; }
+#sidebar .sb-link .ti {
+  width: 30px !important; height: 30px !important; margin-right: 0 !important;
+  border-radius: 9px !important; border-color: color-mix(in srgb, var(--portal-accent) 25%, var(--border)) !important;
+  box-shadow: none !important;
+}
+#sidebar .sb-link:hover { transform: translateX(2px); border-color: color-mix(in srgb, var(--portal-accent) 28%, var(--border)); }
+#sidebar .sb-acct {
+  margin: auto 12px 8px; padding: 12px; display: flex; align-items: center; gap: 10px;
+  background: color-mix(in srgb, var(--surface) 84%, var(--portal-accent) 8%);
+  border: 1px solid color-mix(in srgb, var(--portal-accent) 22%, var(--border)); border-radius: 14px;
+}
+#sidebar .sb-acct-avatar { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 11px; font: 700 15px var(--font-disp); }
+#sidebar .sb-acct-id { min-width: 0; display: grid; gap: 2px; }
+#sidebar .sb-acct-id b { color: var(--text-1); font: 700 13px var(--font-tech); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#sidebar .sb-acct-id span { color: var(--text-3); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#sidebar .sb-acct-role { color: var(--portal-accent-text) !important; font: 700 9px var(--font-tech) !important; letter-spacing: .08em; text-transform: uppercase; }
+#sidebar .sb-link--out { margin-bottom: 16px; color: var(--danger-text); }
+
 /* Mobile scrim behind the open drawer */
 #overlay {
   position: fixed;
@@ -135,6 +175,33 @@
   color: var(--text);
   background: linear-gradient(90deg, color-mix(in srgb, var(--portal-accent) 16%, transparent), transparent 82%);
   box-shadow: inset 3px 0 0 var(--portal-accent), 0 0 22px color-mix(in srgb, var(--portal-accent) 12%, transparent);
+}
+
+/* Navbar composition: guests get a fast global search; signed-in users keep
+   portal pages, utility actions and profile together as one right-side group. */
+.nav .nav-public-search { flex: 0 1 390px; max-width:390px; margin-left:auto; z-index:210; }
+.nav .nav-public-search input { min-height:42px; padding-top:11px; padding-bottom:11px; border-radius:12px; letter-spacing:.35px; }
+.nav .nav-links--portal { margin-left:auto; gap:2px; }
+.nav .nav-links--portal a { padding:8px 9px; font-size:12px; letter-spacing:.55px; }
+.nav .nav-links--portal + #themeToggle { margin-left:2px !important; }
+.nav .brand { gap:11px; }
+.nav .brand svg { width:42px !important; height:42px !important; max-width:42px !important; max-height:42px !important; filter:drop-shadow(0 0 13px color-mix(in srgb, var(--primary) 58%, transparent)); }
+.nav .brand b { position:relative; display:grid; gap:1px; font-size:19px; line-height:1; letter-spacing:.1em; }
+.nav .brand b::after { content:"ADVISOR · PERFORMANCE INTELLIGENCE"; color:var(--text-3); font:700 6.6px var(--font-tech); letter-spacing:.13em; white-space:nowrap; }
+.nav .acct-wrap { margin-left:2px; }
+.nav .nav-avatar { width:42px; height:42px; border-color:color-mix(in srgb, var(--primary) 46%, var(--border)); }
+@media (max-width: 1180px) {
+  .nav .nav-links--portal a { padding-inline:6px; font-size:11px; }
+  .nav .nav-public-search { max-width:285px; }
+}
+@media (max-width: 930px) {
+  .nav .nav-links--portal { display:none; }
+  .nav .nav-public-search { flex:1 1 auto; max-width:none; margin-left:0; }
+}
+@media (max-width: 620px) {
+  .nav .brand b::after { display:none; }
+  .nav .brand svg { width:36px !important; height:36px !important; }
+  .nav .nav-public-search { display:none; }
 }
 
 /* =============================================================================

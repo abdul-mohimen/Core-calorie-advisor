@@ -65,7 +65,7 @@ if (typeof THREE.DRACOLoader === 'function'){
   d.setDecoderConfig({type:'js'});
   loader.setDRACOLoader(d);
 }
-loader.load('assets/models/trainers.glb', (gltf)=>{
+loader.load('assets/models/trainer-street.glb', (gltf)=>{
   const root = gltf.scene;
   CCARig.fit(root, 2.7);
   scene.add(root);

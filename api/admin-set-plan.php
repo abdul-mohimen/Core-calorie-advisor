@@ -1,6 +1,6 @@
 <?php
 /* Admin-only: grant/revoke a user's subscription plan (free/pro/elite).
-   Used by the Forge Control Room's user table. */
+   Used by the Core Calorie Advisor Control Room's user table. */
 require_once dirname(__DIR__) . '/config/config.php';
 
 header('Content-Type: application/json; charset=utf-8');

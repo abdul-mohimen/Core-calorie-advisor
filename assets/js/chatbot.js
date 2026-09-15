@@ -80,7 +80,7 @@
       .then(j => {
         typing(false);
         if (j.ok) bubble(j.reply, 'bot', j.links);
-        else bubble('Hmm, I couldn\'t reach the forge just now. Try again?', 'bot');
+        else bubble('Hmm, I couldn\'t reach the advisor just now. Try again?', 'bot');
       })
       .catch(() => { typing(false); bubble('Network hiccup — please try again.', 'bot'); });
   }

@@ -43,8 +43,8 @@ $pageTitle = 'Contact Support & Help Desk';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<div class="wrap" style="padding-top:40px;padding-bottom:60px;max-width:900px">
-    <div style="text-align:center;margin-bottom:40px">
+<div class="wrap support-page" style="padding-top:40px;padding-bottom:60px;max-width:900px">
+    <div class="support-page__head" style="text-align:center;margin-bottom:40px">
         <span class="eyebrow" style="justify-content:center">CORE CALORIE ADVISOR SUPPORT</span>
         <h1 style="font-size:36px;margin-top:10px">Contact &amp; Help Desk</h1>
         <p style="color:var(--muted);max-width:600px;margin:12px auto 0">Have a question about 3D coaching, portal access, AI food scanners or medical safe plans? Our engineering and support team is here to assist.</p>
@@ -57,10 +57,10 @@ include dirname(__DIR__) . '/includes/header.php';
         <div class="flash flash-ok" style="margin-bottom:24px"><?= e($success) ?></div>
     <?php endif; ?>
 
-    <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:30px">
+    <div class="support-grid" style="display:grid;grid-template-columns:1fr 1.5fr;gap:30px">
         <!-- Support Details Column -->
-        <div style="display:flex;flex-direction:column;gap:20px">
-            <div class="card" style="display:flex;align-items:flex-start;gap:14px">
+        <div class="support-options" style="display:flex;flex-direction:column;gap:20px">
+            <div class="card support-option" style="display:flex;align-items:flex-start;gap:14px">
                 <div style="font-size:24px">⚡</div>
                 <div>
                     <h4 style="font-size:16px;margin-bottom:4px">Instant AI Assistance</h4>
@@ -68,7 +68,7 @@ include dirname(__DIR__) . '/includes/header.php';
                 </div>
             </div>
 
-            <div class="card" style="display:flex;align-items:flex-start;gap:14px">
+            <div class="card support-option" style="display:flex;align-items:flex-start;gap:14px">
                 <div style="font-size:24px">🏥</div>
                 <div>
                     <h4 style="font-size:16px;margin-bottom:4px">Doctor &amp; Trainer Support</h4>
@@ -76,7 +76,7 @@ include dirname(__DIR__) . '/includes/header.php';
                 </div>
             </div>
 
-            <div class="card" style="display:flex;align-items:flex-start;gap:14px">
+            <div class="card support-option" style="display:flex;align-items:flex-start;gap:14px">
                 <div style="font-size:24px">🛡️</div>
                 <div>
                     <h4 style="font-size:16px;margin-bottom:4px">Admin Verification</h4>
@@ -86,7 +86,7 @@ include dirname(__DIR__) . '/includes/header.php';
         </div>
 
         <!-- Contact Form Column -->
-        <div class="card">
+        <div class="card support-form-card">
             <h3 style="font-size:20px;margin-bottom:20px">Send Us a Message</h3>
             <form method="post">
                 <?= csrf_field() ?>

@@ -46,7 +46,7 @@ if (PHP_SAPI !== 'cli' && !headers_sent()) {
         . "font-src 'self' data: https://fonts.gstatic.com; "
         . "img-src 'self' data: blob: https:; "
         . "media-src 'self' blob:; "
-        . "connect-src 'self' https://api.anthropic.com https://www.gstatic.com; "
+        . "connect-src 'self' blob: data: https://api.anthropic.com https://www.gstatic.com; "
         . "worker-src 'self' blob:; "
         . "object-src 'none'; "
         . "base-uri 'self'; "
@@ -85,9 +85,11 @@ if (!empty($_SERVER['HTTP_HOST']) && PHP_SAPI !== 'cli') {
     $host = $_SERVER['HTTP_HOST'];
     $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
     $appPath = preg_replace('#/(portals|auth|pages|api|includes|config|member|trainer|doctor|patient|admin)$#i', '', $scriptDir);
-    $baseUrl = $scheme . '://' . $host . rtrim($appPath, '/');
+    // RFC-3986 encode path segments so folder spaces like 'Core calorie advisor' don't break browser fetch() for GLB/media
+    $encodedPath = implode('/', array_map('rawurlencode', explode('/', $appPath)));
+    $baseUrl = $scheme . '://' . $host . rtrim($encodedPath, '/');
 } else {
-    $baseUrl = $envAppUrl !== '' ? $envAppUrl : 'http://localhost/Core calorie advisor';
+    $baseUrl = $envAppUrl !== '' ? str_replace(' ', '%20', $envAppUrl) : 'http://localhost/Core%20calorie%20advisor';
 }
 
 define('BASE_URL', rtrim($baseUrl, '/'));

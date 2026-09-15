@@ -26,3 +26,4 @@ _audit/db-backup/
 *.zip
 *.bak
 *.old
+tmp/

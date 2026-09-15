@@ -58,7 +58,7 @@
     }
     function renderBody(result, meta) {
       text('detectedVerdict', result.verdict || 'Training profile');
-      text('detectedVerdictLabel', meta && meta.demo ? 'Goal-based plan' : 'AI estimate');
+      text('detectedVerdictLabel', 'Live AI visual estimate');
       text('statBodyType', result.body_type || 'Not determined');
       text('statWeight', result.weight_kg ? result.weight_kg + ' kg (estimate)' : 'Not estimated');
       text('statBodyFat', result.body_fat_pct != null ? result.body_fat_pct + '% (estimate)' : 'Not estimated');
@@ -71,10 +71,6 @@
       text('statHealthNote', result.health_note || 'This is not medical advice. Please consult a qualified clinician for health concerns.');
       const program = document.getElementById('startWorkoutBtn');
       if (program) program.href = result.program_id ? TF.baseUrl + '/pages/workout-detail.php?id=' + encodeURIComponent(result.program_id) : TF.baseUrl + '/pages/workouts.php';
-      if (meta && meta.demo) {
-        const label = document.getElementById('detectedVerdictLabel');
-        if (label) label.title = 'Connect the configured vision provider for a live image analysis.';
-      }
       // Muscle focus breakdown — which muscles to develop + what to do
       const mfWrap = document.getElementById('muscleFocusWrap');
       const mfList = document.getElementById('muscleFocusList');
@@ -111,7 +107,7 @@
     }
     function renderFood(result, meta) {
       text('detectedMealName', result.name || 'Meal');
-      text('detectedMealVerdict', meta && meta.demo ? 'Reference match' : (result.verdict || 'AI estimate'));
+      text('detectedMealVerdict', result.verdict || 'Live AI estimate');
       text('statKcal', result.kcal != null ? String(result.kcal) : '—');
       text('statProtein', result.protein != null ? result.protein + 'g' : '—');
       text('statCarbs', result.carbs != null ? result.carbs + 'g' : '—');

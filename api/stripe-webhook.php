@@ -32,31 +32,47 @@ $type = $event['type'] ?? '';
 
 if ($type === 'checkout.session.completed') {
     $session = $event['data']['object'] ?? [];
+    $sessionId = (string)($session['id'] ?? '');
+    if ($sessionId === '') { http_response_code(400); exit('Missing checkout session'); }
+    /* Stripe can retry a delivered event.  A completed session must mutate our
+       ledger once only; the database unique key is the race-safe backstop. */
+    $seen = db()->prepare('SELECT id FROM transactions WHERE stripe_session_id = ? LIMIT 1');
+    $seen->execute([$sessionId]);
+    if ($seen->fetch()) { http_response_code(200); echo 'ok'; exit; }
     $metadata = $session['metadata'] ?? [];
     $uid = (int)($metadata['user_id'] ?? $session['client_reference_id'] ?? 0);
     $type = $metadata['type'] ?? 'subscription';
 
     if ($type === 'appointment') {
         $apptId = (int)($metadata['appointment_id'] ?? 0);
-        $providerId = (int)($metadata['provider_id'] ?? 0);
-        $fee = (float)($metadata['fee'] ?? 0);
 
-        if ($apptId > 0 && $providerId > 0 && $fee > 0) {
+        if ($apptId > 0 && $uid > 0) {
             db()->beginTransaction();
             try {
+                $appt = db()->prepare('SELECT member_id, trainer_id, fee, status, transaction_id FROM appointments WHERE id = ? FOR UPDATE');
+                $appt->execute([$apptId]);
+                $appointment = $appt->fetch();
+                if (!$appointment || (int)$appointment['member_id'] !== $uid || $appointment['status'] !== 'pending' || (float)$appointment['fee'] <= 0) {
+                    db()->rollBack();
+                    http_response_code(200); echo 'ignored'; exit;
+                }
+                $providerId = (int)$appointment['trainer_id'];
+                $fee = (float)$appointment['fee'];
+
                 // Calculate commission split
                 $split = calculate_commission($fee, $providerId);
 
                 // Record payment transaction
                 $st = db()->prepare('INSERT INTO transactions (user_id, type, amount, reference_type, reference_id, description, status, stripe_session_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-                $st->execute([$uid, 'payment', $fee, 'appointment', $apptId, "Appointment #$apptId payment", 'completed', $session['id'] ?? '']);
+                $st->execute([$uid, 'payment', $fee, 'appointment', $apptId, "Appointment #$apptId payment", 'completed', $sessionId]);
                 $txnId = db()->lastInsertId();
 
                 // Record commission for platform
-                $st->execute([1, 'commission', $split['commission'], 'appointment', $apptId, "Platform commission ({$split['rate']}%) for Appointment #$apptId", 'completed', $session['id'] ?? '']);
+                $st->execute([1, 'commission', $split['commission'], 'appointment', $apptId, "Platform commission ({$split['rate']}%) for Appointment #$apptId", 'completed', $sessionId . ':commission']);
 
                 // Credit provider wallet
-                credit_wallet($providerId, $split['payout'], "Payout for Appointment #$apptId (after {$split['rate']}% commission)");
+                db()->prepare('INSERT INTO wallets (user_id, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance = balance + VALUES(balance)')
+                    ->execute([$providerId, $split['payout']]);
 
                 // Update appointment status and transaction link
                 db()->prepare("UPDATE appointments SET status = 'accepted', fee = ?, transaction_id = ? WHERE id = ?")
@@ -89,7 +105,7 @@ if ($type === 'checkout.session.completed') {
                     // Log transaction
                     $amount = $plan === 'elite' ? 29.99 : 9.99;
                     db()->prepare("INSERT INTO transactions (user_id, type, amount, description, status, stripe_session_id) VALUES (?, 'payment', ?, ?, 'completed', ?)")
-                        ->execute([$uid, $amount, ucfirst($plan) . " Subscription", $session['id'] ?? '']);
+                        ->execute([$uid, $amount, ucfirst($plan) . " Subscription", $sessionId]);
 
                     notify($uid, 'Subscription Active', strtoupper($plan) . ' subscription is now active.', 'system', BASE_URL . '/member/billing.php');
                     db()->commit();

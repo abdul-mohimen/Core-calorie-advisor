@@ -89,29 +89,30 @@ include dirname(__DIR__) . '/includes/header.php';
       </div>
       <div class="cca-hero__kpi-row">
         <span class="cca-hero__kpi-icon c1">🔥</span>
-        <div><div class="cca-hero__kpi-val"><?= number_format($totalKcal) ?></div><div class="cca-hero__kpi-lbl">Total Calories Burned</div></div>
+        <div><div class="cca-hero__kpi-val"><span data-count-to="<?= $totalKcal ?>"><?= number_format($totalKcal) ?></span></div><div class="cca-hero__kpi-lbl">Total Calories Burned</div></div>
       </div>
       <div class="cca-hero__kpi-row">
         <span class="cca-hero__kpi-icon c2">🏆</span>
-        <div><div class="cca-hero__kpi-val"><?= $streakDays ?> Day<?= $streakDays !== 1 ? 's' : '' ?></div><div class="cca-hero__kpi-lbl">Active Streak</div></div>
+        <div><div class="cca-hero__kpi-val"><span data-count-to="<?= $streakDays ?>"><?= $streakDays ?></span> Day<?= $streakDays !== 1 ? 's' : '' ?></div><div class="cca-hero__kpi-lbl">Active Streak</div></div>
       </div>
       <div class="cca-hero__kpi-row">
         <span class="cca-hero__kpi-icon c3">⚡</span>
-        <div><div class="cca-hero__kpi-val"><?= $avgKcal ?> kcal</div><div class="cca-hero__kpi-lbl">Avg per Workout</div></div>
+        <div><div class="cca-hero__kpi-val"><span data-count-to="<?= $avgKcal ?>"><?= $avgKcal ?></span> kcal</div><div class="cca-hero__kpi-lbl">Avg per Workout</div></div>
       </div>
     </div>
   </div>
 </section>
 
 <?= portal_nav('member') ?>
+<?= portal_dashboard_hub('member') ?>
 
 <div class="cca-page-container">
   <!-- ═══ STAT CARDS ═══ -->
   <div class="cca-grid-4">
-    <div class="cca-metric"><span class="cca-metric-icon c1">🔥</span><div><div class="cca-metric-val"><?= number_format($totalKcal) ?></div><div class="cca-metric-lbl">Calories Burned</div></div></div>
-    <div class="cca-metric"><span class="cca-metric-icon c2">🏋️</span><div><div class="cca-metric-val"><?= $totalDone ?></div><div class="cca-metric-lbl">Workouts Done</div></div></div>
-    <div class="cca-metric"><span class="cca-metric-icon c3">⏱</span><div><div class="cca-metric-val"><?= $activeMin ?> min</div><div class="cca-metric-lbl">Active Time</div></div></div>
-    <div class="cca-metric"><span class="cca-metric-icon c4">🔥</span><div><div class="cca-metric-val"><?= $streakDays ?></div><div class="cca-metric-lbl">Day Streak</div></div></div>
+    <div class="cca-metric"><span class="cca-metric-icon c1">🔥</span><div><div class="cca-metric-val"><span data-count-to="<?= $totalKcal ?>"><?= number_format($totalKcal) ?></span></div><div class="cca-metric-lbl">Calories Burned</div></div></div>
+    <div class="cca-metric"><span class="cca-metric-icon c2">🏋️</span><div><div class="cca-metric-val"><span data-count-to="<?= $totalDone ?>"><?= $totalDone ?></span></div><div class="cca-metric-lbl">Workouts Done</div></div></div>
+    <div class="cca-metric"><span class="cca-metric-icon c3">⏱</span><div><div class="cca-metric-val"><span data-count-to="<?= $activeMin ?>"><?= $activeMin ?></span> min</div><div class="cca-metric-lbl">Active Time</div></div></div>
+    <div class="cca-metric"><span class="cca-metric-icon c4">🔥</span><div><div class="cca-metric-val"><span data-count-to="<?= $streakDays ?>"><?= $streakDays ?></span></div><div class="cca-metric-lbl">Day Streak</div></div></div>
   </div>
 
   <!-- ═══ ACTIVITY CHART + RECENT WORKOUTS ═══ -->
