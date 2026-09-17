@@ -17,7 +17,7 @@ function csrf_verify(): void {
         $t = $_POST['csrf'] ?? '';
         if (!$t || !hash_equals($_SESSION['csrf'] ?? '', $t)) {
             http_response_code(419);
-            die('CSRF token invalid — form dobara submit karo.');
+            die('Security token expired. Please refresh and submit the form again.');
         }
     }
 }
@@ -122,14 +122,14 @@ function sandbox_checkout_enabled(): bool {
 
 function require_login(): void {
     if (!is_logged_in()) {
-        flash('warn', 'Pehle login karo!');
+        flash('warn', 'Please log in to continue.');
         redirect('auth/login.php?next=' . urlencode($_SERVER['REQUEST_URI'] ?? ''));
     }
 }
 function require_role(string ...$roles): void {
     require_login();
     if (!in_array($_SESSION['user']['role'], $roles, true)) {
-        flash('warn', 'Is portal ka access aap ke role ke liye nahi hai.');
+        flash('warn', 'Access to this portal is restricted for your account role.');
         redirect('index.php');
     }
 }

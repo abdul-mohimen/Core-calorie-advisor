@@ -98,7 +98,7 @@ include dirname(__DIR__) . '/includes/header.php';
                   <input id="ccNum" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" maxlength="19">
                   <span class="card-brand" id="ccBrand">💳</span>
                 </div>
-                <div class="hint">Invalid card number (sandbox: 4242 4242 4242 4242 try karein).</div>
+                <div class="hint">Invalid card number (sandbox: try 4242 4242 4242 4242).</div>
               </div>
 
               <div class="pay-split">

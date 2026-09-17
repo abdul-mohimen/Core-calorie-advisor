@@ -3,13 +3,13 @@ require_once dirname(__DIR__) . '/config/config.php';
 $id = (int)get('id', '0');
 $st = db()->prepare('SELECT * FROM workouts WHERE id = ?');
 $st->execute([$id]); $w = $st->fetch();
-if (!$w) { flash('err', 'Workout nahi mila.'); redirect('pages/workouts.php'); }
+if (!$w) { flash('err', 'Workout not found.'); redirect('pages/workouts.php'); }
 
 /* ---- PRO gating: paid workout => login + pro/elite plan lazmi ---- */
 $isPro = (bool)($w['is_pro'] ?? !($w['is_free'] ?? 1));
 if ($isPro) {
-    if (!is_logged_in()) { flash('warn', '🔒 Ye PRO workout hai — pehle login karo!'); redirect('auth/login.php?next=' . urlencode('pages/workout-detail.php?id=' . $id)); }
-    if (!is_pro())       { flash('warn', '🔒 Ye PRO workout hai — subscription chahiye!'); redirect('pages/pricing.php'); }
+    if (!is_logged_in()) { flash('warn', '🔒 This is a PRO workout — please log in first!'); redirect('auth/login.php?next=' . urlencode('pages/workout-detail.php?id=' . $id)); }
+    if (!is_pro())       { flash('warn', '🔒 This is a PRO workout — active subscription required!'); redirect('pages/pricing.php'); }
 }
 $ex = db()->prepare('SELECT * FROM exercises WHERE workout_id = ? ORDER BY sort_order');
 $ex->execute([$id]); $exercises = $ex->fetchAll();

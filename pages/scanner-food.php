@@ -1,8 +1,8 @@
 <?php
 require_once dirname(__DIR__) . '/config/config.php';
-if (!is_logged_in()) { flash('warn', '🔒 AI Food Scanner PRO tool hai — pehle login karo!'); redirect('auth/login.php?next=' . urlencode('pages/scanner-food.php')); }
-if (($_SESSION['user']['role'] ?? '') !== 'member') { flash('warn', '🔒 AI Food Scanner sirf Member Portal ke andar available hai.'); redirect('portals/' . $_SESSION['user']['role'] . '.php'); }
-if (!is_pro())       { flash('warn', '🔒 AI Food Scanner ke liye CCA Pro subscription chahiye!'); redirect('pages/pricing.php'); }
+if (!is_logged_in()) { flash('warn', '🔒 The AI Food Scanner is a PRO tool — please log in first!'); redirect('auth/login.php?next=' . urlencode('pages/scanner-food.php')); }
+if (($_SESSION['user']['role'] ?? '') !== 'member') { flash('warn', '🔒 The AI Food Scanner is exclusive to the Member Portal.'); redirect('portals/' . $_SESSION['user']['role'] . '.php'); }
+if (!is_pro())       { flash('warn', '🔒 An active Pro subscription is required to use the AI Food Scanner.'); redirect('pages/pricing.php'); }
 
 $pageTitle = 'AI Food Scanner';
 include dirname(__DIR__) . '/includes/header.php';

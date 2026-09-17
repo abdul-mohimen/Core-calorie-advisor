@@ -1,11 +1,9 @@
 <?php
 require_once dirname(__DIR__) . '/config/config.php';
 /* ============ INSTAGRAM OAUTH — Setup Guide ============
-   1. Instagram developer console me app banao aur Client ID/Secret lo
-   2. .env me INSTAGRAM_CLIENT_ID / INSTAGRAM_CLIENT_SECRET dalo
-   3. Redirect URI set karo:  BASE_URL/auth/oauth-instagram.php
-   4. Composer se league/oauth2-client install karo aur yahan flow likho:
-      authorize -> callback -> user info -> users table me find/create -> session set
-   Abhi demo message dikhate hain: */
-flash('warn', 'Instagram login abhi configure nahi hua — .env me INSTAGRAM_CLIENT_ID set karo (auth/oauth-instagram.php me guide hai).');
+   1. Create an App in Meta for Developers with Instagram Basic Display.
+   2. Define INSTAGRAM_CLIENT_ID and INSTAGRAM_CLIENT_SECRET in .env.
+   3. Configure Authorized Redirect URI: BASE_URL/auth/oauth-instagram.php
+   4. Install league/oauth2-client via Composer to complete the OAuth flow. */
+flash('warn', 'Instagram login is not yet configured — set INSTAGRAM_CLIENT_ID in your .env file (see guide in auth/oauth-instagram.php).');
 redirect('auth/login.php');

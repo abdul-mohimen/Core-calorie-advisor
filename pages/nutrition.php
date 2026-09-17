@@ -49,7 +49,7 @@ include dirname(__DIR__) . '/includes/header.php';
   <!-- Cards Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     <?php if (!$foods): ?>
-      <p class="text-gray-600 dark:text-gray-400 col-span-full text-center py-10 font-semibold">Koi food nahi mila "<?= e($q ?? '') ?>" ke liye.</p>
+      <p class="text-gray-600 dark:text-gray-400 col-span-full text-center py-10 font-semibold">No food items found matching "<?= e($q ?? '') ?>".</p>
     <?php endif; ?>
     
     <?php foreach ($foods as $f): ?>

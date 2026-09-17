@@ -33,7 +33,7 @@ $pdo = db();
 $chk = $pdo->prepare('SELECT id FROM shop_items WHERE id = ?');
 $chk->execute([$itemId]);
 if (!$chk->fetch()) {
-    echo json_encode(['ok' => false, 'error' => 'Product nahi mila']);
+    echo json_encode(['ok' => false, 'error' => 'Product not found']);
     exit;
 }
 

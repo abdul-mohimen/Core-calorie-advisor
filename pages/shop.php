@@ -205,7 +205,7 @@ include dirname(__DIR__) . '/includes/header.php';
     <div class="cca-card" style="text-align:center; padding:64px 24px">
       <span class="text-4xl block mb-3">🔍</span>
       <h3 class="text-lg font-bold">No Products Found</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Tamam filters check karein ya naya search word try karein.</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Try adjusting your filters or searching with a different term.</p>
     </div>
   <?php else: ?>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -280,10 +280,10 @@ include dirname(__DIR__) . '/includes/header.php';
       });
       const data = await res.json();
       if (res.status === 401 || data.login) { window.location.href = LOGIN; return null; }
-      if (!data.ok) { alert(data.error || 'Kuch ghalat ho gaya.'); return null; }
+      if (!data.ok) { alert(data.error || 'An error occurred.'); return null; }
       return data;
     } catch (e) {
-      alert('Network error — dobara koshish karein.');
+      alert('Network error — please check your connection and try again.');
       return null;
     } finally {
       btn.disabled = false;

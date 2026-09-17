@@ -137,20 +137,20 @@ function plan_btn(string $p, string $label, bool $featured = false): void {
     <div class="mt-14 max-w-3xl mx-auto">
       <h2 class="text-center text-2xl font-black uppercase tracking-wider mb-6">Billing FAQ</h2>
       <details class="group border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-white/[0.03] px-5 py-4 mb-3">
-        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">Kya main kabhi bhi cancel kar sakta hoon? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Haan — subscription kisi bhi waqt cancel karein. Aap ka access billing period ke aakhir tak chalta rahega, us ke baad koi charge nahi hoga.</p>
+        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">Can I cancel my subscription anytime? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Yes — you can cancel your subscription at any time. You will continue to have full access until the end of your billing period, with no subsequent charges.</p>
       </details>
       <details class="group border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-white/[0.03] px-5 py-4 mb-3">
-        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">Payment kaise process hoti hai? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Payments secure checkout ke zariye process hoti hain. Core Calorie Advisor kabhi bhi aap ke card numbers store nahi karta — sirf payment provider ki signed confirmation par plan activate hota hai.</p>
+        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">How are payments processed? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Payments are processed securely via encrypted checkout. Core Calorie Advisor never stores your card credentials — plans are activated solely via cryptographically signed webhooks.</p>
       </details>
       <details class="group border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-white/[0.03] px-5 py-4 mb-3">
-        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">Pro aur Elite mein farq kya hai? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Pro mein AI scanners, tamam PRO workouts aur trainer appointments milte hain. Elite mein us ke oopar doctor consults, disease-safe custom plans, 1-on-1 video sessions aur custom meal plans shamil hain.</p>
+        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">What is the difference between Pro and Elite? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Pro unlocks all 120+ 3D workouts, the AI Body &amp; Food Scanners, and trainer appointments. Elite builds on Pro with direct medical doctor consults, disease-safe workout plans, and personalized dietary guidance.</p>
       </details>
       <details class="group border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-white/[0.03] px-5 py-4">
-        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">Plan upgrade instantly milta hai? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Ji haan — payment confirm hote hi PRO features foran unlock ho jate hain aur aap ko notification mil jati hai.</p>
+        <summary class="cursor-pointer font-bold text-sm flex items-center justify-between">Is plan upgrade activated instantly? <span class="text-[#FF6B1A] group-open:rotate-45 transition-transform text-lg leading-none">+</span></summary>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">Yes — as soon as your payment is confirmed, your upgraded tier and all premium features are unlocked instantly in your account.</p>
       </details>
     </div>
 </div>

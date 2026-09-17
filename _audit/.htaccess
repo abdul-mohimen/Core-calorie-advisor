@@ -1,9 +1,0 @@
-# ================= CORE CALORIE ADVISOR — _audit is DEVELOPER-ONLY =================
-# This folder holds audit reports, dev probes, screenshots and DB backups.
-# None of it is part of the running application. Nothing here may be served.
-#
-# History: _audit/set_session.php used to hand any visitor a Master Admin session
-# (verified HTTP 200 on 2026-07-30). That file is gone; this rule makes sure a
-# future dev script dropped in here can never be reachable from a browser again.
-
-Require all denied

@@ -8,7 +8,7 @@ $st->execute([$id]);
 $product = $st->fetch();
 
 if (!$product) {
-    flash('err', 'Product nahi mila.');
+    flash('err', 'Product not found.');
     redirect('pages/shop.php');
 }
 

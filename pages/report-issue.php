@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/config.php';
-if (!is_logged_in()) { flash('warn', '🔒 Report Issue portals ke andar available hai — pehle login karo!'); redirect('auth/login.php?next=' . urlencode('pages/report-issue.php')); }
+if (!is_logged_in()) { flash('warn', '🔒 Report Issue is available inside portals — please log in first!'); redirect('auth/login.php?next=' . urlencode('pages/report-issue.php')); }
 $me = current_user();
 
 /* pull doctors + trainers so the reporter can name a target */

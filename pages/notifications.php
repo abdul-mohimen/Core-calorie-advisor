@@ -76,8 +76,8 @@ include dirname(__DIR__) . '/includes/header.php';
   <?php if (!$notes): ?>
     <div class="notif-none">
       <div style="font-size:42px;margin-bottom:10px">🔔</div>
-      <b>Sab clear hai!</b>
-      <p style="margin:6px 0 0"><?= $filter === 'unread' ? 'Koi unread notification nahi.' : 'Abhi tak koi notification nahi aayi.' ?></p>
+      <b>All caught up!</b>
+      <p style="margin:6px 0 0"><?= $filter === 'unread' ? 'No unread notifications.' : 'No notifications received yet.' ?></p>
     </div>
   <?php else: ?>
     <?php foreach ($notes as $n):

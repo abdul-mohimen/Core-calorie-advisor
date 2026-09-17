@@ -3,11 +3,11 @@ require_once dirname(__DIR__) . '/config/config.php';
 $id = (int)get('id', '0');
 $st = db()->prepare('SELECT * FROM workouts WHERE id = ?');
 $st->execute([$id]); $w = $st->fetch();
-if (!$w) { flash('err', 'Workout nahi mila.'); redirect('pages/workouts.php'); }
+if (!$w) { flash('err', 'Workout not found.'); redirect('pages/workouts.php'); }
 $isPro = (bool)($w['is_pro'] ?? !($w['is_free'] ?? 1));
 if ($isPro) {
-    if (!is_logged_in()) { flash('warn', '🔒 PRO workout — pehle login!'); redirect('auth/login.php'); }
-    if (!is_pro())       { flash('warn', '🔒 PRO workout — subscription chahiye!'); redirect('pages/pricing.php'); }
+    if (!is_logged_in()) { flash('warn', '🔒 PRO workout — please log in first!'); redirect('auth/login.php'); }
+    if (!is_pro())       { flash('warn', '🔒 PRO workout — active subscription required!'); redirect('pages/pricing.php'); }
 }
 $ex = db()->prepare('SELECT name, seconds, kcal, anim_mode FROM exercises WHERE workout_id = ? ORDER BY sort_order');
 $ex->execute([$id]); $exercises = $ex->fetchAll();

@@ -14,7 +14,7 @@ $st->execute([$orderId, $uid, $uid]);
 $order = $st->fetch();
 
 if (!$order) {
-    flash('err', 'Invoice nahi mili.');
+    flash('err', 'Invoice not found.');
     redirect('pages/shop.php');
 }
 

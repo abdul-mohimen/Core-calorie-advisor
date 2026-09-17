@@ -1,9 +1,9 @@
 <?php
 require_once dirname(__DIR__) . '/config/config.php';
 /* ---- Access: login + member role + PRO plan (Member Portal exclusive tool) ---- */
-if (!is_logged_in()) { flash('warn', '🔒 AI Scanner Member Portal ka PRO tool hai — pehle login karo!'); redirect('auth/login.php?next=' . urlencode('pages/scanner-body.php')); }
-if (($_SESSION['user']['role'] ?? '') !== 'member') { flash('warn', '🔒 AI Body Scanner sirf Member Portal ke andar available hai.'); redirect('portals/' . $_SESSION['user']['role'] . '.php'); }
-if (!is_pro())       { flash('warn', '🔒 AI Body Scanner ke liye CCA Pro subscription chahiye!'); redirect('pages/pricing.php'); }
+if (!is_logged_in()) { flash('warn', '🔒 The AI Body Scanner is a PRO tool — please log in first!'); redirect('auth/login.php?next=' . urlencode('pages/scanner-body.php')); }
+if (($_SESSION['user']['role'] ?? '') !== 'member') { flash('warn', '🔒 The AI Body Scanner is exclusive to the Member Portal.'); redirect('portals/' . $_SESSION['user']['role'] . '.php'); }
+if (!is_pro())       { flash('warn', '🔒 An active Pro subscription is required to use the AI Body Scanner.'); redirect('pages/pricing.php'); }
 
 $pageTitle = 'AI Body Scanner';
 include dirname(__DIR__) . '/includes/header.php';

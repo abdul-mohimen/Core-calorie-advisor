@@ -2,10 +2,11 @@
 /* ============ CORE CALORIE ADVISOR — Global Header (navbar + sidebar) ============
    Har page pehle config require kare, phir: $pageTitle='...'; include header.php
    Auth pages (login/register) set $authMinimal = true; for a clean, link-less bar. */
-if (!defined('BASE_URL')) { die('Config load nahi hui — page ke top par config/config.php require karo.'); }
+if (!defined('BASE_URL')) { die('Configuration failed to load — please ensure config/config.php is included at the top of the file.'); }
 /* PHASE I: makes portal_hero() available to every portal page without each one
    requiring it. Defines a function only — emits nothing. */
 require_once __DIR__ . '/portal-hero.php';
+require_once __DIR__ . '/i18n.php';
 $u          = current_user();
 $role       = $u['role'] ?? null;
 $authMinimal = $authMinimal ?? false;
@@ -156,7 +157,7 @@ $BRAND_SVG = (static function (): string {
 })();
 ?>
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="<?= current_lang() ?>" dir="<?= is_rtl() ? 'rtl' : 'ltr' ?>" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -312,6 +313,38 @@ endif;
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
     </svg>
   </button>
+  <!-- Global Language Switcher -->
+  <?php
+  $ccaLanguages = get_supported_languages();
+  $ccaCurrentLang = current_lang();
+  $ccaActiveInfo = $ccaLanguages[$ccaCurrentLang] ?? $ccaLanguages['en'];
+  ?>
+  <div class="cca-lang-switcher" id="ccaLangSwitcher">
+    <button class="cca-lang-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Change Language">
+      <span class="flag"><?= $ccaActiveInfo['flag'] ?></span>
+      <span class="code"><?= strtoupper($ccaCurrentLang) ?></span>
+      <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="cca-lang-menu" role="menu">
+      <input type="text" class="cca-lang-search" placeholder="Search language..." aria-label="Search languages">
+      <div class="cca-lang-list">
+        <?php foreach ($ccaLanguages as $code => $lInfo): ?>
+          <a class="cca-lang-opt<?= $code === $ccaCurrentLang ? ' active' : '' ?>" href="<?= url('api/set-language.php?lang=' . $code) ?>" data-code="<?= $code ?>" data-name="<?= e($lInfo['name']) ?> <?= e($lInfo['native']) ?>" role="menuitem">
+            <span class="cca-lang-opt-name">
+              <span class="cca-lang-flag"><?= $lInfo['flag'] ?></span>
+              <span><?= e($lInfo['native']) ?> <small style="opacity:0.6;font-size:11px">(<?= e($lInfo['name']) ?>)</small></span>
+            </span>
+            <?php if ($code === $ccaCurrentLang): ?>
+              <span style="color:var(--primary);font-weight:bold">✓</span>
+            <?php endif; ?>
+          </a>
+        <?php endforeach; ?>
+      </div>
+      <a class="cca-lang-auto-btn" href="#" role="button">
+        <span>🌐 More Countries &amp; Languages</span>
+      </a>
+    </div>
+  </div>
   <?php if ($u): ?>
     <div class="notif-wrap">
       <button class="icon-btn notif-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
@@ -378,6 +411,35 @@ endif;
       <a class="sb-link<?= str_ends_with($href, $curFile) ? ' active' : '' ?>" href="<?= $href ?>"><?= icon_img($ic) ?> <?= e($label) ?></a>
     <?php endforeach; ?>
   <?php endif; ?>
+
+  <div class="sb-sec"><?= __('lang_select', 'Language') ?></div>
+  <div style="padding:0 12px 10px">
+    <div class="cca-lang-switcher" style="width:100%;margin:0">
+      <button class="cca-lang-btn" type="button" style="width:100%;justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:6px">
+          <span class="flag"><?= $ccaActiveInfo['flag'] ?></span>
+          <span><?= e($ccaActiveInfo['native']) ?> (<?= strtoupper($ccaCurrentLang) ?>)</span>
+        </span>
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="cca-lang-menu" style="position:static;width:100%;box-sizing:border-box;margin-top:6px;box-shadow:none">
+        <input type="text" class="cca-lang-search" placeholder="Search language..." aria-label="Search languages">
+        <div class="cca-lang-list">
+          <?php foreach ($ccaLanguages as $code => $lInfo): ?>
+            <a class="cca-lang-opt<?= $code === $ccaCurrentLang ? ' active' : '' ?>" href="<?= url('api/set-language.php?lang=' . $code) ?>" data-code="<?= $code ?>" data-name="<?= e($lInfo['name']) ?> <?= e($lInfo['native']) ?>">
+              <span class="cca-lang-opt-name">
+                <span class="cca-lang-flag"><?= $lInfo['flag'] ?></span>
+                <span><?= e($lInfo['native']) ?></span>
+              </span>
+              <?php if ($code === $ccaCurrentLang): ?>
+                <span style="color:var(--primary);font-weight:bold">✓</span>
+              <?php endif; ?>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="sb-sec">Account</div>
   <?php if ($u): ?>

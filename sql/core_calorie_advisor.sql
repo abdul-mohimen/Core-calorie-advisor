@@ -961,6 +961,10 @@ CREATE TABLE `workout_logs` (
   `workout_id` int(11) NOT NULL,
   `kcal_burned` int(11) DEFAULT 0,
   `duration_sec` int(11) DEFAULT 0,
+  `target_seconds` int(11) NOT NULL DEFAULT 0,
+  `blocks_completed` int(11) NOT NULL DEFAULT 0,
+  `rest_added_seconds` int(11) NOT NULL DEFAULT 0,
+  `skips_used` int(11) NOT NULL DEFAULT 0,
   `completed_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `workout_id` (`workout_id`),
@@ -976,7 +980,7 @@ CREATE TABLE `workout_logs` (
 
 LOCK TABLES `workout_logs` WRITE;
 /*!40000 ALTER TABLE `workout_logs` DISABLE KEYS */;
-INSERT INTO `workout_logs` VALUES (1,2,1,41,255,'2026-07-23 11:03:08'),(2,2,4,39,225,'2026-07-22 11:03:08'),(3,2,8,23,135,'2026-07-21 11:03:08'),(4,2,1,41,255,'2026-07-19 11:03:08'),(5,2,9,5,73,'2026-07-25 10:08:36'),(6,2,6,6,102,'2026-07-25 10:10:36');
+INSERT INTO `workout_logs` (`id`, `user_id`, `workout_id`, `kcal_burned`, `duration_sec`, `target_seconds`, `blocks_completed`, `rest_added_seconds`, `skips_used`, `completed_at`) VALUES (1,2,1,41,255,250,5,30,0,'2026-07-23 11:03:08'),(2,2,4,39,225,220,4,30,0,'2026-07-22 11:03:08'),(3,2,8,23,135,130,3,15,0,'2026-07-21 11:03:08'),(4,2,1,41,255,250,5,30,0,'2026-07-19 11:03:08'),(5,2,9,5,73,70,2,15,0,'2026-07-25 10:08:36'),(6,2,6,6,102,100,2,15,0,'2026-07-25 10:10:36');
 /*!40000 ALTER TABLE `workout_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 

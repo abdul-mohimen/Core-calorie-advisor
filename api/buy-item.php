@@ -35,7 +35,7 @@ $st->execute([$itemId]);
 $item = $st->fetch();
 
 if (!$item) {
-    flash('err', 'Product nahi mila.');
+    flash('err', 'Product not found.');
     redirect('pages/shop.php');
 }
 
@@ -93,6 +93,6 @@ try {
         $pdo->rollBack();
     }
     @file_put_contents(dirname(__DIR__) . '/logs/shop-error.log', date('c') . ' shop ' . $e->getMessage() . PHP_EOL, FILE_APPEND | LOCK_EX);
-    flash('err', 'Order save nahi ho saka. Dobara koshish karein.');
+    flash('err', 'Order could not be saved. Please try again.');
     redirect('pages/checkout-shop.php?id=' . $itemId);
 }

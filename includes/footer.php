@@ -86,6 +86,7 @@ SVG;
 
 <?php endif; ?>
 </div><!-- /#app -->
+<script src="<?= asset('js/cca-i18n.js') ?>"></script>
 <script src="<?= asset('js/main.js') ?>"></script>
 <?php if (!$authMinimal): ?>
 <script src="<?= asset('js/chatbot.js') ?>"></script>

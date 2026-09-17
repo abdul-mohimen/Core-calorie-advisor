@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=600&q=60&auto=format&fit=crop" alt="3D workouts" class="w-2/5 h-full object-cover" loading="lazy">
       <div class="w-3/5 p-5 flex flex-col justify-center gap-1">
         <h3 class="text-sm font-bold text-gray-900 dark:text-white leading-tight">3D Animated Workouts</h3>
-        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">Living 3D trainer har exercise correct form, timing aur rest ke saath karta hai — bas follow karo.</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">Interactive 3D trainer demonstrates every exercise with precise biomechanics, pacing, and rest timers — simply follow along.</p>
       </div>
     </div>
     <div class="rv flex flex-row h-48 bg-white dark:bg-[#121212] rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 hover:border-brand-accent transition-all">
@@ -400,7 +400,7 @@ foreach ($catDefs as $slug => $def) {
     <div class="sb-txt">
       <span class="lock-tag">🔒 Pro Feature</span>
       <h2 class="text-gray-900 dark:text-white">AI Body Scanner — <span class="grad-text">Like Google Lens</span> For Your Body</h2>
-      <p>Camera apni taraf point karo. AI physique analyze kar ke batata hai gain ya cut, body fat estimate karta hai, aur perfect trainer + workout plan recommend karta hai.</p>
+      <p>Point your camera towards yourself. AI analyzes your physique to recommend cut or bulk pathways, estimates body composition, and matches you with a certified coach and routine.</p>
       <div class="hero-cta">
         <?php if ($u && $u['role'] === 'member'): ?>
           <a class="btn btn-fire" href="<?= url('pages/scanner-body.php') ?>">Open Scanner 🔬</a>

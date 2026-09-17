@@ -39,11 +39,11 @@ try {
 } catch (Throwable $e) {
     if (isset($pdo) && $pdo->inTransaction()) $pdo->rollBack();
     @file_put_contents(dirname(__DIR__) . '/logs/billing-error.log', date('c') . ' sandbox ' . $e->getMessage() . PHP_EOL, FILE_APPEND | LOCK_EX);
-    flash('err', 'Checkout mukammal nahi ho saka — dobara koshish karein.');
+    flash('err', 'Checkout could not be completed — please try again.');
     redirect('pages/checkout.php?plan=' . rawurlencode($plan));
 }
 
 $_SESSION['user']['plan'] = $plan;
 $method = post('payment_method', 'Gemini Pay');
-notify($uid, '🎉 ' . strtoupper($plan) . ' plan activated', 'Aap ka CCA ' . ucfirst($plan) . ' subscription active ho gaya hai (sandbox). Tamam PRO features ab unlocked hain.', 'success', 'pages/workouts.php');
+notify($uid, '🎉 ' . strtoupper($plan) . ' plan activated', 'Your Core Calorie Advisor ' . ucfirst($plan) . ' subscription is now active. All premium features are unlocked.', 'success', 'pages/workouts.php');
 redirect('pages/billing-success.php?mode=sandbox&method=' . urlencode($method));

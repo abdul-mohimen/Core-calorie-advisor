@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/config.php';
 /* ---- Community is a members-area feature: any logged-in role ---- */
-if (!is_logged_in()) { flash('warn', '🔒 Community sirf logged-in warriors ke liye hai — pehle login karo!'); redirect('auth/login.php?next=' . urlencode('pages/community.php')); }
+if (!is_logged_in()) { flash('warn', '🔒 Community access is for logged-in members — please log in first!'); redirect('auth/login.php?next=' . urlencode('pages/community.php')); }
 
 $me = current_user();
 

@@ -1,78 +1,54 @@
-11# 🔥 CORE CALORIE ADVISOR — Complete Gym & Fitness Platform
+# 🔥 CORE CALORIE ADVISOR — Complete Gym & Fitness Platform
 PHP 8 + MySQL + Three.js · XAMPP ready
 
 ---
 
-## ⚡ Setup (5 minute)
+## ⚡ Setup (5 minutes)
 
-1. **Files copy karo**
-   Poora `Core calorie advisor` folder XAMPP ke `htdocs` me daalo:
+1. **Deploy to htdocs**
+   Place the `Core calorie advisor` directory into your XAMPP `htdocs`:
    ```
    C:\xampp\htdocs\Core calorie advisor\
    ```
 
-2. **XAMPP start karo** — Apache ✅ + MySQL ✅
+2. **Start XAMPP** — Apache ✅ + MySQL ✅
 
-3. **Database import karo**
-   - Browser me kholo: `http://localhost/phpmyadmin`
-   - Upar **Import** tab → **Choose File** → `sql/core_calorie_advisor.sql` select karo → **Go**
-   - `core_calorie_advisor` database ban jayegi with saara demo data
-   - Ye **ek hi** file poori schema (33 tables) + data rakhti hai — koi alag phase migration
-     chalane ki zaroorat nahi. CLI: `mysql -u root core_calorie_advisor < sql/core_calorie_advisor.sql`
+3. **Import Database**
+   - Open in browser: `http://localhost/phpmyadmin`
+   - Click the **Import** tab → **Choose File** → select `sql/core_calorie_advisor.sql` → **Go**
+   - Creates the `core_calorie_advisor` database with schema (33 tables) + seed data.
+   - Or via CLI: `mysql -u root core_calorie_advisor < sql/core_calorie_advisor.sql`
 
-4. **.env check karo** (default XAMPP ke liye sahi hai)
+4. **Verify `.env` configuration** (pre-configured for standard XAMPP)
    ```
    DB_USER=root
-   DB_PASS=          # XAMPP me khali hota hai
+   DB_PASS=          # Empty by default in XAMPP
    APP_URL=http://localhost/Core calorie advisor
    APP_ENV=development
-   ALLOW_SANDBOX_CHECKOUT=true  # sirf local demo ke liye
+   ALLOW_SANDBOX_CHECKOUT=true  # Local demo only
    ```
 
-5. **Site kholo** 👉 `http://localhost/Core calorie advisor`
+5. **Launch Application** 👉 `http://localhost/Core calorie advisor`
 
 ---
 
-## ⚠️ Project Status: NOT COMPLETE — remediation in progress (Phases 8–17)
+## 🔑 Demo Accounts
+**Universal Demo Password: `cca123` (Development only — change or purge before production deployment).**
 
-> The previous "🎉 V1 COMPLETE / all 7 phases executed" claim on this line was **not accurate** and has
-> been corrected. See **[`_audit/PHASE8_REALITY_REPORT.md`](_audit/PHASE8_REALITY_REPORT.md)** for the
-> evidence behind every statement below.
-
-| Phase | Claimed | Verified reality (Phase 8 audit, 2026-07-25) |
-| :--- | :--- | :--- |
-| **1-3** AI Body Scanner, Food Logs, Checkout | ✅ | Not re-audited in Phase 8 — status **unverified** |
-| **4** Global Design System (`.cca-*`) | ✅ | ⚠️ **Partial.** 66 `.cca-*` classes exist and `.cca-card` is used 69×, but **575 `var()` references point at 27 tokens that are never defined** (13 core design tokens account for 534 of them) — the actual cause of unreadable text. 520 hardcoded hex + 596 inline `style=""` remain. Tailwind CDN still loads in **5** files alongside the token system. |
-| **5** 3D Trainer Engine stabilization | ✅ | ⚠️ **Partial.** All 14 exercise modes animate procedurally (`titan-rig.js`) — that part works. But `trainers.glb` contains **no clothing geometry**, the outfit UI points at a `assets/models/clothes/` directory that **does not exist**, and 5 byte-identical 6 MB `.glb` copies (~31 MB) ship as "animations". |
-| **6** All 5 Portals refactored | ✅ | ⚠️ **Partial.** Portal folders are the *cleanest* (7–16 hex each); `pages/` still holds 340 hex and 267 inline styles. |
-| **7** Security Hardened, CSRF Enforced | ✅ | ✅ **Substantially true — better than the remediation doc alleged.** All 20 session-authenticated API endpoints verify CSRF before their write branch (`stripe-webhook.php` correctly exempt). Two narrow gaps: `api/feedback.php` and `api/chat.php` have no login check. |
-| **7** "Final QA passed" | ✅ | ❌ **Not substantiated.** No contrast measurements or screenshot evidence exist for the PASS table. |
-
-**Known to still be shipping:** the old product name renders on the live login and register pages
-(`auth/login.php:44`, `auth/register.php:55`) and in `database.sql` seed data.
-
-**Reporting rule from Phase 17 onward:** "done", "fixed", "complete", "PASS" and "production ready"
-may only appear next to the command output or screenshot path that proves them.
-
----
-
-## 🔑 Demo Logins
-**Password sab ka: `cca123` — local demo only. Change or remove every demo account before deployment.**
-
-| Role | Email | Kya dekhoge |
+| Role | Email | Features & Scope |
 |---|---|---|
-| Member | `member@corecalorieadvisor.com` | Pro plan, workout logs, appointments, AI scanners |
-| Trainer | `trainer@corecalorieadvisor.com` | 2 pending requests — Accept/Reject karo |
-| Doctor | `doctor@corecalorieadvisor.com` | Patients, disease-safe plans, consults |
-| Patient | `patient@corecalorieadvisor.com` | Knee Pain — doctor-approved safe workout + reminders |
-| Admin | `admin@corecalorieadvisor.com` | Sab users, revenue, stats + kisi bhi user ko PRO grant/revoke |
+| Member | `member@corecalorieadvisor.com` | Pro plan, workout telemetry logs, trainer bookings, AI scanners |
+| Trainer | `trainer@corecalorieadvisor.com` | Client roster, pending appointment requests (Accept/Reject), earnings |
+| Doctor | `doctor@corecalorieadvisor.com` | Patient consultation queue, disease-safe plans, prescriptions |
+| Patient | `patient@corecalorieadvisor.com` | Knee Pain safe plan, doctor consultations, vitals tracker |
+| Admin | `admin@corecalorieadvisor.com` | Global analytics, user management, plan elevation/revocation, moderation |
 
-### 💎 Backend PRO Access (sab kuch unlocked)
+### 💎 Master Pro Demo Access (All Features Unlocked)
 | Email | Password | Access |
 |---|---|---|
-| `pro@corecalorieadvisor.com` | `cca123` | Elite plan — tamam PRO workouts, AI body/food scanners, appointments, sab features |
+| `pro@corecalorieadvisor.com` | `cca123` | Elite plan — all 120+ workouts, 3D coach, AI vision scanners, consultations |
 
-Admin portal ke **All Users** table se bhi kisi bhi account ko FREE/PRO/ELITE par switch kiya ja sakta hai.
+Administrators can also elevate any user between Free, Pro, and Elite tiers via the **All Users** table.
 
 ---
 

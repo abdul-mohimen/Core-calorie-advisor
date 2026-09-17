@@ -22,20 +22,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && post('mode') === 'request') {
                 @file_put_contents(dirname(__DIR__) . '/logs/password-reset.log', date('c') . ' ' . $email . ' ' . $resetUrl . PHP_EOL, FILE_APPEND | LOCK_EX);
             }
         }
-        $msg = 'Agar ye email registered hai to reset link bhej di gayi hai.';
+        $msg = 'If this email address is registered, a password reset link has been dispatched.';
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && post('mode') === 'reset') {
     $t = post('token'); $pass = post('password'); $passConfirm = post('password_confirm');
     $st = db()->prepare('SELECT email FROM password_resets WHERE token = ? AND expires_at > NOW() ORDER BY id DESC LIMIT 1');
     $st->execute([hash('sha256', $t)]); $row = $st->fetch();
-    if (!$row)                  { flash('err', 'Link expire ho gaya — dobara request karo.'); redirect('auth/forgot-password.php'); }
+    if (!$row)                  { flash('err', 'The password reset link has expired or is invalid — please request a new link.'); redirect('auth/forgot-password.php'); }
     elseif (!password_is_strong($pass))  { flash('err', 'Use 12+ characters with uppercase, lowercase and a number.'); redirect('auth/forgot-password.php?token=' . urlencode($t)); }
     elseif (!hash_equals($pass, $passConfirm)) { flash('err', 'Password confirmation does not match.'); redirect('auth/forgot-password.php?token=' . urlencode($t)); }
     else {
         db()->prepare('UPDATE users SET password_hash = ? WHERE email = ?')->execute([password_hash($pass, PASSWORD_DEFAULT), $row['email']]);
         db()->prepare('DELETE FROM password_resets WHERE email = ?')->execute([$row['email']]);
-        flash('ok', '✔ Password change ho gaya — ab login karo!');
+        flash('ok', '✔ Password successfully updated — please log in with your new password!');
         redirect('auth/login.php');
     }
 }

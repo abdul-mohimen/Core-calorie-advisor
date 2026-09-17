@@ -60,8 +60,8 @@ include dirname(__DIR__) . '/includes/header.php';
   <?php if (!$rows): ?>
     <div class="cca-card" style="text-align:center; padding:64px 24px">
       <div class="cca-card__icon" style="margin:0 auto 16px">🛒</div>
-      <h3 class="cca-card__title" style="justify-content:center">Cart khali hai</h3>
-      <p class="cca-card__subtitle" style="margin-bottom:20px">Shop se koi product "Add to Cart" karein.</p>
+      <h3 class="cca-card__title" style="justify-content:center">Your Cart is Empty</h3>
+      <p class="cca-card__subtitle" style="margin-bottom:20px">Explore our gear and supplements to add items to your cart.</p>
       <a class="wk-btn wk-btn-open" style="max-width:220px; margin:0 auto" href="<?= url('pages/shop.php') ?>">Browse Shop</a>
     </div>
   <?php else: ?>
