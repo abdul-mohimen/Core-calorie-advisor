@@ -8,17 +8,17 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     ? url($next) : url('pages/workouts.php');
 ?>
 
-<section class="cca-hero" style="min-height:auto;padding-block:clamp(28px,5vw,56px)">
+<section class="cca-hero" style="min-height:auto;padding-block:clamp(28px,5vw,52px)">
   <div class="cca-hero__overlay"></div>
   <div class="cca-hero__content" style="display:block">
     <div class="cca-hero__breadcrumb">
       <a href="<?= url('index.php') ?>">Home</a> <span class="sep">›</span>
       <a href="<?= url('pages/workouts.php') ?>">Workouts</a> <span class="sep">›</span> Trainer Studio
     </div>
-    <div class="cca-hero__badge cca-hero__badge--pro"><span class="dot"></span> 3D Locker Room · Free Fire &amp; GTA Style Customization</div>
+    <div class="cca-hero__badge cca-hero__badge--pro"><span class="dot"></span> Free Fire &amp; GTA Style 3D Customization</div>
     <h1 class="cca-hero__title" style="margin-bottom:8px">Trainer <span class="grad">Studio</span></h1>
     <p class="cca-hero__subtitle" style="max-width:64ch">
-      Equip your coach with genuine 3D apparel, bone-socketed accessories, lifting belts, biometric watches, dumbbells, and VFX auras. Your custom loadout persists into every live workout.
+      Customise your 3D coach with genuine modular workout apparel (gym tanks, lifting shorts, hoodies), bone-socket accessories, and animated VFX auras.
     </p>
   </div>
 </section>
@@ -26,11 +26,119 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
 <section class="studio-page">
   <div id="studioGrid">
 
-    <!-- ══ live 3D preview ══ -->
+    <!-- ══ LEFT: Free Fire & GTA Style Customization Controls ══ -->
+    <aside class="studio-controls" aria-label="Trainer customization controls">
+      <div class="studio-controls-head">
+        <span class="studio-kicker">Locker Room Vault</span>
+        <h2>Customise Coach</h2>
+        <p>Switch workout tops, shorts, tracksuits, accessories and energy rings.</p>
+      </div>
+
+      <!-- Live Equipped HUD summary -->
+      <div class="studio-selection" id="studioSelection" aria-live="polite"></div>
+
+      <!-- Free Fire Style Category Navigation Bar -->
+      <div class="st-tabs-nav" role="tablist" aria-label="Customization categories">
+        <button type="button" class="st-tab-btn active" data-tab="presets" role="tab" aria-selected="true"><span class="tab-icon">🥋</span> Presets</button>
+        <button type="button" class="st-tab-btn" data-tab="tops" role="tab" aria-selected="false"><span class="tab-icon">👕</span> Tops</button>
+        <button type="button" class="st-tab-btn" data-tab="bottoms" role="tab" aria-selected="false"><span class="tab-icon">🩳</span> Bottoms</button>
+        <button type="button" class="st-tab-btn" data-tab="shoes" role="tab" aria-selected="false"><span class="tab-icon">👟</span> Shoes</button>
+        <button type="button" class="st-tab-btn" data-tab="headwear" role="tab" aria-selected="false"><span class="tab-icon">🎧</span> Headwear</button>
+        <button type="button" class="st-tab-btn" data-tab="gear" role="tab" aria-selected="false"><span class="tab-icon">⚡</span> Gear</button>
+        <button type="button" class="st-tab-btn" data-tab="auras" role="tab" aria-selected="false"><span class="tab-icon">✨</span> Auras</button>
+        <button type="button" class="st-tab-btn" data-tab="poses" role="tab" aria-selected="false"><span class="tab-icon">🏃</span> Poses</button>
+      </div>
+
+      <!-- Tab Content Panels -->
+      <div class="st-tab-panels">
+        <!-- Tab 1: Presets & Body Archetypes -->
+        <div class="st-panel active" id="panelPresets" role="tabpanel">
+          <div class="studio-control-groups">
+            <div id="studioTrainers"></div>
+            <div id="studioOutfits"></div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Tops / Shirts -->
+        <div class="st-panel" id="panelTops" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">Workout Tops &amp; Apparel</span>
+            <p class="st-panel-sub">Modular 3D upper-body activewear.</p>
+          </div>
+          <div class="st-gear-grid" id="studioTops"></div>
+        </div>
+
+        <!-- Tab 3: Bottoms / Shorts / Pants -->
+        <div class="st-panel" id="panelBottoms" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">Workout Shorts &amp; Pants</span>
+            <p class="st-panel-sub">Cut for functional lifting, squats, and agility.</p>
+          </div>
+          <div class="st-gear-grid" id="studioBottoms"></div>
+        </div>
+
+        <!-- Tab 4: Shoes -->
+        <div class="st-panel" id="panelShoes" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">Footwear</span>
+            <p class="st-panel-sub">High-traction training footwear.</p>
+          </div>
+          <div class="st-gear-grid" id="studioShoes"></div>
+        </div>
+
+        <!-- Tab 5: Headwear -->
+        <div class="st-panel" id="panelHeadwear" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">Headwear &amp; Acoustic Audio</span>
+            <p class="st-panel-sub">Mounts cleanly to cranial bones with zero mesh clipping.</p>
+          </div>
+          <div class="st-gear-grid" id="studioHeadwear"></div>
+        </div>
+
+        <!-- Tab 6: Gear (Belt, Watch, Wraps, Dumbbells) -->
+        <div class="st-panel" id="panelGear" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">Olympic &amp; Biometric Gear</span>
+            <p class="st-panel-sub">Skeletal bone-mounted training gear.</p>
+          </div>
+          <div class="st-gear-grid" id="studioGear"></div>
+        </div>
+
+        <!-- Tab 7: VFX Auras -->
+        <div class="st-panel" id="panelAuras" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">VFX Energy Rings</span>
+            <p class="st-panel-sub">Dynamic Three.js rings synchronized to workout cadence.</p>
+          </div>
+          <div class="st-gear-grid" id="studioAuras"></div>
+        </div>
+
+        <!-- Tab 8: Exercise Poses -->
+        <div class="st-panel" id="panelPoses" role="tabpanel">
+          <div class="st-panel-header">
+            <span class="st-group-label">Movement Animations</span>
+            <p class="st-panel-sub">Test procedural kinematics in real-time.</p>
+          </div>
+          <div class="st-gear-grid" id="studioPosesTab"></div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="studio-actions">
+        <a id="studioDone" class="cca-btn cca-btn-primary" href="<?= e($backUrl) ?>"
+           style="flex:1 1 180px;text-align:center;text-decoration:none">Save &amp; Continue <span aria-hidden="true">→</span></a>
+        <button type="button" id="studioReset" class="cca-btn cca-btn-ghost" style="flex:0 0 auto">Reset</button>
+      </div>
+      <p class="studio-save-note" style="margin:0;font:500 11.5px/1.6 system-ui;color:var(--muted,#8b93a1)">
+        <span aria-hidden="true">✓</span> Saved locally. Your custom 3D clothes and gear carry directly into live workout sessions.
+      </p>
+    </aside>
+
+    <!-- ══ RIGHT: 3D Model Viewport & Showcase Pedestal (Free Fire Style) ══ -->
     <div class="studio-preview-wrap">
       <div class="studio-preview-head">
         <div>
-          <span class="studio-kicker"><i></i> Live 3D Locker Room</span>
+          <span class="studio-kicker"><i></i> Live 3D Viewport</span>
           <h2>Your Training Partner</h2>
         </div>
         <div class="studio-head-badges">
@@ -42,7 +150,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
       <div id="studioStage" class="studio-stage"
            style="position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--line,rgba(255,255,255,.12));
                   background:radial-gradient(120% 90% at 50% 0%,#1b1f28 0%,#0f1116 60%,#0b0d11 100%);
-                  aspect-ratio:4/5;min-height:420px;max-height:min(74vh,680px)">
+                  aspect-ratio:4/5;min-height:440px;max-height:min(76vh,720px)">
         <div id="studioLoading" class="studio-loading"
              style="position:absolute;inset:0;display:grid;place-items:center;font:700 11px/1 ui-monospace,monospace;
                     letter-spacing:3px;text-transform:uppercase;color:#FF6B1A">Loading trainer…</div>
@@ -64,97 +172,25 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
       </div>
 
       <p class="studio-preview-note" style="margin-top:10px;font:500 12px/1.5 system-ui;color:var(--muted,#8b93a1)">
-        Bone-socket equipment moves in real-time physics with every squat, curl, and pushup. 0% mesh tearing.
+        Kinematics updated: arms and hands stay cleanly in front during squats, bicep curls, and warm-ups. Zero backwards clipping.
       </p>
     </div>
 
-    <!-- ══ locker room controls ══ -->
-    <aside class="studio-controls" aria-label="Trainer customization controls">
-      <div class="studio-controls-head">
-        <span class="studio-kicker">Locker Room Setup</span>
-        <h2>Equip Your Coach</h2>
-        <p>Switch between body archetypes, high-performance gear, socketed wearables, and animated auras.</p>
-      </div>
-
-      <!-- Live Equipped HUD summary -->
-      <div class="studio-selection" id="studioSelection" aria-live="polite"></div>
-
-      <!-- Category Navigation Tabs -->
-      <div class="st-tabs-nav" role="tablist" aria-label="Customization categories">
-        <button type="button" class="st-tab-btn active" data-tab="outfits" role="tab" aria-selected="true"><span class="tab-icon">🥋</span> Outfits</button>
-        <button type="button" class="st-tab-btn" data-tab="headwear" role="tab" aria-selected="false"><span class="tab-icon">🎧</span> Headwear</button>
-        <button type="button" class="st-tab-btn" data-tab="gear" role="tab" aria-selected="false"><span class="tab-icon">⚡</span> Gear</button>
-        <button type="button" class="st-tab-btn" data-tab="auras" role="tab" aria-selected="false"><span class="tab-icon">✨</span> Auras</button>
-        <button type="button" class="st-tab-btn" data-tab="poses" role="tab" aria-selected="false"><span class="tab-icon">🏋️</span> Poses</button>
-      </div>
-
-      <!-- Tab Content Panels -->
-      <div class="st-tab-panels">
-        <!-- Tab 1: Outfits & Trainers -->
-        <div class="st-panel active" id="panelOutfits" role="tabpanel">
-          <div class="studio-control-groups">
-            <div id="studioTrainers"></div>
-            <div id="studioOutfits"></div>
-          </div>
-        </div>
-
-        <!-- Tab 2: Headwear -->
-        <div class="st-panel" id="panelHeadwear" role="tabpanel">
-          <div class="st-panel-header">
-            <span class="st-group-label">Bone-Mounted Head Accessories</span>
-            <p class="st-panel-sub">Mounts directly to cranial joints without mesh clipping.</p>
-          </div>
-          <div class="st-gear-grid" id="studioHeadwear"></div>
-        </div>
-
-        <!-- Tab 3: Gear (Belt, Watch, Wraps, Dumbbells) -->
-        <div class="st-panel" id="panelGear" role="tabpanel">
-          <div class="st-panel-header">
-            <span class="st-group-label">Olympic &amp; Biometric Gear</span>
-            <p class="st-panel-sub">Dynamic skeletal joints follow spinal rotation and arm flexion.</p>
-          </div>
-          <div class="st-gear-grid" id="studioGear"></div>
-        </div>
-
-        <!-- Tab 4: VFX Auras -->
-        <div class="st-panel" id="panelAuras" role="tabpanel">
-          <div class="st-panel-header">
-            <span class="st-group-label">VFX Energy Rings &amp; Auras</span>
-            <p class="st-panel-sub">Three.js dynamic particle rings animated to your workout cadence.</p>
-          </div>
-          <div class="st-gear-grid" id="studioAuras"></div>
-        </div>
-
-        <!-- Tab 5: Exercise Poses -->
-        <div class="st-panel" id="panelPoses" role="tabpanel">
-          <div class="st-panel-header">
-            <span class="st-group-label">Movement Animations</span>
-            <p class="st-panel-sub">Test procedural exercise kinematics in real-time.</p>
-          </div>
-          <div class="st-gear-grid" id="studioPosesTab"></div>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="studio-actions">
-        <a id="studioDone" class="cca-btn cca-btn-primary" href="<?= e($backUrl) ?>"
-           style="flex:1 1 190px;text-align:center;text-decoration:none">Save &amp; Continue <span aria-hidden="true">→</span></a>
-        <button type="button" id="studioReset" class="cca-btn cca-btn-ghost" style="flex:0 0 auto">Reset</button>
-      </div>
-      <p class="studio-save-note" style="margin:0;font:500 11.5px/1.6 system-ui;color:var(--muted,#8b93a1)">
-        <span aria-hidden="true">✓</span> Saved locally. Your custom trainer appearance, gear and VFX sync into every live workout session.
-      </p>
-    </aside>
   </div>
 </section>
 
 <style>
-/* ══ Locker Room Grid & Typography ══ */
-.studio-page{max-width:1320px;margin:0 auto;padding:10px clamp(16px,3vw,34px) 84px}
+/* ══ Free Fire & GTA Style Grid Layout ══ */
+.studio-page{max-width:1380px;margin:0 auto;padding:10px clamp(16px,3vw,34px) 84px}
 #studioGrid{display:grid;gap:clamp(20px,3vw,36px);grid-template-columns:minmax(0,1fr)}
 @media (min-width: 960px){
-  #studioGrid{grid-template-columns:minmax(0,1.15fr) 420px;align-items:start}
+  /* Free Fire layout: Controls on LEFT (460px), Model Viewport on RIGHT */
+  #studioGrid{grid-template-columns:460px minmax(0,1fr);align-items:start}
   .studio-controls{position:sticky;top:calc(var(--nav-h, 72px) + 16px)}
+}
+@media (max-width: 959px){
+  /* Mobile / tablet: Stage on top, controls below */
+  #studioGrid{display:flex;flex-direction:column-reverse}
 }
 
 .studio-preview-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 2px 14px}
@@ -173,7 +209,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
 .studio-loading::before{content:"";position:absolute;width:42px;height:42px;border:2px solid color-mix(in srgb,var(--primary,#FF6B1A) 22%,transparent);border-top-color:var(--primary,#FF6B1A);border-radius:50%;animation:studioSpin .9s linear infinite}
 @keyframes studioSpin{to{transform:rotate(360deg)}}
 
-.studio-name{left:16px!important;bottom:16px!important;z-index:3!important;padding:8px 14px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(7,9,13,.7);backdrop-filter:blur(12px);font-family:var(--font-tech, system-ui)!important;letter-spacing:.03em;max-width:calc(100% - 140px)}
+.studio-name{left:16px!important;bottom:16px!important;z-index:3!important;padding:8px 14px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(7,9,13,.75);backdrop-filter:blur(12px);font-family:var(--font-tech, system-ui)!important;letter-spacing:.03em;max-width:calc(100% - 140px)}
 .studio-pose{left:12px!important;right:12px!important;top:12px!important;gap:6px!important;z-index:3!important}
 
 /* Auto-spin turntable button */
@@ -183,25 +219,25 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
 .studio-spin-btn.active .spin-icon{display:inline-block;animation:studioSpin 4s linear infinite}
 
 /* ══ Controls Container ══ */
-.studio-controls{display:flex;flex-direction:column;gap:18px;padding:22px;border:1px solid color-mix(in srgb,var(--primary,#FF6B1A) 16%,var(--line,rgba(255,255,255,.12)));border-radius:24px;background:linear-gradient(150deg,rgba(24,28,38,.85),rgba(12,14,20,.95));backdrop-filter:blur(16px);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.studio-controls{display:flex;flex-direction:column;gap:16px;padding:22px;border:1px solid color-mix(in srgb,var(--primary,#FF6B1A) 16%,var(--line,rgba(255,255,255,.12)));border-radius:24px;background:linear-gradient(150deg,rgba(24,28,38,.85),rgba(12,14,20,.95));backdrop-filter:blur(16px);box-shadow:0 20px 40px rgba(0,0,0,.35)}
 .studio-controls-head p{margin:6px 0 0;color:var(--text-2,#9ca3af);font-size:13.5px;line-height:1.55}
 
 /* Equipped HUD summary bar */
-.studio-selection{padding:12px 15px;border:1px solid color-mix(in srgb,var(--primary,#FF6B1A) 24%,rgba(255,255,255,.1));border-radius:14px;background:rgba(255,107,26,.06);color:var(--text-1,#fff);font:600 13px/1.45 var(--font-tech, system-ui)}
+.studio-selection{padding:12px 14px;border:1px solid color-mix(in srgb,var(--primary,#FF6B1A) 24%,rgba(255,255,255,.1));border-radius:14px;background:rgba(255,107,26,.06);color:var(--text-1,#fff);font:600 13px/1.45 var(--font-tech, system-ui)}
 .studio-selection-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#FF6B1A;font-weight:800}
 .studio-selection-name{font:800 15px/1.2 var(--font-tech, system-ui);color:#fff;margin-bottom:6px}
 .studio-selection-chips{display:flex;flex-wrap:wrap;gap:5px}
 .st-loadout-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#cbd5e1;font:650 10.5px/1 var(--font-tech, system-ui)}
 
-/* ══ Category Tabs ══ */
-.st-tabs-nav{display:flex;gap:5px;padding:5px;background:rgba(0,0,0,.45);border-radius:14px;border:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}
+/* ══ Category Tabs (Free Fire Horizontal Navigation) ══ */
+.st-tabs-nav{display:flex;gap:4px;padding:5px;background:rgba(0,0,0,.45);border-radius:14px;border:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}
 .st-tabs-nav::-webkit-scrollbar{display:none}
-.st-tab-btn{flex:1 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--text-2,#94a3b8);font:700 11.5px/1 var(--font-tech, system-ui);cursor:pointer;transition:all .18s ease;text-transform:uppercase;letter-spacing:.05em}
+.st-tab-btn{flex:1 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--text-2,#94a3b8);font:700 11px/1 var(--font-tech, system-ui);cursor:pointer;transition:all .18s ease;text-transform:uppercase;letter-spacing:.04em}
 .st-tab-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
 .st-tab-btn.active{color:#fff;background:linear-gradient(135deg,rgba(255,107,26,.36),rgba(255,184,0,.15));border-color:#FF6B1A;box-shadow:0 4px 14px rgba(255,107,26,.25)}
 
 /* Tab Panels */
-.st-tab-panels{min-height:220px}
+.st-tab-panels{min-height:240px}
 .st-panel{display:none}
 .st-panel.active{display:block;animation:stFadeIn .22s cubic-bezier(0.16,1,0.3,1)}
 @keyframes stFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -209,8 +245,8 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
 .st-panel-sub{margin:3px 0 0;font:500 11.5px/1.4 system-ui;color:var(--muted,#8b93a1)}
 
 /* ══ Gear Item Cards (AAA Free Fire / GTA Locker Room) ══ */
-.st-gear-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
-.st-gear-card{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--text-1,#dfe3ea);cursor:pointer;transition:all .2s cubic-bezier(0.16,1,0.3,1);text-align:left;position:relative;overflow:hidden}
+.st-gear-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:9px}
+.st-gear-card{display:flex;flex-direction:column;gap:5px;padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--text-1,#dfe3ea);cursor:pointer;transition:all .2s cubic-bezier(0.16,1,0.3,1);text-align:left;position:relative;overflow:hidden}
 .st-gear-card:hover{transform:translateY(-2px);border-color:rgba(255,107,26,.45);background:rgba(255,255,255,.05);box-shadow:0 8px 20px rgba(0,0,0,.3)}
 
 /* Rarity Accents */
@@ -220,13 +256,13 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
 .st-gear-card[data-rarity="legendary"] .st-badge-rarity{color:#f59e0b;border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.18);font-weight:800}
 
 .st-gear-card-top{display:flex;align-items:center;justify-content:space-between;width:100%}
-.st-badge-rarity{padding:2px 6px;border-radius:5px;border:1px solid;font:800 9px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
-.st-gear-icon{font-size:22px;line-height:1}
-.st-gear-name{font:800 13.5px/1.2 var(--font-tech, system-ui);color:#fff;letter-spacing:.01em}
-.st-gear-type{font:700 10.5px/1 var(--font-tech, monospace);color:var(--text-3,#9ca3af);text-transform:uppercase;letter-spacing:.06em}
-.st-gear-desc{font:500 11px/1.35 system-ui;color:var(--text-2,#9ca3af);opacity:.85}
+.st-badge-rarity{padding:2px 5px;border-radius:5px;border:1px solid;font:800 8.5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
+.st-gear-icon{font-size:20px;line-height:1}
+.st-gear-name{font:800 13px/1.2 var(--font-tech, system-ui);color:#fff;letter-spacing:.01em}
+.st-gear-type{font:700 10px/1 var(--font-tech, monospace);color:var(--text-3,#9ca3af);text-transform:uppercase;letter-spacing:.06em}
+.st-gear-desc{font:500 10.5px/1.35 system-ui;color:var(--text-2,#9ca3af);opacity:.85}
 
-.st-gear-card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font:700 10.5px/1 var(--font-tech, system-ui);letter-spacing:.04em}
+.st-gear-card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font:700 10px/1 var(--font-tech, system-ui);letter-spacing:.04em}
 .st-gear-status{display:inline-flex;align-items:center;gap:3px;color:var(--text-3,#8b93a1)}
 
 /* Active / Equipped Gear Card */
@@ -236,17 +272,17 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
 
 /* Legacy Trainer & Kit Card styles */
 .st-group-label{font:800 10px/1 ui-monospace,monospace;letter-spacing:2.2px;text-transform:uppercase;color:#FF6B1A;margin-bottom:8px;display:block}
-.st-row{display:flex;flex-wrap:wrap;gap:9px}
-.st-card{display:flex;flex-direction:column;gap:3px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1px solid var(--line,rgba(255,255,255,.12));background:rgba(255,255,255,.04);color:var(--fg,#dfe3ea);cursor:pointer;flex:1 1 150px;transition:.16s;text-align:left}
+.st-row{display:flex;flex-wrap:wrap;gap:8px}
+.st-card{display:flex;flex-direction:column;gap:3px;align-items:flex-start;padding:11px 13px;border-radius:14px;border:1px solid var(--line,rgba(255,255,255,.12));background:rgba(255,255,255,.04);color:var(--fg,#dfe3ea);cursor:pointer;flex:1 1 140px;transition:.16s;text-align:left}
 .st-card:hover{border-color:rgba(255,107,26,.5);transform:translateY(-1px)}
 .st-card[aria-pressed="true"]{border-color:#FF6B1A;background:linear-gradient(135deg,rgba(255,107,26,.26),rgba(255,184,0,.09));color:#fff;box-shadow:inset 3px 0 0 #FF6B1A}
-.st-card b{font:800 14.5px/1.1 var(--font-tech, system-ui)}
+.st-card b{font:800 14px/1.1 var(--font-tech, system-ui)}
 .st-card span{font:500 11px/1.35 system-ui;opacity:.75}
 
-.st-kit{display:flex;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#dfe3ea;font:700 12.5px/1 var(--font-tech, system-ui);cursor:pointer;transition:.16s}
+.st-kit{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#dfe3ea;font:700 12px/1 var(--font-tech, system-ui);cursor:pointer;transition:.16s}
 .st-kit:hover{border-color:rgba(255,107,26,.5)}
 .st-kit[aria-pressed="true"]{border-color:#FF6B1A;background:rgba(255,107,26,.22);color:#fff;font-weight:800}
-.st-kit i{width:20px;height:20px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.28)}
+.st-kit i{width:18px;height:18px;border-radius:50%;display:block;border:2px solid rgba(255,255,255,.28)}
 
 .st-pose{padding:6px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(10,12,16,.68);color:#cfd5df;font:700 10px/1 ui-monospace,monospace;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(6px);transition:.16s}
 .st-pose:hover,.st-pose[aria-pressed="true"]{border-color:#FF6B1A;color:#fff;background:rgba(255,107,26,.32)}
@@ -263,7 +299,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
   .studio-controls{padding:18px;border-radius:18px}
   .studio-drag-hint{display:none}
   .st-card{flex-basis:100%}
-  .st-gear-grid{grid-template-columns:1fr}
+  .st-gear-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 
@@ -292,7 +328,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
   var autoRotate = true;
   var audioCtx = null;
 
-  /* ══ Web Audio Equip Sound Effects ══ */
+  /* ══ Web Audio Acoustic Feedback ══ */
   function playEquipSound(rarity) {
     try {
       if (!audioCtx) {
@@ -308,34 +344,30 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
       gain.connect(audioCtx.destination);
 
       if (rarity === 'legendary') {
-        // Shimmering Golden Arpeggio
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, now);       // C5
-        osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.16); // C6
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.16);
         gain.gain.setValueAtTime(0.12, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
         osc.start(now);
         osc.stop(now + 0.22);
       } else if (rarity === 'epic') {
-        // High-Tech Synth Pulse
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, now);          // A4
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12); // A5
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
         gain.gain.setValueAtTime(0.1, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
         osc.start(now);
         osc.stop(now + 0.15);
       } else if (rarity === 'rare') {
-        // Cyan Biometric Blip
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, now);       // D5
+        osc.frequency.setValueAtTime(587.33, now);
         osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
         gain.gain.setValueAtTime(0.08, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
         osc.start(now);
         osc.stop(now + 0.1);
       } else {
-        // Crisp Tactical Snap
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(320, now);
         osc.frequency.exponentialRampToValueAtTime(160, now + 0.05);
@@ -344,12 +376,10 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         osc.start(now);
         osc.stop(now + 0.06);
       }
-    } catch (e) {
-      // AudioContext gestures handled safely
-    }
+    } catch (e) {}
   }
 
-  /* ══ Scene & Camera Initialization ══ */
+  /* ══ Three.js Scene Setup ══ */
   scene = new THREE.Scene();
   cam = new THREE.PerspectiveCamera(36, 4 / 5, 0.1, 60);
   rend = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -357,13 +387,13 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
   stage.appendChild(rend.domElement);
   rend.domElement.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block';
   
-  // Lighting
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x1b1f28, 1.1));
+  // High-contrast PBR lighting
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x1b1f28, 1.15));
   var key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(-2.2, 3.2, 3.0); scene.add(key);
   var fill = new THREE.DirectionalLight(0xffd9b0, 0.9); fill.position.set(2.6, 1.4, -2.2); scene.add(fill);
   var rim = new THREE.DirectionalLight(0x9dc4ff, 0.75); rim.position.set(0, 2.4, -3.4); scene.add(rim);
 
-  /* ══ 3D Turntable Circular Pedestal ══ */
+  /* ══ Turntable Circular Pedestal ══ */
   var pedestalGroup = new THREE.Group();
   var diskGeo = new THREE.CylinderGeometry(1.1, 1.2, 0.04, 48);
   var diskMat = new THREE.MeshStandardMaterial({
@@ -496,8 +526,25 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         console.error('[studio] Error inside onLoad:', innerErr);
       }
     }, undefined, function (e) {
-      console.warn('[studio] model failed', e);
-      document.getElementById('studioLoading').textContent = 'Could not load this trainer';
+      console.warn('[studio] model failed, trying fallback...', e);
+      if (t.fallbackFile) {
+        new THREE.GLTFLoader().load('../' + t.fallbackFile, function (g) {
+          if (root) scene.remove(root);
+          root = g.scene;
+          W.uncull(root);
+          if (window.CCARig && CCARig.styleModel) CCARig.styleModel(root);
+          fitByBones(root, FIT_H);
+          scene.add(root);
+          if (window.CCARig && CCARig.attach) CCARig.attach(root);
+          W.apply(root, ld);
+          resize(); placeCamera();
+          document.getElementById('studioLoading').style.display = 'none';
+          updateStudioNameHUD();
+          if (!raf) loop();
+        });
+      } else {
+        document.getElementById('studioLoading').textContent = 'Could not load this trainer';
+      }
     });
   }
 
@@ -538,10 +585,13 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     placeCamera();
   }, { passive: false });
 
-  /* ══ Category Tab Switching ══ */
+  /* ══ Free Fire Category Tab Switching ══ */
   var tabButtons = document.querySelectorAll('.st-tab-btn');
   var panels = {
-    outfits: document.getElementById('panelOutfits'),
+    presets: document.getElementById('panelPresets'),
+    tops: document.getElementById('panelTops'),
+    bottoms: document.getElementById('panelBottoms'),
+    shoes: document.getElementById('panelShoes'),
     headwear: document.getElementById('panelHeadwear'),
     gear: document.getElementById('panelGear'),
     auras: document.getElementById('panelAuras'),
@@ -574,7 +624,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
       if (ld[k]) extrasCount++;
     });
     if (ld.aura) extrasCount++;
-    nameEl.textContent = t.name + ' · ' + t.build + (extrasCount ? ' (' + extrasCount + ' Gear Equipped)' : '');
+    nameEl.textContent = t.name + ' · ' + (ld.top === 'tank' ? 'Gym Tank' : 'Hoodie') + (extrasCount ? ' (' + extrasCount + ' Gear Equipped)' : '');
   }
 
   function updateSelectionHUD() {
@@ -584,6 +634,14 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     var outfit = W.outfitsFor(ld.trainer).filter(function (o) { return o.id === ld.outfit; })[0];
     
     var chips = [];
+    if (ld.top === 'tank') chips.push('<span class="st-loadout-chip" style="border-color:#FF6B1A;color:#FF6B1A">👕 Gym Tank</span>');
+    else chips.push('<span class="st-loadout-chip">👕 Hoodie</span>');
+
+    if (ld.bottom === 'shorts') chips.push('<span class="st-loadout-chip" style="border-color:#FF6B1A;color:#FF6B1A">🩳 Lifting Shorts</span>');
+    else chips.push('<span class="st-loadout-chip">🩳 Trackpants</span>');
+
+    if (ld.shoes === 'hightops') chips.push('<span class="st-loadout-chip">👟 High-Tops</span>');
+
     if (ld.cap && ld.trainer === 'street') chips.push('<span class="st-loadout-chip">🧢 Cap</span>');
     if (ld.headphones) chips.push('<span class="st-loadout-chip">🎧 Cyber Audio</span>');
     if (ld.visor) chips.push('<span class="st-loadout-chip">🥽 HUD Visor</span>');
@@ -600,12 +658,12 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     mount.innerHTML = 
       '<div class="studio-selection-header"><span>Active Loadout</span><span>Synchronized</span></div>' +
       '<div class="studio-selection-name">' + trainer.name + ' <span style="opacity:0.6">·</span> ' + (outfit ? outfit.name : 'Signature Kit') + '</div>' +
-      '<div class="studio-selection-chips">' + (chips.length ? chips.join('') : '<span class="st-loadout-chip" style="opacity:0.6">Standard Apparel Only</span>') + '</div>';
+      '<div class="studio-selection-chips">' + (chips.length ? chips.join('') : '<span class="st-loadout-chip" style="opacity:0.6">Standard Apparel</span>') + '</div>';
     
     updateStudioNameHUD();
   }
 
-  /* ══ Render Outfits Tab ══ */
+  /* ══ Presets Tab ══ */
   function group(mount, label) {
     mount.innerHTML = '';
     var l = document.createElement('span'); l.className = 'st-group-label'; l.textContent = label;
@@ -615,7 +673,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
   }
 
   function renderTrainers() {
-    var row = group(document.getElementById('studioTrainers'), 'Trainer Body Archetype');
+    var row = group(document.getElementById('studioTrainers'), 'Character Body Archetype');
     W.TRAINERS.forEach(function (t) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'st-card';
@@ -629,6 +687,8 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         playEquipSound('epic');
         renderTrainers();
         renderOutfits();
+        renderTops();
+        renderBottoms();
         renderHeadwear();
         updateSelectionHUD();
         loadTrainer();
@@ -638,7 +698,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
   }
 
   function renderOutfits() {
-    var row = group(document.getElementById('studioOutfits'), 'Performance Kit / Colorway');
+    var row = group(document.getElementById('studioOutfits'), 'Signature Colorway');
     W.outfitsFor(ld.trainer).forEach(function (o) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'st-kit';
@@ -656,7 +716,146 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     });
   }
 
-  /* ══ Headwear Items Definition ══ */
+  /* ══ Tops (Workout Shirts / Tanks / Hoodies) ══ */
+  var TOPS = [
+    {
+      id: 'hoodie',
+      name: 'Oversized Street Hoodie',
+      type: 'Streetwear Top',
+      rarity: 'common',
+      icon: '🧥',
+      desc: 'Comfortable heavyweight cotton hoodie with full athletic sleeves.'
+    },
+    {
+      id: 'tank',
+      name: 'Gym Stringer Tank',
+      type: 'Athletic Tank',
+      rarity: 'epic',
+      icon: '👕',
+      desc: 'Sleeveless deep-cut lifting stringer showing shoulder & arm definition.'
+    }
+  ];
+
+  function renderTops() {
+    var grid = document.getElementById('studioTops');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    TOPS.forEach(function (item) {
+      var card = document.createElement('div');
+      card.className = 'st-gear-card';
+      card.setAttribute('data-rarity', item.rarity);
+      var isEquipped = (ld.top || 'hoodie') === item.id;
+      card.setAttribute('aria-pressed', isEquipped ? 'true' : 'false');
+      card.innerHTML = 
+        '<div class="st-gear-card-top"><span class="st-gear-icon">' + item.icon + '</span><span class="st-badge-rarity">' + item.rarity.toUpperCase() + '</span></div>' +
+        '<div class="st-gear-name">' + item.name + '</div>' +
+        '<div class="st-gear-type">' + item.type + '</div>' +
+        '<div class="st-gear-desc">' + item.desc + '</div>' +
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
+      card.onclick = function () {
+        ld.top = item.id;
+        W.save(ld);
+        playEquipSound(item.rarity);
+        renderTops();
+        updateSelectionHUD();
+        if (root) W.apply(root, ld);
+      };
+      grid.appendChild(card);
+    });
+  }
+
+  /* ══ Bottoms (Shorts / Pants) ══ */
+  var BOTTOMS = [
+    {
+      id: 'trackpants',
+      name: 'Streetwear Trackpants',
+      type: 'Joggers',
+      rarity: 'common',
+      icon: '👖',
+      desc: 'Baggy heavyweight cotton sweatpants with tapered cuffs.'
+    },
+    {
+      id: 'shorts',
+      name: 'Olympic Lifting Shorts',
+      type: 'Workout Shorts',
+      rarity: 'rare',
+      icon: '🩳',
+      desc: 'Above-the-knee athletic lifting shorts tailored for full squats.'
+    }
+  ];
+
+  function renderBottoms() {
+    var grid = document.getElementById('studioBottoms');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    BOTTOMS.forEach(function (item) {
+      var card = document.createElement('div');
+      card.className = 'st-gear-card';
+      card.setAttribute('data-rarity', item.rarity);
+      var isEquipped = (ld.bottom || 'trackpants') === item.id;
+      card.setAttribute('aria-pressed', isEquipped ? 'true' : 'false');
+      card.innerHTML = 
+        '<div class="st-gear-card-top"><span class="st-gear-icon">' + item.icon + '</span><span class="st-badge-rarity">' + item.rarity.toUpperCase() + '</span></div>' +
+        '<div class="st-gear-name">' + item.name + '</div>' +
+        '<div class="st-gear-type">' + item.type + '</div>' +
+        '<div class="st-gear-desc">' + item.desc + '</div>' +
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
+      card.onclick = function () {
+        ld.bottom = item.id;
+        W.save(ld);
+        playEquipSound(item.rarity);
+        renderBottoms();
+        updateSelectionHUD();
+        if (root) W.apply(root, ld);
+      };
+      grid.appendChild(card);
+    });
+  }
+
+  /* ══ Shoes ══ */
+  var SHOES = [
+    {
+      id: 'hightops',
+      name: 'High-Top Court Sneakers',
+      type: 'High-Tops',
+      rarity: 'rare',
+      icon: '👟',
+      desc: 'Cushioned high-top basketball sneakers with ankle wrap support.'
+    }
+  ];
+
+  function renderShoes() {
+    var grid = document.getElementById('studioShoes');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    SHOES.forEach(function (item) {
+      var card = document.createElement('div');
+      card.className = 'st-gear-card';
+      card.setAttribute('data-rarity', item.rarity);
+      var isEquipped = (ld.shoes || 'hightops') === item.id;
+      card.setAttribute('aria-pressed', isEquipped ? 'true' : 'false');
+      card.innerHTML = 
+        '<div class="st-gear-card-top"><span class="st-gear-icon">' + item.icon + '</span><span class="st-badge-rarity">' + item.rarity.toUpperCase() + '</span></div>' +
+        '<div class="st-gear-name">' + item.name + '</div>' +
+        '<div class="st-gear-type">' + item.type + '</div>' +
+        '<div class="st-gear-desc">' + item.desc + '</div>' +
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
+      card.onclick = function () {
+        ld.shoes = item.id;
+        W.save(ld);
+        playEquipSound(item.rarity);
+        renderShoes();
+        updateSelectionHUD();
+        if (root) W.apply(root, ld);
+      };
+      grid.appendChild(card);
+    });
+  }
+
+  /* ══ Headwear ══ */
   var HEADWEAR_ITEMS = [
     {
       slot: 'headphones',
@@ -689,7 +888,6 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     if (!grid) return;
     grid.innerHTML = '';
 
-    // If on Street Beast, cap toggle is available
     if (ld.trainer === 'street') {
       var capCard = document.createElement('div');
       capCard.className = 'st-gear-card';
@@ -701,7 +899,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         '<div class="st-gear-name">Signature Cap</div>' +
         '<div class="st-gear-type">Streetwear Apparel</div>' +
         '<div class="st-gear-desc">Front-facing aerodynamic athletic cap.</div>' +
-        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isCapOn ? '✓ EQUIPPED' : '+ TAP TO EQUIP') + '</span></div>';
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isCapOn ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
       capCard.onclick = function () {
         ld.cap = ld.cap ? '' : 'cap';
         W.save(ld);
@@ -724,7 +922,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         '<div class="st-gear-name">' + item.name + '</div>' +
         '<div class="st-gear-type">' + item.type + '</div>' +
         '<div class="st-gear-desc">' + item.desc + '</div>' +
-        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ TAP TO EQUIP') + '</span></div>';
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
       card.onclick = function () {
         ld[item.slot] = ld[item.slot] ? '' : item.slot;
         W.save(ld);
@@ -737,7 +935,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     });
   }
 
-  /* ══ Gear Items Definition (Belt, Watch, Wraps, Dumbbells) ══ */
+  /* ══ Gear (Belt, Watch, Wraps, Dumbbells) ══ */
   var GEAR_ITEMS = [
     {
       slot: 'belt',
@@ -789,7 +987,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         '<div class="st-gear-name">' + item.name + '</div>' +
         '<div class="st-gear-type">' + item.type + '</div>' +
         '<div class="st-gear-desc">' + item.desc + '</div>' +
-        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ TAP TO EQUIP') + '</span></div>';
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
       card.onclick = function () {
         ld[item.slot] = ld[item.slot] ? '' : item.slot;
         W.save(ld);
@@ -802,7 +1000,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     });
   }
 
-  /* ══ VFX Auras Definition ══ */
+  /* ══ VFX Auras ══ */
   var AURA_ITEMS = [
     {
       id: '',
@@ -854,7 +1052,7 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
         '<div class="st-gear-name">' + item.name + '</div>' +
         '<div class="st-gear-type">' + item.type + '</div>' +
         '<div class="st-gear-desc">' + item.desc + '</div>' +
-        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ TAP TO EQUIP') + '</span></div>';
+        '<div class="st-gear-card-bottom"><span class="st-gear-status">' + (isEquipped ? '✓ EQUIPPED' : '+ EQUIP') + '</span></div>';
       card.onclick = function () {
         ld.aura = item.id;
         W.save(ld);
@@ -867,12 +1065,12 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     });
   }
 
-  /* ══ Poses Tab & Top-Bar ══ */
+  /* ══ Poses ══ */
   var POSES = [
-    { id: 'warmup', name: 'Warm Up', icon: '🏃', desc: 'Active breathing cadence and rhythmic arm swing' },
-    { id: 'squat', name: 'Deep Squat', icon: '🦵', desc: 'Hip-hinge air squat with dynamic knee flex' },
-    { id: 'pushup', name: 'Push Up', icon: '💪', desc: 'Floor press with neutral spine & elbow tuck' },
-    { id: 'curl', name: 'Bicep Curl', icon: '⚡', desc: 'Full elbow flexion with peak bicep contraction' },
+    { id: 'warmup', name: 'Warm Up', icon: '🏃', desc: 'Forward athletic arm drive & light bounce cadence' },
+    { id: 'squat', name: 'Deep Squat', icon: '🦵', desc: 'Hip-hinge air squat with forward counterbalance reach' },
+    { id: 'curl', name: 'Bicep Curl', icon: '⚡', desc: 'Strict elbow flexion curling upward in front of chest' },
+    { id: 'pushup', name: 'Push Up', icon: '💪', desc: 'Floor press with neutral spine & 45° tucked elbows' },
     { id: 'jumpingjack', name: 'Jumping Jacks', icon: '⭐', desc: 'Cardio star-jumps with full overhead reach' }
   ];
 
@@ -929,6 +1127,9 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
     playEquipSound('legendary');
     renderTrainers();
     renderOutfits();
+    renderTops();
+    renderBottoms();
+    renderShoes();
     renderHeadwear();
     renderGear();
     renderAuras();
@@ -941,6 +1142,9 @@ $backUrl = $next !== '' && preg_match('#^[A-Za-z0-9_\-/\.\?=&]+$#', $next)
   /* ══ Initialization ══ */
   renderTrainers();
   renderOutfits();
+  renderTops();
+  renderBottoms();
+  renderShoes();
   renderHeadwear();
   renderGear();
   renderAuras();

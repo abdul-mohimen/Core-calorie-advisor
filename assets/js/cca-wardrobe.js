@@ -30,9 +30,9 @@
        0.01 scale, and no parent-inverse arrangement fixed it cleanly. A button
        that does nothing is worse than no button. */
   var TRAINERS = [
-    { id: 'street', name: 'Street Beast', file: 'assets/models/trainer-street.glb', prefix: 'ch06_',
+    { id: 'street', name: 'Street Beast', file: 'assets/models/trainer-modular.glb', fallbackFile: 'assets/models/trainer-street.glb', prefix: 'ch06_',
       extras: ['cap', 'headphones', 'visor', 'headband', 'belt', 'watch', 'wraps', 'dumbbells'],
-      build: 'Athletic hoodie build', wears: 'Oversized tracksuit · high-tops',
+      build: 'Athletic modular build', wears: 'Customizable workout apparel',
       outfits: [
         { id: '',       name: 'Midnight Black', hex: '#232733' },
         { id: 'ember',  name: 'Ember Crimson',  hex: '#8C3A17', tex: 'assets/models/outfits/ch06-ember.png' },
@@ -53,6 +53,9 @@
   var DEFAULT = {
     trainer: 'street',
     outfit: '',
+    top: 'hoodie',
+    bottom: 'trackpants',
+    shoes: 'hightops',
     cap: 'cap',
     headphones: 'headphones',
     visor: '',
@@ -187,6 +190,30 @@
     /* 3D Socket Gear & Outfits Engine (Free Fire / GTA Style) */
     if (w.CCAGearEngine && w.CCAGearEngine.attach) {
       w.CCAGearEngine.attach(root, ld);
+    }
+
+    /* 3D Modular Costumes & Clothing Engine (Free Fire / GTA Style) */
+    var hasModular = false;
+    root.traverse(function (o) {
+      if (!o.isMesh && !o.isSkinnedMesh) return;
+      var n = o.name;
+      if (n === 'Top_Hoodie') { o.visible = (ld.top === 'hoodie'); hasModular = true; }
+      else if (n === 'Top_GymTank') { o.visible = (ld.top === 'tank'); hasModular = true; }
+      else if (n === 'Bottom_Trackpants') { o.visible = (ld.bottom === 'trackpants'); hasModular = true; }
+      else if (n === 'Bottom_GymShorts') { o.visible = (ld.bottom === 'shorts'); hasModular = true; }
+      else if (n === 'Shoes_HighTops') { o.visible = (ld.shoes === 'hightops'); hasModular = true; }
+      else if (n === 'Base_Head') { o.visible = true; hasModular = true; }
+      else if (n === 'Head_Cap' || n === 'ch06_cap') { o.visible = (ld.trainer === 'street' && !!ld.cap); }
+      else if (n === 'ch06_glasses') { o.visible = false; }
+    });
+
+    if (hasModular) {
+      root.traverse(function (o) {
+        if (!o.isMesh && !o.isSkinnedMesh) return;
+        if (o.name === 'Ch06_BaseBackup' || o.name === 'Ch06_Original' || o.name === 'Ch06') {
+          o.visible = false; // Hide monolithic combined mesh when modular meshes exist
+        }
+      });
     }
 
     /* accessories: pure visibility. Only slots this trainer actually offers can

@@ -731,26 +731,38 @@
 
     switch (mode) {
 
-      /* ---- SQUATS: feet planted, knees + hips bend, arms reach forward ---- */
+      /* ---- SQUATS: authentic hip-hinge & forward counterbalance reach ---- */
       case 'squat': {
         var u = 0.5 - 0.5 * Math.cos(t * 2.4);           // 0 (stand) → 1 (deep)
-        rot('lUpLeg', AX, -1.10 * u); rot('rUpLeg', AX, -1.10 * u);   // thighs fold up
-        rot('lLeg',   AX,  1.70 * u); rot('rLeg',   AX,  1.70 * u);   // knees bend deep
-        rot('lFoot',  AX, -0.55 * u); rot('rFoot',  AX, -0.55 * u);   // ankles flex → soles stay flat
-        rot('spine',  AX,  0.36 * u); rot('spine1', AX, 0.10 * u);    // chest leans in
-        rot('lArm', AY, -1.35); rot('rArm', AY, 1.35);               // arms reach forward
-        rot('lArm', AX, -0.10 * u); rot('rArm', AX, -0.10 * u);
-        root.position.y = basePos.y - 0.62 * u;                       // sink so the feet stay planted
+        rot('lUpLeg', AX, -1.12 * u); rot('rUpLeg', AX, -1.12 * u);   // thighs fold up
+        rot('lLeg',   AX,  1.68 * u); rot('rLeg',   AX,  1.68 * u);   // knees track forward/down
+        rot('lFoot',  AX, -0.54 * u); rot('rFoot',  AX, -0.54 * u);   // ankles flex → flat contact
+        rot('spine',  AX,  0.32 * u); rot('spine1', AX, 0.10 * u);    // athletic neutral torso lean
+        
+        // Counterbalance reach: arms raise smoothly from side to shoulder height in front
+        rot('lArm', AZ, -1.26 + 1.20 * u);  // raise arm from side (-1.26) up toward horizontal
+        rot('rArm', AZ,  1.26 - 1.20 * u);
+        rot('lArm', AX, 0.85 * u);          // pitch arm forward into front view
+        rot('rArm', AX, 0.85 * u);
+        rot('lForeArm', AX, -0.25 * u);     // soft natural elbow bend (15°)
+        rot('rForeArm', AX, -0.25 * u);
+        
+        root.position.y = basePos.y - 0.62 * u;                       // sink so feet stay planted
         break;
       }
 
-      /* ---- BICEP CURLS: arms at sides, forearms curl up together ---- */
+      /* ---- BICEP CURLS: strict elbow flexion in front of chest ---- */
       case 'curl': {
         var u2 = 0.5 - 0.5 * Math.cos(t * 3.4);
-        armsDown(0.06, 0.12);
-        rot('lForeArm', AX, -2.15 * u2);                 // hand sweeps up to shoulder
-        rot('rForeArm', AX, -2.15 * u2);
-        rot('spine', AX, 0.03 * Math.sin(t * 3.4));
+        // Keep upper arms pinned slightly in front of the ribs
+        rot('lArm', AZ, -1.28);
+        rot('rArm', AZ,  1.28);
+        rot('lArm', AX, 0.12);
+        rot('rArm', AX, 0.12);
+        // Curl forearm smoothly upward toward anterior deltoids in front of body
+        rot('lForeArm', AX, -0.20 - 1.95 * u2);
+        rot('rForeArm', AX, -0.20 - 1.95 * u2);
+        rot('spine', AX, 0.025 * Math.sin(t * 3.4));
         break;
       }
 
@@ -926,24 +938,31 @@
         break;
       }
 
-      /* ---- WARM-UP: light bounce + easy arm swings ---- */
+      /* ---- WARM-UP: dynamic athletic arm drive & light bounce ---- */
       case 'warmup': {
-        var w = Math.sin(t * 2.6);
-        armsDown(0.0, 0.25);
-        rot('lArm', AX, -0.45 - 0.35 * w); rot('rArm', AX, -0.45 + 0.35 * w); // arms swing
-        rot('spine1', AY, 0.10 * w);
-        root.position.y = basePos.y + Math.abs(Math.sin(t * 2.6)) * 0.04;
+        var w = Math.sin(t * 2.8);
+        var swingL = 0.22 + 0.28 * w;     // always >= -0.06 rad; swings forward in front
+        var swingR = 0.22 - 0.28 * w;
+        armsDown(0.04, 0.22);
+        // Swing forward in front of the chest, never behind the back
+        rot('lArm', AX, swingL);
+        rot('rArm', AX, swingR);
+        rot('lForeArm', AX, -0.30 - 0.20 * Math.max(0, w));   // forearm flexes naturally on forward swing
+        rot('rForeArm', AX, -0.30 - 0.20 * Math.max(0, -w));
+        rot('spine1', AY, 0.08 * w);
+        root.position.y = basePos.y + Math.abs(Math.sin(t * 2.8)) * 0.035;
         break;
       }
 
       /* ---- IDLE: relaxed athletic stance, gentle breathing ---- */
       default: {
         var b = Math.sin(t * 1.6);
-        armsDown(0.0, 0.20);
+        armsDown(-0.06, 0.22);
+        rot('lArm', AX, 0.06); rot('rArm', AX, 0.06);     // hands sit slightly forward of thighs
         rot('spine', AX, 0.02 * b); rot('spine1', AX, 0.02 * b);
-        rot('lArm', AZ, 0.03 * b); rot('rArm', AZ, -0.03 * b);
+        rot('lArm', AZ, 0.02 * b); rot('rArm', AZ, -0.02 * b);
         rot('head', AY, 0.04 * Math.sin(t * 0.7));
-        root.position.y = basePos.y + 0.01 * b;
+        root.position.y = basePos.y + 0.008 * b;
         break;
       }
     }
