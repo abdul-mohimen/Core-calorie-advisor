@@ -30,28 +30,50 @@
        0.01 scale, and no parent-inverse arrangement fixed it cleanly. A button
        that does nothing is worse than no button. */
   var TRAINERS = [
-    { id: 'street', name: 'Street', file: 'assets/models/trainer-street.glb', prefix: 'ch06_',
-      extras: ['cap'],
-      build: 'Athletic build', wears: 'Tracksuit · headphones · trainers',
+    { id: 'street', name: 'Street Beast', file: 'assets/models/trainer-street.glb', prefix: 'ch06_',
+      extras: ['cap', 'headphones', 'visor', 'headband', 'belt', 'watch', 'wraps', 'dumbbells'],
+      build: 'Athletic hoodie build', wears: 'Oversized tracksuit · high-tops',
       outfits: [
-        { id: '',       name: 'Midnight', hex: '#232733' },
-        { id: 'ember',  name: 'Ember',    hex: '#8C3A17', tex: 'assets/models/outfits/ch06-ember.png' },
-        { id: 'ocean',  name: 'Ocean',    hex: '#153D57', tex: 'assets/models/outfits/ch06-ocean.png' },
-        { id: 'forest', name: 'Forest',   hex: '#1A4430', tex: 'assets/models/outfits/ch06-forest.png' }
+        { id: '',       name: 'Midnight Black', hex: '#232733' },
+        { id: 'ember',  name: 'Ember Crimson',  hex: '#8C3A17', tex: 'assets/models/outfits/ch06-ember.png' },
+        { id: 'ocean',  name: 'Ocean Cobalt',   hex: '#153D57', tex: 'assets/models/outfits/ch06-ocean.png' },
+        { id: 'forest', name: 'Forest Stealth', hex: '#1A4430', tex: 'assets/models/outfits/ch06-forest.png' }
       ] },
-    { id: 'pro', name: 'Pro', file: 'assets/models/trainer-pro.glb', prefix: 'mg_',
-      extras: [],
-      build: 'Lean build', wears: 'Compression fit · cap included',
+    { id: 'pro', name: 'Titan Pro', file: 'assets/models/trainer-pro.glb', prefix: 'mg_',
+      extras: ['headphones', 'visor', 'headband', 'belt', 'watch', 'wraps', 'dumbbells'],
+      build: 'Lean muscular build', wears: 'Compression suit · athletic fit',
       outfits: [
-        { id: '',       name: 'Graphite', hex: '#2E333D' },
-        { id: 'ember',  name: 'Ember',    hex: '#8C3A17', tex: 'assets/models/outfits/ember.png' },
-        { id: 'ocean',  name: 'Ocean',    hex: '#153D57', tex: 'assets/models/outfits/ocean.png' },
-        { id: 'forest', name: 'Forest',   hex: '#1A4430', tex: 'assets/models/outfits/forest.png' }
+        { id: '',       name: 'Graphite Carbon', hex: '#2E333D' },
+        { id: 'ember',  name: 'Molten Flame',    hex: '#8C3A17', tex: 'assets/models/outfits/ember.png' },
+        { id: 'ocean',  name: 'Abyssal Blue',    hex: '#153D57', tex: 'assets/models/outfits/ocean.png' },
+        { id: 'forest', name: 'Military Olive',  hex: '#1A4430', tex: 'assets/models/outfits/forest.png' }
       ] }
   ];
 
-  var DEFAULT = { trainer: 'street', outfit: '', cap: 'cap' };
-  var EXTRA_LABEL = { cap: 'Cap' };
+  var DEFAULT = {
+    trainer: 'street',
+    outfit: '',
+    cap: 'cap',
+    headphones: 'headphones',
+    visor: '',
+    headband: '',
+    belt: 'belt',
+    watch: 'watch',
+    wraps: '',
+    dumbbells: '',
+    aura: ''
+  };
+  var EXTRA_LABEL = {
+    cap: 'Cap',
+    headphones: 'Cyber Headphones',
+    visor: 'Tactical Visor',
+    headband: 'Sweatband',
+    belt: 'Lifting Belt',
+    watch: 'Smartwatch',
+    wraps: 'Wrist Wraps',
+    dumbbells: 'Dumbbells',
+    aura: 'Aura VFX'
+  };
 
   function trainerById(id) {
     for (var i = 0; i < TRAINERS.length; i++) if (TRAINERS[i].id === id) return TRAINERS[i];
@@ -161,6 +183,11 @@
     if (!root) return { cap: false, glasses: false };
     uncull(root);
     ld = ld || load();
+
+    /* 3D Socket Gear & Outfits Engine (Free Fire / GTA Style) */
+    if (w.CCAGearEngine && w.CCAGearEngine.attach) {
+      w.CCAGearEngine.attach(root, ld);
+    }
 
     /* accessories: pure visibility. Only slots this trainer actually offers can
        be turned on; the retired glasses mesh is always hidden. */

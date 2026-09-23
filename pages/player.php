@@ -393,6 +393,7 @@ include dirname(__DIR__) . '/includes/header.php';
 $playerJs = asset('js/player.js');
 $ccaVoiceJs  = asset('js/cca-voice.js');
 $ccaCoachJs  = asset('js/cca-coach.js');
+$ccaGearEngineJs = asset('js/cca-gear-engine.js');
 $ccaWardrobeJs = asset('js/cca-wardrobe.js');
 $titanRigJs = asset('js/titan-rig.js');
 $json = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG);
@@ -403,6 +404,7 @@ $extraScripts = <<<HTML
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="{$ccaVoiceJs}"></script>
 <script src="{$ccaCoachJs}"></script>
+<script src="{$ccaGearEngineJs}"></script>
 <script src="{$ccaWardrobeJs}"></script>
 <script src="{$titanRigJs}"></script>
 <script>
@@ -1603,9 +1605,15 @@ function animate() {
     var pv = window.TF_PREVIEW;
     rigTime += dt * ((pv && pv.active) ? pv.scale : 1);
     CCARig.update(mode, rigTime);                    // rigged human performs the workout
+    if (window.CCAGearEngine && CCAGearEngine.update && gltfRoot) {
+      CCAGearEngine.update(t, gltfRoot);
+    }
   } else if (useGLTF && mixer) {
     mixer.update(dt);
     if (gltfRoot) gltfRoot.rotation.y = Math.sin(t * 0.25) * 0.08;
+    if (window.CCAGearEngine && CCAGearEngine.update && gltfRoot) {
+      CCAGearEngine.update(t, gltfRoot);
+    }
   }
 
   // Particle drift

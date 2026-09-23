@@ -88,6 +88,7 @@ SVG;
 </div><!-- /#app -->
 <script src="<?= asset('js/cca-i18n.js') ?>"></script>
 <script src="<?= asset('js/main.js') ?>"></script>
+<script src="<?= asset('js/cca-gear-engine.js') ?>"></script>
 <?php if (!$authMinimal): ?>
 <script src="<?= asset('js/chatbot.js') ?>"></script>
 <script src="<?= asset('js/hero-anims.js') ?>"></script>
